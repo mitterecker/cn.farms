@@ -1,0 +1,33 @@
+citHeader("To cite package 'cn.farms' in publications use:")
+
+desc <- packageDescription("cn.farms")
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
+vers <- paste("R package version", desc$Version)
+url  <- desc$URL
+
+citEntry(entry="article",
+         title="{cn.FARMS}: a latent variable model to detect copy
+number variations in microarray data with a low false discovery rate",
+         author=personList(as.person("Djork-Arn\'e Clevert"),
+                           as.person("Andreas Mitterecker"),
+                           as.person("Andreas Mayr"),
+                           as.person("G\"{u}nter Klambauer"),
+                           as.person("Marianne Tuefferd"),
+                           as.person("An De Bondt"),
+                           as.person("Willem Talloen"),
+                           as.person("Hinrich W. H. G\"{o}hlmann"),
+                           as.person("Sepp Hochreiter")),
+         journal="Nucleic Acids Research",
+         volume="",
+         number="",
+         pages="",
+         note="doi:10.1093/nar/gkr197",
+         year="2011",
+         textVersion =
+             paste("D.-A. Clevert et al.,",
+                   "cn.FARMS: a latent variable model to detect copy number", 
+                   "variations in microarray data with a low false discovery rate",
+                   "Nucleic Acids Research, 2011."))
+
+citFooter("To obtain the references in BibTex format, enter",
+          "'toBibtex(citation(\"cn.farms\"))'")

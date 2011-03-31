@@ -1,0 +1,45 @@
+This is BibTeX, Version 0.99c (TeX Live 2009)
+The top-level auxiliary file: cnFarmsRun.aux
+The style file: natbib.bst
+Database file #1: cnv.bib
+You've used 6 entries,
+            2378 wiz_defined-function locations,
+            574 strings with 5490 characters,
+and the built_in function-call counts, 3632 in all, are:
+= -- 291
+> -- 300
+< -- 0
++ -- 96
+- -- 92
+* -- 395
+:= -- 656
+add.period$ -- 32
+call.type$ -- 6
+change.case$ -- 36
+chr.to.int$ -- 6
+cite$ -- 6
+duplicate$ -- 123
+empty$ -- 201
+format.name$ -- 98
+if$ -- 693
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 6
+newline$ -- 33
+num.names$ -- 24
+pop$ -- 39
+preamble$ -- 1
+purify$ -- 36
+quote$ -- 0
+skip$ -- 73
+stack$ -- 0
+substring$ -- 207
+swap$ -- 25
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 54
+warning$ -- 0
+while$ -- 23
+width$ -- 0
+write$ -- 79

@@ -1,0 +1,31 @@
+\name{normalizeCels}
+\alias{normalizeCels}
+\title{Wrapper for the normalization functions...}
+\usage{normalizeCels(filenames, method=c("ACC", "quantiles"), cores=1, alleles=F,
+    runtype="bm", annotDir, ...)
+}
+\description{Wrapper for the normalization functions}
+\details{This functions provides different normalization methods for microarray data.
+At the moment only ACC and quantile normalization are implemented.}
+\value{An ExpressionSet object with the normalized data.}
+\author{Djork-Arne Clevert \email{okko@clevert.de} and 
+Andreas Mitterecker \email{mitterecker@bioinf.jku.at}}
+\arguments{\item{filenames}{The absolute path of the CEL files as a list.}
+\item{method}{The normalization method. Possible methods so far: 
+ACC, quantiles}
+\item{cores}{Number of cores for used for parallelization.}
+\item{alleles}{States if information for allele A and B should be given back.}
+\item{runtype}{Mode how the results are saved. Possible values are ff or bm. 
+If ff is chosen the data will not be saved automatically. 
+With bm the results will be saved permanently.}
+\item{annotDir}{An optional annotation directory.}
+\item{...}{Further parameters for the normalization method.}
+}
+\examples{\dontrun{
+library("hapmapsnp6") 
+celDir <- system.file("celFiles", package="hapmapsnp6")
+filenames <- dir(path=celDir, full.names=TRUE)
+createAnnotation(filenames=filenames)
+normData <- normalizeCels(filenames, method="ACC")
+}}
+
