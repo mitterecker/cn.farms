@@ -228,7 +228,9 @@ library(cn.farms)
 \noindent  Next, the user specifies a working directory on the harddisk whereto save the results.
 
 \begin{Sinput}
-> workDir <- "~/tmp"> dir.create(workDir, showWarnings=F, recursive=T)> setwd(workDir)
+> workDir <- "~/tmp"
+> dir.create(workDir, showWarnings=F, recursive=T)
+> setwd(workDir)
 \end{Sinput}
 
 \noindent For reasons of computational time and memory consumption \Rpackage{cn.farms} supports high-performance clustering. 
@@ -237,31 +239,48 @@ indicates how the data matrix should be stored.   \verb+runtype = "ff"+ creates 
 Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save permanently.
 
 \begin{Sinput}
-> cores <- 2> runtype <- "bm"
+> cores <- 2
+> runtype <- "bm"
 \end{Sinput}
 
 \noindent  Next, the user specifies a subdirectory whereto save the flat-files.
 
 \begin{Sinput}
-> dir.create("ffObjects/ff", showWarnings=F, recursive=T)> oligoClasses::ldPath(file.path(getwd(), "ffObjects"))> options(fftempdir = file.path(oligoClasses::ldPath(), "ff"))
+> dir.create("ffObjects/ff", showWarnings=F, recursive=T)
+> oligoClasses::ldPath(file.path(getwd(), "ffObjects"))
+> options(fftempdir = file.path(oligoClasses::ldPath(), "ff"))
 \end{Sinput}
 
 \noindent  The directory (\verb+celDir = "where/are/my/cel-files"+) which contain the cel-files has to be specified. 
 
 \begin{Sinput}
-> celDir <- system.file("celFiles", package="hapmapsnp6")> filenames <- dir(path=celDir, full.names=TRUE)
+> celDir <- system.file("celFiles", package="hapmapsnp6")
+> filenames <- dir(path=celDir, full.names=TRUE)
 \end{Sinput}
 
 \noindent The following step will create the annotation file.
 
 \begin{Sinput}
-> if(exists("annotDir")) {>	createAnnotation(filenames=filenames, annotDir=annotDir)	> } else {> 	createAnnotation(filenames=filenames)> }
+> if(exists("annotDir")) {
+>	createAnnotation(filenames=filenames, annotDir=annotDir)	
+> } else {
+> 	createAnnotation(filenames=filenames)
+> }
 \end{Sinput}
 
 \noindent Afterwards, the data will be corrected for cross-hybridization and normalized.
 
 \begin{Sinput}
-> normMethod <- "ACC"> ## normalization of SNP data> if(exists("annotDir")) {> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, > 			annotDir=annotDir, runtype=runtype)> } else {> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, > 			runtype=runtype)> }
+> normMethod <- "ACC"
+
+> ## normalization of SNP data
+> if(exists("annotDir")) {
+> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, 
+> 			annotDir=annotDir, runtype=runtype)
+> } else {
+> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, 
+> 			runtype=runtype)
+> }
 \end{Sinput}
 
 \noindent Now, the normalized data will be summarized at DNA probe loci. \verb+summaryMethod <-  "Variational"+ indicates which FARMS
@@ -291,7 +310,11 @@ assayData(slData)$L_z[1:10, ] ## relative values
 \noindent Now, the intensity values of the non-polymorphic probes (CN-probes) were normalized.
 
 \begin{Sinput}
-> if (exists("annotDir")) {	npData <- normalizeNpData(filenames, cores, annotDir=annotDir)	 } else {	npData <- normalizeNpData(filenames, cores, runtype=runtype) }
+> if (exists("annotDir")) {
+	npData <- normalizeNpData(filenames, cores, annotDir=annotDir)	
+ } else {
+	npData <- normalizeNpData(filenames, cores, runtype=runtype)
+ }
 \end{Sinput}
 
 \noindent This step combines non-polymorphic probes and single-locus summarized SNP-probes.
@@ -352,7 +375,7 @@ segments <- dnaCopySf(
 featureData(segments)@data
 @
 
-\noindent To get further information, e.g. how to process Affymetrix 500K arrays, please check the followings demos.  
+\noindent To get further information, e.g. how to process Affymetrix 500K arrays, please check the following demos.  
 
 \begin{Sinput}
 > demo(package = "cn.farms")
