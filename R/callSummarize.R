@@ -47,11 +47,11 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
     
     if (missing(returnValues)) {
         if (summaryMethod == "summarizeFarmsVariational") {
-            idxNames <- c(1, 5, 12, 7, 11)    
+            idxNames <- c(1, 5, 7, 11)   # 12 
         } else if (summaryMethod == "summarizeFarmsExact") {
             idxNames <- c(1, 2, 5, 7, 15)    
         } else if (summaryMethod == "summarizeFarmsGaussian"){
-            idxNames <- c(1, 5, 12, 14)
+            idxNames <- c(1, 5, 12) # 14
         } else {
             stop("Problem with summaryMethod")
         }
@@ -72,7 +72,7 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
                 sep="")   
         eval(parse(text=tmp))
     }
-
+    
     ## create assignment calls
     resCommands <- vector(length=length(idxNames))
     for (i in seq(length(idxNames))) {
@@ -93,10 +93,10 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
         sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
     }
     
-    #sfLibrary("cn.farms", character.only=TRUE)
-    suppressWarnings(sfExport("summarizeFarmsGaussian", namespace="cn.farms"))
-    suppressWarnings(sfExport("summarizeFarmsVariational", namespace="cn.farms"))
-    suppressWarnings(sfExport("summarizeFarmsExact", namespace="cn.farms"))
+    sfLibrary("cn.farms", character.only=TRUE)
+    #suppressWarnings(sfExport("summarizeFarmsGaussian", namespace="cn.farms"))
+    #suppressWarnings(sfExport("summarizeFarmsVariational", namespace="cn.farms"))
+    #suppressWarnings(sfExport("summarizeFarmsExact", namespace="cn.farms"))
     
     suppressWarnings(sfExport("psInfo"))
     suppressWarnings(sfExport("object"))
@@ -144,7 +144,15 @@ callSummarizeH01 <- function(i, sampleIndices, summaryMethod) {
     
     tmpIndices <- psInfo$start[i]:psInfo$end[i]
     pps <- object[tmpIndices, sampleIndices]
-
+    
+    ## special case if there is no variation in the data
+    tmp <- apply(pps, 1, var) > 1e-20
+    if (!all(tmp)) {
+        for (m in which(!tmp)) {
+            pps[m, ] <- pps[m, ] + rnorm(length(sampleIndices), 0, 0.00005)
+        }
+    }
+    
     exprs <- do.call(summaryMethod, c(alist(pps), summaryParam))
     sapply(resCommands, function (x)  eval(parse(text=x)))
     
