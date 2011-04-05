@@ -26,6 +26,11 @@ normalizeNpData <- function(filenames, cores=1,
     
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
     pkgname <- oligo::cleanPlatformName(mapping)
+    
+    if (pkgname == "pd.genomewideex.6") {
+        pkgname <- "pd.genomewidesnp.6"
+    }
+    
     if (is.null(annotDir)) {
         vers <- dir(file.path("annotation", pkgname))[1]
         annotDir <- normalizePath(file.path("annotation", pkgname, vers))
