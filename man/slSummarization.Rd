@@ -3,8 +3,8 @@
 \alias{slSummarization}
 \title{Method for computation of the single-locus summarization...}
 \usage{slSummarization(object, summaryMethod="Variational", summaryParam,
-    callParam=list(runtype = "ff", cores = 1),
-    summaryWindow=c("std", "fragment"), returnValues)
+    callParam=list(runtype = "ff", cores = 1), summaryWindow=c("std",
+    "fragment"), returnValues)
 }
 \description{Method for computation of the single-locus summarization}
 \details{The different probes of the SNPs of the array are summarized to a probeset.}

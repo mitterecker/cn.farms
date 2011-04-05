@@ -34,13 +34,15 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
     } else if (!is.null(filenames) & is.null(annotation)) {
         mapping <- affxparser::readCelHeader(filenames[1])$chiptype
         pkgname <- oligo::cleanPlatformName(mapping)
+        
+        if (pkgname ==  "pd.genomewideex.6") {
+            pkgname <- "pd.genomewidesnp.6"
+        }
+        
     } else if (!is.null(annotation)){
         mapping <- annotation
         pkgname <- oligo::cleanPlatformName(mapping)
     }
-    
-    
-    
     
     if (!is.element(pkgname, installed.packages()[,1])) {
         stop(paste("Package", pkgname, 

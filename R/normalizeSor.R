@@ -6,6 +6,7 @@
 #' @param runtype Mode how the results are saved. Possible values are ff or bm. 
 #' If ff is chosen the data will not be saved automatically. 
 #' With bm the results will be saved permanently. 
+#' @param pkgname Optional parameter for the CEL mapping.
 #' @return An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -20,10 +21,13 @@
 #' @importFrom snowfall sfClusterEval
 #' @importFrom snowfall sfStop
 normalizeSor <- function (filenames, cores=1, 
-        annotDir=NULL, alleles=F, runtype="ff", cyc=5, ...) {
+        annotDir=NULL, alleles=F, runtype="ff", cyc=5, pkgname=NULL, ...) {
     
-    mapping <- affxparser::readCelHeader(filenames[1])$chiptype
-    pkgname <- oligo::cleanPlatformName(mapping)
+    if(is.null(pkgname)) {
+        mapping <- affxparser::readCelHeader(filenames[1])$chiptype
+        pkgname <- oligo::cleanPlatformName(mapping)
+    }
+    
     if (is.null(annotDir)) {
         vers <- dir(file.path("annotation", pkgname))[1]
         annotDir <- normalizePath(file.path("annotation", pkgname, vers))

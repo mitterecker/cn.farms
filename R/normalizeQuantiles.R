@@ -7,22 +7,24 @@
 #' @param runtype Mode how the results are saved. Possible values are ff or bm. 
 #' If ff is chosen the data will not be saved automatically. 
 #' With bm the results will be saved permanently. 
+#' @param pkgname Optional parameter for the CEL mapping.
 #' @importFrom preprocessCore normalize.quantiles.use.target
-#' @param ... ...
-#' @return S4 object 
+#' @param ... 
+#' @return The normalized data.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 normalizeQuantiles <- function (filenames, cores=1, batch=NULL, 
-        annotDir=NULL, runtype="ff", ...) { 
+        annotDir=NULL, runtype="ff", pkgname=NULL, ...) { 
     if(is.null(batch)) {
         batch <- rep(1, length(filenames))
     } 
     if (length(filenames) != length(batch)) {
         stop("Filenames and batch need to have the same dimension")
     }
-    
-    mapping <- affxparser::readCelHeader(filenames[1])$chiptype
-    pkgname <- oligo::cleanPlatformName(mapping)
+    if(is.null(pkgname)) {
+        mapping <- affxparser::readCelHeader(filenames[1])$chiptype
+        pkgname <- oligo::cleanPlatformName(mapping)
+    }
     if (is.null(annotDir)) {
         vers <- dir(file.path("annotation", pkgname))[1]
         annotDir <- normalizePath(file.path("annotation", pkgname, vers))

@@ -27,9 +27,16 @@
 #' }
 normalizeCels <- function (filenames, method=c("SOR", "quantiles"), cores=1, alleles=F, 
         runtype="bm", annotDir=NULL, ...) {
-    
+
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
-    normAdd <- normAdd(oligo::cleanPlatformName(mapping))
+    pkgname <- oligo::cleanPlatformName(mapping)
+    
+    if (pkgname == "pd.genomewideex.6") {
+        pkgname <- "pd.genomewidesnp.6"
+    }
+    
+    normAdd <- normAdd(pkgname)
+    
     if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
         loadFile <- paste("normData", normAdd, ".RData", sep="")
     } else {
@@ -50,9 +57,10 @@ normalizeCels <- function (filenames, method=c("SOR", "quantiles"), cores=1, all
     }
     normData <- switch(method, 
             SOR = normalizeSor(filenames=filenames, cores=cores, 
-                    alleles=alleles, runtype=runtype, annotDir=annotDir, ...), 
+                    alleles=alleles, runtype=runtype, annotDir=annotDir, 
+                    pkgname=pkgname, ...), 
             quantiles = normalizeQuantiles(filenames=filenames, cores=cores, 
-                    runtype=runtype, annotDir=annotDir, ...))
+                    runtype=runtype, annotDir=annotDir, pkgname=pkgname, ...))
     
     if (runtype=="bm") {
         cat(paste(Sys.time(), "|   Saving normalized data \n"))

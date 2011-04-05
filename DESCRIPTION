@@ -14,9 +14,9 @@ Description: This package implements the cn.FARMS algorithm for
     copy number variation (CNV) analysis. cn.FARMS allows to
     analyse all existing Affymetix (10K-SNP6.0) array types,
     supports high-performance computing using snow and ff.
-Version: 0.99.5
+Version: 0.99.8
 biocViews: Microarray, Bioinformatics, CopyNumberVariants
-Date: 2011-04-04
+Date: 2011-04-05
 Depends: R (>= 2.12), Biobase, methods, ff
 Suggests: pd.mapping250k.sty, pd.mapping250k.nsp,
     pd.genomewidesnp.5, pd.genomewidesnp.6
@@ -28,5 +28,5 @@ Collate: 'callSummarize.R' 'combineData.R' 'createAnnotation.R'
     'plotViolines.R' 'sparseFarmsC.R' 'summarizationMl.R'
     'summarizationSl.R' 'summarizeFarmsGaussian.R'
     'summarizeFarmsLaplaceExact.R' 'summarizeFarmsLaplaceVar.R'
-    'summarizeFarmsMethods.R' 'windowFunctions.R'
-    'windowMethods.R' 'zzz.R'
+    'summarizeFarmsMethods.R' 'windowFunctions.R' 'windowMethods.R'
+    'zzz.R'

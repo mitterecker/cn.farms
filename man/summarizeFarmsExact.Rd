@@ -1,9 +1,8 @@
 \name{summarizeFarmsExact}
 \alias{summarizeFarmsExact}
 \title{Summarization Laplacian approach with exact computation...}
-\usage{summarizeFarmsExact(probes, mu=0, weight=0.5, weightZ=1, eps1=0.01, eps2=10^-10,
-    cyc=c(10, 10), tol=1e-05, weightType="mean",
-    centering="median", ...)
+\usage{summarizeFarmsExact(probes, mu=0, weight=0.5, weightZ=1, eps1=0.01, eps2=10^-10, cyc=c(10,
+    10), tol=1e-05, weightType="mean", centering="median", ...)
 }
 \description{Summarization Laplacian approach with exact computation}
 \details{This function implements an exact Laplace FARMS algorithm. Users should be 
