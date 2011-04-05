@@ -76,7 +76,7 @@ if (!dontrun) {
     celDir <- system.file("celFiles", package="hapmapsnp6")
     filenames <- dir(path=celDir, full.names=TRUE)
     createAnnotation(filenames=filenames)
-    normData <- normalizeCels(filenames, method="ACC")
+    normData <- normalizeCels(filenames, method="SOR")
 }
 
 
@@ -114,6 +114,7 @@ load(system.file("exampleData/normData.RData", package="cn.farms"))
 experimentData(normData)@other$annotDir <- 
         system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
                 package="cn.farms")
+
 summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(10)

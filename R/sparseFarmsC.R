@@ -1,4 +1,4 @@
-#' Normalizes the data with ACC
+#' Normalizes the data with SOR
 #'  
 #' @param probes The intensity matrix.
 #' @param cyc Number of cycles.

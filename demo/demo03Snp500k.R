@@ -50,7 +50,7 @@ if(exists("annotDir")) {
 ###############################################################################
 
 
-normMethod <- "ACC"
+normMethod <- "SOR"
 
 ## normalization of SNP data
 if(exists("annotDir")) {

@@ -61,10 +61,10 @@ normalizeQuantiles <- function (filenames, cores=1, batch=NULL,
     fidTmp <- pmfeature$fid
     
     gc()
-    sfLibrary("cn.farms", character.only=TRUE)
-    sfLibrary("affxparser", character.only=TRUE)
-    sfLibrary("oligo", character.only=TRUE)
-    sfLibrary("preprocessCore", character.only=TRUE)
+    sfLibrary("cn.farms", character.only=TRUE, verbose=FALSE)
+    sfLibrary("affxparser", character.only=TRUE, verbose=FALSE)
+    sfLibrary("oligo", character.only=TRUE, verbose=FALSE)
+    sfLibrary("preprocessCore", character.only=TRUE, verbose=FALSE)
     suppressWarnings(sfExport(list=c(
                             "fidTmp", "target", "idxOfAlleleA", 
                             "idxOfAlleleB", "intensity")))
@@ -92,7 +92,7 @@ normalizeQuantiles <- function (filenames, cores=1, batch=NULL,
     experimentData(eSet) <- new("MIAME", 
             other=list(
                     annotDir=annotDir, 
-                    normalization="ACC", 
+                    normalization="SOR", 
                     type="normData"))    
     
     ## annotation

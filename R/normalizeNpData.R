@@ -97,7 +97,7 @@ normalizeNpData <- function(filenames, cores=1,
     experimentData(eSet) <- new("MIAME", 
             other=list(
                     annotDir=annotDir, 
-                    normalization="ACC",
+                    normalization="SOR",
                     type="npData"))    
     annotation(eSet) <- pkgname
     

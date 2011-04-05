@@ -24,8 +24,9 @@
 #' matrix under the given non-negative correlation constraints of the covariance
 #' matrix)
 #' @param spuriousCorrelation Numeric value for suppression of spurious 
-#' correlation. Default is 1.
+#' correlation.
 #' @param minNoise States the minimal noise. Default is 0.35.
+#' @param centering States how the data is centered. Default is median.
 #' @return A list containing the results of the run. 
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -43,7 +44,8 @@ summarizeFarmsVariational <- function(
         init = 0.6, 
         correction = 0, 
         minNoise = 0.35, 
-        spuriousCorrelation = 0.3){
+        spuriousCorrelation = 0.3,
+        centering = "median"){
     
     informationContent <- TRUE
     
@@ -53,13 +55,15 @@ summarizeFarmsVariational <- function(
     
     n_probes <- nrow(probes)
     
-    mean.probes <- apply(probes, 1, median)
+    if (centering=="median") {mean.probes <- apply(probes, 1, median)}
+    
+    if (centering=="mean") {mean.probes <- rowMeans(probes)} 
     
     centered.probes <- probes - mean.probes
     
     sd.probes <- sqrt(diag(crossprod(t(centered.probes))) / n_array) 
     
-    if(0 %in% sd.probes){
+    if(0 %in% sd.probes) {
             
         index <- which(sd.probes == 0)
         
@@ -69,7 +73,9 @@ summarizeFarmsVariational <- function(
         
         x <- t(probes)
         
-        y_v <- apply(x, 2, median)
+        if (centering=="median") { y_v <- apply(x, 2, median) }
+        
+        if (centering=="mean") { y_v <- colMeans(x) }
         
         xmean <- matrix(y_v, n_array, n_probes, byrow = TRUE)
         
@@ -85,7 +91,9 @@ summarizeFarmsVariational <- function(
         
         x <- t(probes)
         
-        y_v <- apply(x, 2, median)
+        if (centering=="median") { y_v <- apply(x, 2, median) }
+        
+        if (centering=="mean") { y_v <- colMeans(x) }
         
         xmean <- matrix(y_v, n_array, n_probes, byrow = TRUE)
         
@@ -151,56 +159,59 @@ summarizeFarmsVariational <- function(
     
     bbeta <- mu * alpha
     
-    PsiL <- (1/Ph)*L
+    PsiL <- (1/Ph) * L
     
-    a <- as.vector(1+crossprod(L,PsiL))
+    a <- as.vector(1 + crossprod(L, PsiL))
     
-    bar <- PsiL/a
+    bar <- PsiL / a
     
-    mu_ZX <- X%*%bar
+    mu_ZX <- X %*% bar
     
-    lapla <- 1/sqrt(mu_ZX^2)
+    lapla <- 1 / sqrt(mu_ZX^2)
     
-    for (i in 1:cyc){
+    for (i in 1:cyc) {
             
         ## E Step
         
         PsiL <- (1/Ph)*L
         
-        a <- 1/as.vector(as.vector(lapla)+crossprod(L,PsiL)) 
+        ##FIXME: add min noise on a
+        a <- 1 / as.vector(as.vector(lapla) + crossprod(L, PsiL)) 
         
-        mu_ZX <- X%*%PsiL*a 
+        mu_ZX <- X %*% PsiL * a 
         
-        EZZ <- mu_ZX^2+a
+        EZZ <- mu_ZX^2 + a
         
         ## M Step
         
-        sumXMU <- 1/n_array*crossprod(X,mu_ZX)
+        sumXMU <- 1 / n_array * crossprod(X, mu_ZX)
         
-        L <- (sumXMU + Ph*bbeta)/(mean(EZZ)+Ph*alpha) 
+        L <- (sumXMU + Ph * bbeta) / (mean(EZZ) + Ph * alpha) 
         
         L[which(L<0)] <- 0
         
-        Ph <- diagXX-L*sumXMU+Ph*alpha*L*(mu-L) 
+        Ph <- diagXX - L * sumXMU + Ph * alpha * L * (mu - L) 
         
-        lapla <- 1/(mu_ZX^2 + a)^0.5 
+        lapla <- 1 / (mu_ZX^2 + a)^0.5 
         
-        if (spuriousCorrelation != 0 ) { 
+        if (spuriousCorrelation != 0) { 
                     
-            lapla[which(lapla < spuriousCorrelation)] <- spuriousCorrelation    
+            lapla[which(lapla < spuriousCorrelation)] <- spuriousCorrelation
+                
         }
         
-        if (sqrt(sum(a_old - a)^2) < tol){
-                    
-            break
-                    
-        }
+        ## eventually put minimal noise on a
+#        if (sqrt(sum(a_old - a)^2) < tol) {
+#                    
+#            break
+#                    
+#        }
         
         a_old <- a
         
     }
     
-    laINI <- log(1 + as.vector(crossprod(L,PsiL) / as.vector(lapla)))
+    laINI <- log2(1 + as.vector(crossprod(L, PsiL) / as.vector(lapla)))
     
     c <- mu_ZX  
     
@@ -223,13 +234,13 @@ summarizeFarmsVariational <- function(
     
     PsiL <- (1 / Ph) * L
     
-    a_lapla <- as.vector(as.vector(lapla)+crossprod(L,PsiL))
+    a_lapla <- as.vector(as.vector(lapla) + crossprod(L, PsiL))
     
-    a_lapla1 <- as.vector(1 + crossprod(L,PsiL)/as.vector(lapla))
+    a_lapla1 <- as.vector(1 + crossprod(L, PsiL) / as.vector(lapla))
     
-    a <- as.vector(1 + crossprod(L,PsiL))    
+    a <- as.vector(1 + crossprod(L, PsiL))    
     
-    SNR <- log( 1 + (1 - 1 / a) * median(sd.probes))
+    SNR <- log2( 1 + (1 - 1 / a) * median(sd.probes))
     
     signal_info <- numeric(length=4)
     
@@ -237,9 +248,9 @@ summarizeFarmsVariational <- function(
     
     signal_info[2] <- SNR
     
-    signal_info[3] <- log(1 + ((1 - 1 / a) * mean(sd.probes)))
+    signal_info[3] <- log2(1 + ((1 - 1 / a) * mean(sd.probes)))
     
-    lapla <- log(1 + median(sd.probes) * c^2 / (1 / a_lapla + c^2))
+    lapla <- log2(1 + median(sd.probes) * c^2 / (1 / a_lapla + c^2))
     
     if(weightType == "square") {
         
@@ -259,7 +270,7 @@ summarizeFarmsVariational <- function(
         
         median_int <- median(y_v * sd.probes)
         
-        rawCN <- (2^(L_c + mean_int)/2^median_int)
+        rawCN <- (2^(L_c + mean_int) / 2^median_int)
         
     } else if (weightType == "linear") {
         
@@ -289,7 +300,7 @@ summarizeFarmsVariational <- function(
         
         median_int <- median(y_v * sd.probes)
         
-        rawCN <- (2^(L_c + mean_int)/2^median_int)
+        rawCN <- (2^(L_c + mean_int) / 2^median_int)
         
     } else if (weightType=="mean") {
         
@@ -301,7 +312,7 @@ summarizeFarmsVariational <- function(
         
         median_int <- median(y_v * sd.probes)
         
-        rawCN <- (2^(L_c + mean_int)/2^median_int)
+        rawCN <- (2^(L_c + mean_int) / 2^median_int)
         
     } else if (weightType=="softmax") {
         
@@ -311,7 +322,7 @@ summarizeFarmsVariational <- function(
         
         if(sumPsiLL == 0) {
             
-            sumPsiLL<-1
+            sumPsiLL <- 1
             
         }
         
@@ -333,12 +344,12 @@ summarizeFarmsVariational <- function(
     
     if(informationContent) {
         
-        laINI <- log(lapla / signal_info[1])
+        laINI <- log2(lapla / signal_info[1])
         
     }
         
     return(list(intensity=as.numeric(express), 
-                    SNR=as.numeric(signal_info), 
+                    INICall=as.numeric(signal_info[2]), 
                     L_z=as.numeric(L_c), 
                     rawCN=as.numeric(rawCN), 
                     lapla=as.numeric(lapla), 

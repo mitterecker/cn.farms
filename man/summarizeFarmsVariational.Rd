@@ -2,7 +2,8 @@
 \alias{summarizeFarmsVariational}
 \title{Summarization variational Laplacian approach...}
 \usage{summarizeFarmsVariational(probes, weight=0.15, mu=0, cyc=10, tol=1e-04, weightType="mean",
-    init=0.6, correction=0, minNoise=0.35, spuriousCorrelation=0.3)
+    init=0.6, correction=0, minNoise=0.35,
+    spuriousCorrelation=0.3, centering="median")
 }
 \description{Summarization variational Laplacian approach}
 \details{This function runs the FARMS algorithm.}
@@ -31,8 +32,9 @@ covariance matrix to force positive definiteness),
 matrix under the given non-negative correlation constraints of the covariance
 matrix)}
 \item{spuriousCorrelation}{Numeric value for suppression of spurious 
-correlation. Default is 1.}
+correlation.}
 \item{minNoise}{States the minimal noise. Default is 0.35.}
+\item{centering}{States how the data is centered. Default is median.}
 }
 \examples{x <- matrix(rnorm(100, 11), 20, 5)
 summarizeFarmsVariational(x)}

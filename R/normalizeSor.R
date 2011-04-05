@@ -1,4 +1,4 @@
-#' Runs the ACC normalization on microarray data
+#' Runs the SOR normalization on microarray data
 #' @param filenames an absolute path of the CEL files 
 #' @param cores cores
 #' @param annotDir annotDir
@@ -19,7 +19,7 @@
 #' @importFrom snowfall sfLapply
 #' @importFrom snowfall sfClusterEval
 #' @importFrom snowfall sfStop
-normalizeAcc <- function (filenames, cores=1, 
+normalizeSor <- function (filenames, cores=1, 
         annotDir=NULL, alleles=F, runtype="ff", cyc=5, ...) {
     
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
@@ -50,13 +50,13 @@ normalizeAcc <- function (filenames, cores=1,
     nbrOfProbes <- length(which(pmfeature[, "allele"]==1))
     
     intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type="double",
-            bmName="acc_")
+            bmName="SOR_")
     
     if (alleles) {
         intensityA <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
-                type="double", bmName="acc_")
+                type="double", bmName="SOR_")
         intensityB <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
-                type="double", bmName="acc_")        
+                type="double", bmName="SOR_")        
     }
 
     sfLibrary("cn.farms", character.only=TRUE)
@@ -79,7 +79,7 @@ normalizeAcc <- function (filenames, cores=1,
         sfClusterEval(open(intensityB))
     }
     cat(paste(Sys.time(), "|   Starting normalization \n"))
-    res <- sfLapply(1:nbrOfSamples, normalizeAccH01, filenames, cyc)
+    res <- sfLapply(1:nbrOfSamples, normalizeSorH01, filenames, cyc)
     cat(paste(Sys.time(), "|   Normalization done \n"))
     sfStop()
     
@@ -106,7 +106,7 @@ normalizeAcc <- function (filenames, cores=1,
     experimentData(eSet) <- new("MIAME", 
             other=list(
                     annotDir=annotDir, 
-                    normalization="ACC", 
+                    normalization="SOR", 
                     type="normData"))    
     
     ## annotation
@@ -125,7 +125,7 @@ normalizeAcc <- function (filenames, cores=1,
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
-normalizeAccH01 <- function (ii, filenames, cyc) {
+normalizeSorH01 <- function (ii, filenames, cyc) {
     
     ## non-visible bindings
     pmfeature <- pmfeature

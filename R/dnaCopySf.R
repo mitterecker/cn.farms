@@ -43,8 +43,8 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
         sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
     }
     
-    sfLibrary("ff", character.only=TRUE)
-    sfLibrary("DNAcopy", character.only=TRUE)
+    sfLibrary("ff", character.only=TRUE, verbose=FALSE)
+    sfLibrary("DNAcopy", character.only=TRUE, verbose=FALSE)
     suppressWarnings(sfExport("x"))
     suppressWarnings(sfExport("chrom"))
     suppressWarnings(sfExport("maploc"))

@@ -1,11 +1,11 @@
 #' Wrapper for the normalization functions
 #' 
 #' This functions provides different normalization methods for microarray data.
-#' At the moment only ACC and quantile normalization are implemented.
+#' At the moment only SOR and quantile normalization are implemented.
 #' 
 #' @param filenames The absolute path of the CEL files as a list.
 #' @param method The normalization method. Possible methods so far: 
-#' ACC, quantiles
+#' SOR, quantiles
 #' @param cores Number of cores for used for parallelization.
 #' @param alleles States if information for allele A and B should be given back.
 #' @param runtype Mode how the results are saved. Possible values are ff or bm. 
@@ -23,9 +23,9 @@
 #' celDir <- system.file("celFiles", package="hapmapsnp6")
 #' filenames <- dir(path=celDir, full.names=TRUE)
 #' createAnnotation(filenames=filenames)
-#' normData <- normalizeCels(filenames, method="ACC")
+#' normData <- normalizeCels(filenames, method="SOR")
 #' }
-normalizeCels <- function (filenames, method=c("ACC", "quantiles"), cores=1, alleles=F, 
+normalizeCels <- function (filenames, method=c("SOR", "quantiles"), cores=1, alleles=F, 
         runtype="bm", annotDir=NULL, ...) {
     
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
@@ -37,7 +37,7 @@ normalizeCels <- function (filenames, method=c("ACC", "quantiles"), cores=1, all
     }
     
     method <- match.arg(method)
-    normMethods <- c("ACC", "quantiles")
+    normMethods <- c("SOR", "quantiles")
        
     if (!method %in% normMethods) {
         stop("Normalization method not found!")
@@ -49,7 +49,7 @@ normalizeCels <- function (filenames, method=c("ACC", "quantiles"), cores=1, all
         return(normData)
     }
     normData <- switch(method, 
-            ACC = normalizeAcc(filenames=filenames, cores=cores, 
+            SOR = normalizeSor(filenames=filenames, cores=cores, 
                     alleles=alleles, runtype=runtype, annotDir=annotDir, ...), 
             quantiles = normalizeQuantiles(filenames=filenames, cores=cores, 
                     runtype=runtype, annotDir=annotDir, ...))

@@ -1,8 +1,8 @@
 \name{plotDensity}
 \alias{plotDensity}
 \title{Function to create a density plot...}
-\usage{plotDensity(x, xlim=c(0, 16), ylim, col, lty, lwd, add=FALSE, xlab, ylab, log=TRUE,
-    ...)
+\usage{plotDensity(x, xlim=c(0, 16), ylim, col, lty, lwd, add=FALSE, xlab, ylab,
+    log=TRUE, ...)
 }
 \description{Function to create a density plot}
 \details{Simple density plot. Adapted from the aroma.affymetrix package (www.aroma-project.org)}

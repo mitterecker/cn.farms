@@ -109,7 +109,6 @@ summarizeWindowStd <- function(phInf, windowSize=3, overlap=TRUE) {
 summarizeWindowBps <- function(phInf, fixedBps=10000, upperLimit=6) {
     startIdx <- c()
     endIdx <- c()
-    
     probesInChrom <- as.numeric(table(phInf$chrom))  # occurancies per chromosome 
     numberOfProbesInChrom <- cumsum(probesInChrom) # vector!!!
     chr <- unique(phInf$chrom)
@@ -126,7 +125,7 @@ summarizeWindowBps <- function(phInf, fixedBps=10000, upperLimit=6) {
         
         phInfoSelectedChromosome <- 
                 phInf[startIndexOfChr:numberOfProbesInChrom[iCnt], ]    
-        
+
         phPos <- as.numeric(as.character(phInfoSelectedChromosome[, 2]))
         diffPhPositions <- c(diff(phPos, lag=1))
         

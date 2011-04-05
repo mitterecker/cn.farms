@@ -101,8 +101,8 @@ flcStd <- function(y, fragmentLengths, targetFcn=NULL, subsetToFit=NULL,
         sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
     }
     
-    sfLibrary("stats", character.only=TRUE)
-    sfLibrary("ff", character.only=TRUE)
+    sfLibrary("stats", character.only=TRUE, verbose=FALSE)
+    sfLibrary("ff", character.only=TRUE, verbose=FALSE)
     
     suppressWarnings(sfExport(list=c(
                             "nbrOfSamples", "nbrOfProbes", 
@@ -209,8 +209,8 @@ flcSnp6Std <- function(y, fragmentLengths, targetFcn=NULL,
         sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
     }
 
-    sfLibrary("stats", character.only=TRUE)
-    sfLibrary("ff", character.only=TRUE)
+    sfLibrary("stats", character.only=TRUE, verbose=FALSE)
+    sfLibrary("ff", character.only=TRUE, verbose=FALSE)
     
     suppressWarnings(sfExport(list=c(
                             "nbrOfSamples", "nbrOfProbes", 

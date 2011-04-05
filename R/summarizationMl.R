@@ -44,7 +44,7 @@ mlSummarization <- function(object, windowMethod, windowParam,
     }
     
     phInf <- featureData(object)[, c("chrom", "start", "man_fsetid")]
-    runIdx <- do.call(summaryWindowName, c(alist(phInf), windowParam))
+    runIdx <- do.call(summaryWindowName, c(alist(phInf@data), windowParam))
     
     phInfTmp <- data.frame(
             chrom=phInf$"chrom"[runIdx[, 1]],

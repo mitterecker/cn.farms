@@ -24,6 +24,7 @@
 #' matrix under the given non-negative correlation constraints of the covariance
 #' matrix)
 #' @param minNoise States the minimal noise. Default is 0.35.
+#' @param centering States how the data is centered. Default is median.
 #' @return A list containing the results of the run.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -39,15 +40,18 @@ summarizeFarmsGaussian <- function(probes,
         weightType = "mean", 
         init = 0.6, 
         correction = 0, 
-        minNoise = 0.35) {
+        minNoise = 0.35, 
+        centering = "median") {
     
     a_old <- 0.5
     
     n_array <-  ncol(probes)
     
     n_probes <- nrow(probes)
+       
+    if (centering=="median") {mean.probes <- apply(probes, 1, median)}
     
-    mean.probes <- apply(probes,1,median) 
+    if (centering=="mean") {mean.probes <- rowMeans(probes)} 
     
     centered.probes <- probes - mean.probes
     
@@ -63,7 +67,9 @@ summarizeFarmsGaussian <- function(probes,
         
         x <- t(probes)
         
-        y_v <- apply(x, 2, mean) 
+        if (centering=="median") {y_v <- apply(x, 2, median)}
+        
+        if (centering=="mean") {y_v <- colMeans(x)}
         
         xmean <- matrix(y_v, n_array, n_probes, byrow = TRUE)
         
@@ -79,9 +85,9 @@ summarizeFarmsGaussian <- function(probes,
         
         x <- t(probes)
         
-        tmpProbes <- probes
+        if (centering=="median") {y_v <- apply(x, 2, median)}
         
-        y_v <- apply(x,2,mean) 
+        if (centering=="mean") {y_v <- colMeans(x)}
         
         xmean <- matrix(y_v, n_array, n_probes, byrow = TRUE)
         
@@ -149,7 +155,7 @@ summarizeFarmsGaussian <- function(probes,
     
     
     
-    for (i in 1:cyc){
+    for (i in 1:cyc) {
         
         # E Step
         
@@ -176,7 +182,7 @@ summarizeFarmsGaussian <- function(probes,
         Ph <- diagXX - XXbeta * L + Ph * alpha * L * (mu - L) 
         
         
-        if (sqrt((a_old - a)^2) < tol){
+        if (sqrt((a_old - a)^2) < tol) {
             
             break
             
@@ -314,6 +320,7 @@ summarizeFarmsGaussian <- function(probes,
     return(list(intensity = as.numeric(express), 
                     INICall = as.numeric(signal_info)[1], 
                     L_z = as.numeric(L_c), 
+                    INI_sigVar = var(mean(L * sd.probes) * c),
                     rawCN = as.numeric(rawCN), 
                     z = as.numeric(c)))
     

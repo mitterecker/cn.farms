@@ -1,31 +1,46 @@
 #' Summarization Laplacian approach with exact computation
 #' 
-#' This function implements an exact Laplace FARMS algorithm. Users should be aware, that a change of weight in comparison to the default parameter
-#' might also entail a need to change of eps1 and eps2. Unexperienced users should not change weightZ, since a change in weightZ is also connected to weight, eps1 and eps2. 
+#' This function implements an exact Laplace FARMS algorithm. Users should be 
+#' aware, that a change of weight in comparison to the default parameter
+#' might also entail a need to change of eps1 and eps2. Unexperienced users 
+#' should not change weightZ, since a change in weightZ is also connected to 
+#' weight, eps1 and eps2. 
 #' 
 #' @param probes A matrix with numeric values.
 #' @param mu Hyperparameter value which allows to quantify different aspects of
-#' potential prior knowledge. Values near zero assumes that most genes do not
-#' contain a signal, and introduces a bias for loading matrix elements near 
+#' potential prior knowledge. Values near zero assumes that most positions do 
+#' not contain a signal, and introduces a bias for loading matrix elements near 
 #' zero. Default value is 0.
-#' @param weight Hyperparameter value which determines the influence of the Gaussian prior of the loadings
-#' @param weightZ Hyperparameter value which determines how strong the Laplace prior of the factor should be at 0.
-#' @param eps1 Epsilon parameter that determines at which values the algorithm should do an exception handling for low values of the loadings
-#' @param eps2 Epsilon parameter that determines at which values the algorithm should do an exception handling for low values of the data point likelihood or posterior functions, that tend to be Gaussian
-#' @param cyc Number of cycles. If the length is two, it is assumed, that a minimum and a maximum number of cycles is given. If the length is one, the value is interpreted as the exact number of cycles to be executed (minimum == maximum).
-#' @param tol States the termination tolerance if cyc[1]!=cyc[2]. Default is 0.00001.
+#' @param weight Hyperparameter value which determines the influence of the 
+#' Gaussian prior of the loadings
+#' @param weightZ Hyperparameter value which determines how strong the Laplace 
+#' prior of the factor should be at 0.
+#' @param eps1 Epsilon parameter that determines at which values the algorithm 
+#' should do an exception handling for low values of the loadings
+#' @param eps2 Epsilon parameter that determines at which values the algorithm 
+#' should do an exception handling for low values of the data point likelihood 
+#' or posterior functions, that tend to be Gaussian
+#' @param cyc Number of cycles. If the length is two, it is assumed, that a 
+#' minimum and a maximum number of cycles is given. If the length is one, the 
+#' value is interpreted as the exact number of cycles to be executed 
+#' (minimum == maximum).
+#' @param tol States the termination tolerance if cyc[1]!=cyc[2]. 
+#' Default is 0.00001.
 #' @param weightType Flag, that is used to summarize the loading matrix. 
+#' @param centering States how the data is centered. Default is median.
 #' @param ... Further parameters for expert users.
 #' @return A list including:
 #' the found parameters: lambda0, lambda1, Psi
 #' 
 #' the estimated factors: z (expectation), maxZ (maximum)
 #' 
-#' p: log-likelihood of the data given the found lambda0, lambda1, Psi (not the posterior likelihood that is optimized)
+#' p: log-likelihood of the data given the found lambda0, lambda1, 
+#' Psi (not the posterior likelihood that is optimized)
 #' 
 #' varzx: variances of the hidden variables given the data
 #' 
-#' KL: Kullback Leibler divergences between between posterior and prior distribution of the hidden variables
+#' KL: Kullback Leibler divergences between between posterior and prior 
+#' distribution of the hidden variables
 #' 
 #' IC: Information Content considering the hidden variables and data
 #' 
@@ -43,7 +58,9 @@
 #' 
 #' SNR: some additional signal to noise ratio value
 #' 
-#' @author Andreas Mayr \email{mayr@@bioinf.jku.at} and Djork-Arne Clevert \email{okko@@clevert.de} and Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @author Andreas Mayr \email{mayr@@bioinf.jku.at} and 
+#' Djork-Arne Clevert \email{okko@@clevert.de} and 
+#' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @examples 
 #' x <- matrix(rnorm(100, 11), 20, 5)
 #' summarizeFarmsExact(x)
@@ -57,25 +74,27 @@ summarizeFarmsExact <- function(
         eps2=10^-10, 
         cyc=c(10,10), 
         tol=0.00001, 
-        weightType = "mean", ...) {
+        weightType = "mean", 
+        centering = "median", 
+        ...) {
     probes <- as.matrix(probes)
     sigmaZ <- 1.0/weightZ
     if(length(cyc)==1)
         cyc <- c(cyc,cyc)
     additional <- list(...)
      
-    if("initPsi"%in%names(additional)) 
+    if("initPsi" %in% names(additional)) 
         initPsi <- additional$initPsi 
     else 
         initPsi <- 0.5
      
-    if("algorithm"%in%names(additional)) 
+    if("algorithm" %in% names(additional)) 
         algorithm <- additional$algorithm
     else
         algorithm <- "exact"
      
     if(algorithm=="v") {
-        if("boundedLapla"%in%names(additional))
+        if("boundedLapla" %in% names(additional))
             boundedLapla <- additional$boundedLapla
         else
             boundedLapla <- TRUE
@@ -86,7 +105,9 @@ summarizeFarmsExact <- function(
     DataT <- t(probes)
     n <- ncol(Data)
     dimension <- nrow(Data)
-    mean.Data <- apply(Data, 1, median)
+    
+    if (centering=="median") {mean.Data <- apply(Data, 1, median)}
+    if (centering=="mean") {mean.Data <- rowMeans(Data)} 
     NData <- Data - mean.Data
     
     sd.Data <- sqrt(rowSums(NData^2)/n)
@@ -101,19 +122,19 @@ summarizeFarmsExact <- function(
     
     Psi <- initPsi*diag(DataCov)
     lambda <- sqrt(diag(DataCov)-Psi)
-    lapla=rep(1, n)
+    lapla <- rep(1, n)
     
-    NData2=NData^2
+    NData2 <- NData^2
     
     #EM algorithm
     nrCyc <- cyc[2]
     PsiOld <- Psi
     
-    results=list()
+    results <- list()
     
-    log_p_ges=0
-    lambda_old=lambda
-    Psi_old=Psi
+    log_p_ges <- 0
+    lambda_old <- lambda
+    Psi_old <- Psi
     
     for (i in 1:cyc[2]) {
         #E-Step

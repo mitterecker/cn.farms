@@ -1,21 +1,31 @@
 Package: cn.farms
-Type: Package
-Version: 0.99.6
-Date: 2011-03-04
-Title: cn.farms - Factor Analysis for copy number estimation
-Description: This package implements the cn.FARMS algorithm for copy
-    number variation (CNV) analysis. cn.FARMS allows to analyse all
-    existing Affymetix (10K-SNP6.0) array types, supports
-    high-performance computing using snow and ff.
-Author: Andreas Mitterecker, Djork-Arne Clevert
-Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>, Djork-Arne
-    Clevert <okko@clevert.de>
-Depends: R (>= 2.12), Biobase, methods, ff
 Imports: DBI, affxparser, oligo, oligoClasses, snowfall, DNAcopy,
     preprocessCore, lattice
-Suggests: pd.mapping250k.sty, pd.mapping250k.nsp, pd.genomewidesnp.5,
-    pd.genomewidesnp.6
-License: LGPL (>= 2)
+Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>,
+    Djork-Arne Clevert <okko@clevert.de>
+License: LGPL (>= 2.0)
+Title: cn.farms - Factor Analysis for copy number estimation
+Type: Package
 LazyLoad: Yes
+Author: Andreas Mitterecker <mitterecker@bioinf.jku.at>,
+    Djork-Arne Clevert <okko@clevert.de>
+Description: This package implements the cn.FARMS algorithm for
+    copy number variation (CNV) analysis. cn.FARMS allows to
+    analyse all existing Affymetix (10K-SNP6.0) array types,
+    supports high-performance clustering using snow and ff.
+Version: 0.99.5
 biocViews: Microarray, Bioinformatics, CopyNumberVariants
-URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
+Date: 2011-04-04
+Depends: R (>= 2.12), Biobase, methods, ff
+Suggests: pd.mapping250k.sty, pd.mapping250k.nsp,
+    pd.genomewidesnp.5, pd.genomewidesnp.6
+Collate: 'callSummarize.R' 'combineData.R' 'createAnnotation.R'
+    'createMatrix.R' 'distributionDistance.R' 'dnaCopySf.R'
+    'fragLengthCorr.R' 'normAdd.R' 'normalizeAverage.R'
+    'normalizeCels.R' 'normalizeNpData.R' 'normalizeQuantiles.R'
+    'normalizeSor.R' 'plotDendrogram.R' 'plotDensity.R'
+    'plotViolines.R' 'sparseFarmsC.R' 'summarizationMl.R'
+    'summarizationSl.R' 'summarizeFarmsGaussian.R'
+    'summarizeFarmsLaplaceExact.R' 'summarizeFarmsLaplaceVar.R'
+    'summarizeFarmsMethods.R' 'windowFunctions.R'
+    'windowMethods.R' 'zzz.R'
