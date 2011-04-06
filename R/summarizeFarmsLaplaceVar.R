@@ -45,7 +45,7 @@ summarizeFarmsVariational <- function(
         correction = 0, 
         minNoise = 0.35, 
         spuriousCorrelation = 0.3,
-        centering = "median"){
+        centering = "median") {
     
     informationContent <- TRUE
     

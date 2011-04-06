@@ -1,4 +1,3 @@
-
 #' Normalization Quantiles
 #' @param filenames filenames
 #' @param cores cores
@@ -72,7 +71,8 @@ normalizeQuantiles <- function (filenames, cores=1, batch=NULL,
                             "idxOfAlleleB", "intensity")))
     
     cat(paste(Sys.time(), "|   Starting normalization \n"))
-    res <- suppressWarnings(sfLapply(1:nbrOfSamples, normalizeQuantilesH01, filenames))
+    res <- suppressWarnings(sfLapply(1:nbrOfSamples, normalizeQuantilesH01, 
+                    filenames))
     
     cat(paste(Sys.time(), "|   Normalization done \n"))
     sfStop()

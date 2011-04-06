@@ -1,8 +1,3 @@
-## Some distance measures as mentioned in Singh (2006), "Study Of Some
-## Distance Measures For Language And Encoding Identification",
-## http://clair.si.umich.edu/clair/anthology/query.cgi?type=Paper&id=W06-1109.
-
-
 #' Computes the distribution distance 
 #' 
 #' Computes the distribution distance 
@@ -24,10 +19,15 @@
 #' plotDendrogram(y)
 distributionDistance <- function(
         intensityData, 
-	    method=c("JSDiv","KLDiv", "KLInf"),
-	    useSubset=T, 
-	    subsetFraction=0.25, 
-	    useQuantileReference=FALSE) {
+        method = c("JSDiv","KLDiv", "KLInf"),
+	    useSubset = T, 
+	    subsetFraction = 0.25, 
+	    useQuantileReference = FALSE) {
+    
+    ## Some distance measures as mentioned in Singh (2006), "Study Of Some
+    ## Distance Measures For Language And Encoding Identification",
+    ## http://clair.si.umich.edu/clair/anthology/query.cgi?type=Paper&id=W06-1109.
+        
 	## Parse arguments, stored in variables
 	## If no value is specified, the first option in the list is taken as 
     ## the default value  

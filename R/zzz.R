@@ -7,13 +7,13 @@
 		addVigs2WinMenu("cn.farms")
 	
 	packageStartupMessage(
-			"               _                             " ,"\n",
-			"              | |                            " ,"\n",
-			" __   _  _    | |  __,   ,_    _  _  _    ,  " ,"\n",
-			"/    / |/ |   |/  /  |  /  |  / |/ |/ |  / \\_" ,"\n",
+			"               _                                " ,"\n",
+			"              | |                               " ,"\n",
+			" __   _  _    | |  __,   ,_    _  _  _    ,     " ,"\n",
+			"/    / |/ |   |/  /  |  /  |  / |/ |/ |  / \\_  " ,"\n",
 			"\\___/  |  |_/o|__/\\_/|_/   |_/  |  |  |_/ \\/ " ,"\n",
-			"              |\\                             " ,"\n",
-			"              |/   " ,"\n")
+			"              |\\                               " ,"\n",
+			"              |/                                " ,"\n")
 	
 	packageStartupMessage("Citation: D.-A. Clevert et al.," ,"\n",
 			"cn.FARMS: a latent variable model to detect copy number ", 

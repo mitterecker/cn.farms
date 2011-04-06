@@ -13,14 +13,18 @@
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
         batchList=NULL, cores=1, runtype="ff", returnValues){
+    
     cat(paste(Sys.time(), " |   Starting summarization \n", sep = ""))
+    
     if (is.null(batchList)) {
         batchList <- rep(1, ncol(object))
     }
     
     cat(paste(Sys.time(), " |   Computations will take some time,", 
                     " please be patient \n", sep = ""))
+    
     if(runtype=="ram") cores=1
+    
     nbrOfSamples <- ncol(object)
     maxNbrOfProbes <- max((psInfo$end - psInfo$start) + 1)
     nbrOfProbes <- length(psInfo$start)

@@ -47,7 +47,8 @@ double logMultiplyFactor=log(0.01);
 ofstream debugOutput;
 
 
-void quadratic(double a, double b, double c, double& D, double& z1, double& z2) {
+void quadratic(double a, double b, double c, double& D, double& z1,
+		double& z2) {
 	double maxCoeff=fmax(fmax(fabs(a), fabs(b)), fabs(c));
 	a=a/maxCoeff;
 	b=b/maxCoeff;
@@ -56,8 +57,7 @@ void quadratic(double a, double b, double c, double& D, double& z1, double& z2) 
 	if(D<0) {
 		z1=-b/(2.*a);
 		z2=sqrt(-D)/(2.*a);
-	}
-	else {
+	} else {
 		double sqrtD=sqrt(D);
 		z1=(-b-sqrtD)/(2.*a);
 		z2=(-b+sqrtD)/(2.*a);
@@ -73,12 +73,14 @@ double evalLogGauss(double z, double my, double sigma) {
 	return -((-my + z)*(-my + z))/(2.*sigma*sigma) - log(2*Pi)/2. - log(sigma);
 }
 
-double evalLogUnnormalizedPosterior(double a, double b, double c, double sigmaZ, double logNormfact, double z) {
+double evalLogUnnormalizedPosterior(double a, double b, double c, double sigmaZ,
+		double logNormfact, double z) {
 	double z2=z*z;
 	return (a*z2+b*z+c-fabs(z)/sigmaZ)+logNormfact;
 }
 
-double evalApproximation(double leftWeight, double rightWeight, double leftMy, double rightMy, double leftSigma, double rightSigma, double z) {
+double evalApproximation(double leftWeight, double rightWeight, double leftMy,
+		double rightMy, double leftSigma, double rightSigma, double z) {
 	if(z<0) {
 		return log(leftWeight)+evalLogGauss(z, leftMy, leftSigma);
 	}
@@ -88,11 +90,11 @@ double evalApproximation(double leftWeight, double rightWeight, double leftMy, d
 }
 
 
-void computeParameters(double a, double b, double c, double sigmaZ, double logNormfact, 
-		int& Case,
-		double& maxZ, double& logMaxValue,
-		double &alpha, double& leftWeight, double& rightWeight, double&leftMy, double& rightMy, double& leftSigma, double& rightSigma,
-		double& moment1, double& moment2, double& entropy, double& crossentropy) {
+void computeParameters(double a, double b, double c, double sigmaZ,
+		double logNormfact, int& Case, double& maxZ, double& logMaxValue,
+		double &alpha, double& leftWeight, double& rightWeight, double&leftMy,
+		double& rightMy, double& leftSigma, double& rightSigma,double& moment1,
+		double& moment2, double& entropy, double& crossentropy) {
 
 	//"sigmaZ" is considered to be "b" in a Laplace distribution
 
@@ -107,7 +109,8 @@ void computeParameters(double a, double b, double c, double sigmaZ, double logNo
 		moment2=2.0*sigmaZ*sigmaZ;
 		entropy=log(2.0*exp(1.0)*sigmaZ);
 		crossentropy=log(2.0*exp(1.0)*sigmaZ);
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, 0.0);
+		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ,
+				logNormfact, 0.0);
 		alpha=exp(logMaxValue+log(2.0*sigmaZ));
 		maxZ=0.0;
 		return;
@@ -128,7 +131,8 @@ void computeParameters(double a, double b, double c, double sigmaZ, double logNo
 		moment2=2.0*sigmaZ*sigmaZ;
 		entropy=log(2.0*exp(1.0)*sigmaZ);
 		crossentropy=log(2.0*exp(1.0)*sigmaZ);
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, 0.0);
+		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ,
+				logNormfact, 0.0);
 		alpha=exp(logMaxValue+log(2.0*sigmaZ));
 		maxZ=0.0;
 		return;
@@ -144,7 +148,8 @@ void computeParameters(double a, double b, double c, double sigmaZ, double logNo
 		crossentropy=-(-log(2.0*sigmaZ)-moment1/sigmaZ);
 		leftWeight=0.0;
 		rightWeight=1.0;
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, rightMy);
+		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact,
+				rightMy);
 		alpha=exp(logMaxValue+log(rightSigma*sqrt(2*Pi)));
 		maxZ=rightMy;
 		return;
@@ -160,7 +165,8 @@ void computeParameters(double a, double b, double c, double sigmaZ, double logNo
 		crossentropy=-(-log(2.0*sigmaZ)+moment1/sigmaZ);
 		leftWeight=1.0;
 		rightWeight=0.0;
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, leftMy);
+		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact,
+				leftMy);
 		alpha=exp(logMaxValue+log(leftSigma*sqrt(2*Pi)));
 		maxZ=leftMy;
 		return;
@@ -168,7 +174,8 @@ void computeParameters(double a, double b, double c, double sigmaZ, double logNo
 
 	Case=3;
 
-	double weight=exp(evalLogGauss(0, rightMy, rightSigma)-evalLogGauss(0, leftMy, leftSigma)+log(areaLeft)-log(areaRight));
+	double weight=exp(evalLogGauss(0, rightMy, rightSigma)-
+			evalLogGauss(0, leftMy, leftSigma)+log(areaLeft)-log(areaRight));
 	leftWeight=weight/(weight+1.0);
 	rightWeight=1.0/(weight+1.0);
 
@@ -182,17 +189,29 @@ void computeParameters(double a, double b, double c, double sigmaZ, double logNo
 
 	double leftMoment1=1.0*leftMy*I0left+1.0*leftSigma*I1left;
 	double rightMoment1=1.0*rightMy*I0right+1.0*rightSigma*I1right;
-	double leftMoment2=1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+1.0*leftSigma*leftSigma*I2left;
-	double rightMoment2=1.0*rightMy*rightMy*I0right+2.0*rightMy*rightSigma*I1right+1.0*rightSigma*rightSigma*I2right;
+	double leftMoment2=1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+
+			1.0*leftSigma*leftSigma*I2left;
+	double rightMoment2=1.0*rightMy*rightMy*I0right+
+			2.0*rightMy*rightSigma*I1right+1.0*rightSigma*rightSigma*I2right;
 
-	moment1=leftWeight*(1.0*leftMy*I0left+1.0*leftSigma*I1left)+rightWeight*(1.0*rightMy*I0right+1.0*rightSigma*I1right);
-	moment2=leftWeight*(1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+1.0*leftSigma*leftSigma*I2left)+rightWeight*(1.0*rightMy*rightMy*I0right+2.0*rightMy*rightSigma*I1right+1.0*rightSigma*rightSigma*I2right);
+	moment1=leftWeight*(1.0*leftMy*I0left+1.0*leftSigma*I1left)+rightWeight*
+			(1.0*rightMy*I0right+1.0*rightSigma*I1right);
+	moment2=leftWeight*(1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+
+			1.0*leftSigma*leftSigma*I2left)+rightWeight*
+			(1.0*rightMy*rightMy*I0right+2.0*rightMy*rightSigma*I1right+1.0*
+					rightSigma*rightSigma*I2right);
 
-	double leftEntropy=-(-log(sqrt(2.0*Pi)*leftSigma*areaLeft)+(-leftMoment2/2.0+leftMoment1*leftMy-leftMy*leftMy/2.0)/(leftSigma*leftSigma));
-	double rightEntropy=-(-log(sqrt(2.0*Pi)*rightSigma*areaRight)+(-rightMoment2/2.0+rightMoment1*rightMy-rightMy*rightMy/2.0)/(rightSigma*rightSigma));
-	entropy=-leftWeight*log(leftWeight)-rightWeight*log(rightWeight)+leftWeight*leftEntropy+rightWeight*rightEntropy;
+	double leftEntropy=-(-log(sqrt(2.0*Pi)*leftSigma*areaLeft)+
+			(-leftMoment2/2.0+leftMoment1*leftMy-leftMy*leftMy/2.0)/
+			(leftSigma*leftSigma));
+	double rightEntropy=-(-log(sqrt(2.0*Pi)*rightSigma*areaRight)+
+			(-rightMoment2/2.0+rightMoment1*rightMy-rightMy*rightMy/2.0)/
+			(rightSigma*rightSigma));
+	entropy=-leftWeight*log(leftWeight)-rightWeight*log(rightWeight)+
+			leftWeight*leftEntropy+rightWeight*rightEntropy;
 
-	crossentropy=-(-log(2.0*sigmaZ)+(leftWeight*leftMoment1-rightWeight*rightMoment1)/sigmaZ);
+	crossentropy=-(-log(2.0*sigmaZ)+
+			(leftWeight*leftMoment1-rightWeight*rightMoment1)/sigmaZ);
 
 	//Computation of MaxZ
 	double max1Z;
@@ -205,16 +224,19 @@ void computeParameters(double a, double b, double c, double sigmaZ, double logNo
 		max2Z=rightMy;
 	else
 		max2Z=0.0;
-	if(log(leftWeight/areaLeft)+evalLogGauss(max1Z, leftMy, leftSigma)>log(rightWeight/areaRight)+evalLogGauss(max2Z, rightMy, rightSigma))
+	if(log(leftWeight/areaLeft)+evalLogGauss(max1Z, leftMy, leftSigma)>
+	log(rightWeight/areaRight)+evalLogGauss(max2Z, rightMy, rightSigma))
 		maxZ=max1Z;
 	else
 		maxZ=max2Z;
 	logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, maxZ);
-	alpha=exp(logMaxValue-evalApproximation(leftWeight/areaLeft, rightWeight/areaRight, leftMy, rightMy, leftSigma, rightSigma, maxZ));
+	alpha=exp(logMaxValue-evalApproximation(leftWeight/areaLeft,
+			rightWeight/areaRight, leftMy, rightMy, leftSigma, rightSigma, maxZ));
 }
 
 
-extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS, SEXP cS, SEXP sigmaZS, SEXP normfactS, SEXP evalProb, SEXP methodS) {
+extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS,
+		SEXP cS, SEXP sigmaZS, SEXP normfactS, SEXP evalProb, SEXP methodS) {
 	logBorderFactor=log(borderFactor);
 	logIntegrationFactor=log(integrationFactor);
 
@@ -222,7 +244,8 @@ extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS, 
 	int method=0;
 
 	SEXP RET;
-	SEXP normConstRET, moment1RET, moment2RET, maxRET, entropyRET, crossentropyRET, caseRET;
+	SEXP normConstRET, moment1RET, moment2RET, maxRET, entropyRET,
+	crossentropyRET, caseRET;
 
 	PROTECT(RET = allocVector(VECSXP, 7));
 	PROTECT(normConstRET = allocVector(REALSXP, elements));
@@ -260,8 +283,8 @@ extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS, 
 		computeParameters(a, b, c, sigmaZ, logNormfact, 
 				Case,
 				maxZ, logMaxValue,
-				alpha, leftWeight, rightWeight, leftMy, rightMy, leftSigma, rightSigma,
-				moment1, moment2, entropy, crossentropy);
+				alpha, leftWeight, rightWeight, leftMy, rightMy, leftSigma,
+				rightSigma,	moment1, moment2, entropy, crossentropy);
 
 
 		if((double)(REAL(evalProb)[0])==1.0)
@@ -299,7 +322,9 @@ extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS, 
 	return RET;
 }
 
-void evalIntegration(double z, double a, double b, double c, double sigmaZ, double logNormfact, double logFmax, double& newLogFmax, double& value, double& entropy, double& crossentropy) {
+void evalIntegration(double z, double a, double b, double c, double sigmaZ,
+		double logNormfact, double logFmax, double& newLogFmax, double& value,
+		double& entropy, double& crossentropy) {
 	double eval=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, z);
 	if(eval>newLogFmax)
 		newLogFmax=eval;
@@ -308,7 +333,14 @@ void evalIntegration(double z, double a, double b, double c, double sigmaZ, doub
 	crossentropy=value*(-log(sigmaZ)-fabs(z)/sigmaZ);
 }
 
-void sumTrapez(double a, double b, double eps, int n, double* integral, double* err, bool& fail, void func(double val, double apar, double bpar, double cpar, double sigmapar, double normfactpar, double logFmax, double& newLogFmax, double& value, double& entropy, double& crossentropy), double ap, double bp, double cp, double sigmap, double normfactp, double logFmax, double& newLogFmax) {
+void sumTrapez(double a, double b, double eps, int n, double* integral,
+		double* err, bool& fail,
+		void func(double val, double apar, double bpar, double cpar,
+				double sigmapar, double normfactpar, double logFmax,
+				double& newLogFmax, double& value, double& entropy,
+				double& crossentropy),
+				double ap, double bp, double cp, double sigmap,
+				double normfactp, double logFmax, double& newLogFmax) {
 	integral[0]=0.0;
 	integral[1]=0.0;
 	integral[2]=0.0;
@@ -322,7 +354,8 @@ void sumTrapez(double a, double b, double eps, int n, double* integral, double* 
 		double addmoment;
 		double addentropy;
 		double addcrossentropy;
-		func(xvalue, ap, bp, cp, sigmap, normfactp, logFmax, newLogFmax, addmoment, addentropy, addcrossentropy);
+		func(xvalue, ap, bp, cp, sigmap, normfactp, logFmax, newLogFmax,
+				addmoment, addentropy, addcrossentropy);
 		integral[0]=integral[0]+addmoment;
 		addmoment=addmoment*xvalue;
 		integral[1]=integral[1]+addmoment;
@@ -338,7 +371,9 @@ void sumTrapez(double a, double b, double eps, int n, double* integral, double* 
 	integral[4]=integral[4]*h;
 }
 
-extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS, SEXP cS, SEXP sigmaZS, SEXP normfactS, SEXP evalProb, SEXP methodS) {
+extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S,
+		SEXP aS, SEXP bS, SEXP cS, SEXP sigmaZS, SEXP normfactS,
+		SEXP evalProb, SEXP methodS) {
 	logBorderFactor=log(borderFactor);
 	logIntegrationFactor=log(integrationFactor);
 
@@ -348,7 +383,8 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S, SEXP a
 	int method=0;
 
 	SEXP RET;
-	SEXP normConstRET, moment1RET, moment2RET, maxRET, entropyRET, crossentropyRET, caseRET;
+	SEXP normConstRET, moment1RET, moment2RET, maxRET, entropyRET,
+	crossentropyRET, caseRET;
 
 	PROTECT(RET = allocVector(VECSXP, 7));
 	PROTECT(normConstRET = allocVector(REALSXP, elements));
@@ -385,15 +421,17 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S, SEXP a
 		computeParameters(a, b, c, sigmaZ, logNormfact,
 				Case,
 				maxZ, logMaxValue,
-				alpha, leftWeight, rightWeight, leftMy, rightMy, leftSigma, rightSigma,
-				moment1, moment2, entropy, crossentropy);
+				alpha, leftWeight, rightWeight, leftMy, rightMy, leftSigma,
+				rightSigma,	moment1, moment2, entropy, crossentropy);
 
 		if(method==1||method==2) {
 			logNormfact=logNormfact+log(2.0);
 		}
 		double left, right, D, variable;
-		quadratic(a, b+1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact, D, left, variable);
-		quadratic(a, b-1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact, D, variable, right);
+		quadratic(a, b+1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact,
+				D, left, variable);
+		quadratic(a, b-1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact,
+				D, variable, right);
 
 		if(method==1) {
 			left=0.0;
@@ -403,14 +441,17 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S, SEXP a
 		}
 
 
-		double logFmax=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, maxZ);
+		double logFmax=evalLogUnnormalizedPosterior(a, b, c, sigmaZ,
+				logNormfact, maxZ);
 		double newLogFmax=logFmax;
 
 
 		double integral[5];
 		double err[5];
 		bool fail;
-		sumTrapez(left, right, numeric_limits<double>::epsilon(), 15000, integral, err, fail, evalIntegration, a, b, c, sigmaZ, logNormfact, logFmax, newLogFmax);
+		sumTrapez(left, right, numeric_limits<double>::epsilon(), 15000,
+				integral, err, fail, evalIntegration, a, b, c, sigmaZ,
+				logNormfact, logFmax, newLogFmax);
 
 		bool repeatQuadrature=false;
 		for(int i=0; i<3; i++) {
@@ -418,7 +459,9 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S, SEXP a
 				repeatQuadrature=true;
 		}
 		if(repeatQuadrature) {
-			sumTrapez(left, right, numeric_limits<double>::epsilon(), 15000, integral, err, fail, evalIntegration, a, b, c, sigmaZ, logNormfact, newLogFmax, newLogFmax);
+			sumTrapez(left, right, numeric_limits<double>::epsilon(), 15000,
+					integral, err, fail, evalIntegration, a, b, c, sigmaZ,
+					logNormfact, newLogFmax, newLogFmax);
 			logFmax=newLogFmax;
 		}
 

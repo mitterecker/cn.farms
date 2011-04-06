@@ -13,15 +13,15 @@
 #' normalizeAverage(x)
 normalizeAverage <- function(x, baseline=1, avg=median, targetAvg=2200, ...) {
     
-    # Estimate the scale for each channel
+    ## Estimate the scale for each channel
     scale <- apply(x, MARGIN=2, FUN=avg, ...)
     
     scale1 <- scale[baseline]
     
-    # Standardize so that the 'baseline' channel has scale one.
+    ## Standardize so that the 'baseline' channel has scale one.
     scale <- scale / scale1
     
-    # Rescale to target averages?
+    ## Rescale to target averages?
     if (!is.null(targetAvg)) {
         
         rho <- (scale1 / targetAvg)
@@ -30,7 +30,7 @@ normalizeAverage <- function(x, baseline=1, avg=median, targetAvg=2200, ...) {
         
     }
     
-    # Rescale so that all channels have the same scale
+    ## Rescale so that all channels have the same scale
     for (cc in 1:ncol(x)) {
         
         x[,cc] <- x[,cc] / scale[cc]

@@ -36,8 +36,7 @@
 combineData <- function (object01, object02, 
         obj01Var="intensity",    obj02Var="intensity", runtype="ff") {
     
-    if (runtype=="bm" & 
-            file.exists("combData.RData")) {
+    if (runtype=="bm" & file.exists("combData.RData")) {
         message("Combining the data has already been done")
         message("Trying to load combined data ...")
         load("combData.RData", envir=globalenv())

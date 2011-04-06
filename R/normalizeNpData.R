@@ -22,7 +22,7 @@
 #' }
 #' @export
 normalizeNpData <- function(filenames, cores=1, 
-        annotDir=NULL, runtype="ff"){
+        annotDir=NULL, runtype="ff") {
     
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
     pkgname <- oligo::cleanPlatformName(mapping)
@@ -130,7 +130,8 @@ normalizeNpDataH01 <- function(i){
     filenames <- filenames
     pmfeatureCNV <- pmfeatureCNV
     
-    LZExprs <- affxparser::readCelIntensities(filenames[i], indices=pmfeatureCNV$fid)
+    LZExprs <- affxparser::readCelIntensities(filenames[i], 
+            indices=pmfeatureCNV$fid)
     LZExprs <- normalizeAverage(LZExprs)
     LZExprs <- log2(LZExprs)
     intensity[, i] <- LZExprs

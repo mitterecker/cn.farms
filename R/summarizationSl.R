@@ -52,11 +52,12 @@
 #'         summaryMethod = summaryMethod, 
 #'         summaryParam = summaryParam)
 #' assayData(slData)$L_z[1:10, ]
-slSummarization <- function(object, 
-        summaryMethod="Variational", 
+slSummarization <- function(
+        object, 
+        summaryMethod = "Variational", 
         summaryParam, 
-        callParam=list(runtype="ff", cores=1), 
-        summaryWindow=c("std", "fragment"), 
+        callParam = list(runtype="ff", cores=1), 
+        summaryWindow = c("std", "fragment"), 
         returnValues) {
     
     normAdd <- normAdd(object@annotation)
@@ -67,7 +68,7 @@ slSummarization <- function(object,
     }
     
     if (callParam$runtype=="bm" & file.exists(loadFile)) {
-        message("Single-locus summarization has already been done")
+        message("Single-locus summarization has already been done.")
         message("Trying to load data ...")
         load("slData.RData")
         return(slData)    

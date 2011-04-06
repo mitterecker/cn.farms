@@ -86,6 +86,7 @@ dnaCopySfH01 <- function (i, ...) {
     if (!exists("min.width")) min.width <- 3
     if (!exists("undo.splits")) undo.splits <- "sdundo"
     if (!exists("undo.SD")) undo.SD <- 1
+    
     ## non-visible bindings
     x <- x
     chrom <- chrom
@@ -97,7 +98,7 @@ dnaCopySfH01 <- function (i, ...) {
             chrom, 
             maploc,
             data.type="logratio")
-    #presorted=presorted)
+
     if(smoothing == T) {
         cnaObj <- DNAcopy::smooth.CNA(cnaObj)
     } 

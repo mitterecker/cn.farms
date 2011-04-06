@@ -25,8 +25,13 @@
 #' createAnnotation(filenames=filenames)
 #' normData <- normalizeCels(filenames, method="SOR")
 #' }
-normalizeCels <- function (filenames, method=c("SOR", "quantiles"), cores=1, alleles=F, 
-        runtype="bm", annotDir=NULL, ...) {
+normalizeCels <- function (
+        filenames, 
+        method = c("SOR", "quantiles"), 
+        cores=1, 
+        alleles=F, 
+        runtype="bm", 
+        annotDir=NULL, ...) {
 
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
     pkgname <- oligo::cleanPlatformName(mapping)

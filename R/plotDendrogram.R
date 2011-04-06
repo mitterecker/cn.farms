@@ -1,4 +1,3 @@
-
 #' Plots a dendrogram
 #' @param DivMetric The input data (see example).
 #' @param colorLabels A color label with the dimension of the columns.
@@ -12,7 +11,7 @@
 #' y <- distributionDistance(x)
 #' attr(y, "Labels") <- substr(sampleNames(normData), 1, 7)
 #' plotDendrogram(y)
-plotDendrogram <- function(DivMetric, colorLabels){
+plotDendrogram <- function(DivMetric, colorLabels) {
     
     if (missing(colorLabels)) colorLabels <- seq(DivMetric)
     

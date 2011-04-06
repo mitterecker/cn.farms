@@ -101,7 +101,8 @@ void Inverse3x3(double mat[3][3], double res[3][3]) {
 
 void Inverse3x3diag(double mat[3][3],double vec[3], double res[3][3]) {
 
-	double mat_11, mat_12, mat_13, mat_21, mat_22, mat_23, mat_31, mat_32, mat_33, det;
+	double mat_11, mat_12, mat_13, mat_21, mat_22, mat_23, mat_31, mat_32,
+	mat_33, det;
 
 	mat_11 = mat[0][0] + vec[0];
 
@@ -220,7 +221,8 @@ SEXP normData(SEXP xS, SEXP E_SX, SEXP nnS){
 
 		E_SX_t[2] = E_SX_Data[nn2+j] + epsv;
 
-		euclid_Scalar_E_SX = sqrt(pow(E_SX_t[0],2) + pow(E_SX_t[1],2) + pow(E_SX_t[2],2));
+		euclid_Scalar_E_SX = sqrt(pow(E_SX_t[0],2) + pow(E_SX_t[1],2) +
+				pow(E_SX_t[2],2));
 
 		E_SX_n[j][0] = E_SX_t[0] / euclid_Scalar_E_SX * euclid_Scalar_x;
 
@@ -256,7 +258,8 @@ SEXP sparseFarmsC(SEXP xS, SEXP cycS, SEXP XXS, SEXP nnS) {
 
 	double sumhelp,fac1,f1,f2,epsv,ess;
 
-	double LPsiL[3][3],LPsi[3][2],Psi[2][2],sum1[2][3],sum2[3][3],tt[3],tt1[3],xt[2],inva[3][3],invp[2][2],invpPsi[2][2],tmplapla[3];
+	double LPsiL[3][3], LPsi[3][2], Psi[2][2], sum1[2][3], sum2[3][3], tt[3],
+	tt1[3], xt[2], inva[3][3], invp[2][2], invpPsi[2][2], tmplapla[3];
 
 	void** ret=Calloc(4, void*);	
 
@@ -271,14 +274,11 @@ SEXP sparseFarmsC(SEXP xS, SEXP cycS, SEXP XXS, SEXP nnS) {
 	*nna=nn;
 
 
-
 	L=(double**)Calloc(2, double*);
 
 	lapla=(double**)Calloc(nn, double*);
 
 	E_SX_n	=(double**)Calloc(nn, double*);
-
-
 
 
 
