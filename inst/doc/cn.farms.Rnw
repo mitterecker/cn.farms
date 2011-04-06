@@ -2,7 +2,7 @@
 %\VignetteIndexEntry{cn.farms: Manual for the R package}
 %\VignetteDepends{cn.farms}
 %\VignettePackage{cn.farms}
-%\VignetteKeywords{copy number analysis, factor analysis, sparse coding, latent variables, Laplace distribution, EM algorithm, microarray, farms, CNV, copy number}
+%\VignetteKeywords{copy number analysis, factor analysis, sparse coding, latent variables, Laplace distribution, EM algorithm, microarray, farms, CNV, copy number variant, sparse overcomplete representation}
 
 \documentclass[article]{bioinf}
 
