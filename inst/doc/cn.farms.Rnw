@@ -232,7 +232,7 @@ library(cn.farms)
 \end{Sinput}
 
 \noindent For reasons of computational time and memory consumption \Rpackage{cn.farms} supports high-performance computation. 
-The parameter  \verb+cores+ specifies number amount of CPUs requested for the cluster and  the parameter  \verb+runtype+
+The parameter  \verb+cores+ specifies number of CPUs requested for the cluster and  the parameter  \verb+runtype+
 indicates how the data matrix should be stored.   \verb+runtype = "ff"+ creates a transient flat-file which will not be saved automatically.
 Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save permanently.
 
@@ -264,11 +264,10 @@ Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save 
 > normMethod <- "SOR"> ## normalization of SNP data> if(exists("annotDir")) {> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, > 			annotDir=annotDir, runtype=runtype)> } else {> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, > 			runtype=runtype)> }
 \end{Sinput}
 
-\noindent Now, the normalized data will be summarized at DNA probe loci. \verb+summaryMethod <-  "Variational"+ indicates which FARMS
+\noindent Now, the normalized data will be summarized at DNA probe loci. \verb+summaryMethod <- "Variational"+ indicates which FARMS
 approach should be used and \verb+summaryParam$cyc <- c(10, 10)+ specifies the number of iterations of the EM-algorithm. The parameter 
 \verb+summaryWindow+ indicates whether DNA probe loci on the same DNA fragments are summarized together (\verb+summaryWindow="fragment"+) 
 or if the DNA probe loci are summarized separately (\verb+summaryWindow="std"+ is the default setting).
-
 
 << echo=TRUE>>=
 summaryMethod <- "Variational"
@@ -365,6 +364,10 @@ demo03Snp500k         Demo for an Affymetrix 500K data set
 demo04Snp250k         Demo for an Affymetrix 250K NSP data set
 demo05Testing         Run the examples
 \end{Sinput}
+
+
+\noindent The most recent \Rpackage{cn.farms} version can be found at \href{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}. 
+
 
 \section{Setup}
 \label{sec:setup}
