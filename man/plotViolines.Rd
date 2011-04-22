@@ -15,6 +15,7 @@ Andreas Mitterecker \email{mitterecker@bioinf.jku.at}}
 \item{...}{Further arguments passed to the lattice graph.}
 }
 \examples{load(system.file("exampleData/normData.RData", package="cn.farms"))
+normData <- normData[, 1:10]
 groups <- seq(sampleNames(normData))
 plotViolines(normData, variable="intensity", groups, xlab="Intensity values")}
 

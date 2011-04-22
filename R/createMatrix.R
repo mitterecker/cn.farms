@@ -21,3 +21,4 @@ createMatrix <- function(runtype, nrow, ncol, type="double", bmName="NA") {
     }
     return(x)
 }
+

@@ -30,7 +30,7 @@ if (!dontrun) {
 
 ## distributionDistance (see plotDendrogram)
 load(system.file("exampleData/normData.RData", package="cn.farms"))
-x <- assayData(normData)$intensity
+x <- assayData(normData)$intensity[, 1:3]
 y <- distributionDistance(x)
 attr(y, "Labels") <- substr(sampleNames(normData), 1, 7)
 plotDendrogram(y)
@@ -38,9 +38,7 @@ plotDendrogram(y)
 
 ## dnaCopySf
 load(system.file("exampleData/mlData.RData", package="cn.farms"))
-experimentData(mlData)@other$annotDir <- 
-        system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
-                package="cn.farms")
+mlData <- mlData[, 1:3]
 colnames(assayData(mlData)$L_z) <- sampleNames(mlData)
 segments <- dnaCopySf(
         x         = assayData(mlData)$L_z, 
@@ -92,7 +90,7 @@ if (!dontrun) {
 
 ## plotDendrogram
 load(system.file("exampleData/normData.RData", package="cn.farms"))
-x <- assayData(normData)$intensity
+x <- assayData(normData)$intensity[, 1:3]
 y <- distributionDistance(x)
 attr(y, "Labels") <- substr(sampleNames(normData), 1, 7)
 plotDendrogram(y)
@@ -103,8 +101,27 @@ load(system.file("exampleData/slData.RData", package="cn.farms"))
 plotDensity(assayData(slData)$intensity)
 
 
+## plotEvalIc
+load(system.file("exampleData/slData.RData", package="cn.farms"))
+load(system.file("exampleData/testSegments.RData", package="cn.farms"))
+plotEvalIc(slData, featureData(testSegments)@data, 
+        variable=assayData(slData)$L_z[, 1],  23)
+
+
+## plotRegions
+load(system.file("exampleData/slData.RData", package="cn.farms"))
+load(system.file("exampleData/testSegments.RData", package="cn.farms"))
+plotRegions(slData, testSegments, addInd=10, ylim=c(-2, 2), 
+        variable="L_z", colorVersion=1, plotLegend=TRUE, pdfname="slData.pdf")
+
+## plotSmoothScatter
+load(system.file("exampleData/slData.RData", package="cn.farms"))
+plotSmoothScatter(slData[, 1:3], chrom="23")
+
+
 ## plotVioline
 load(system.file("exampleData/normData.RData", package="cn.farms"))
+normData <- normData[, 1:10]
 groups <- seq(sampleNames(normData))
 plotViolines(normData, variable="intensity", groups, xlab="Intensity values")
 

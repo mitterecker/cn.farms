@@ -18,6 +18,7 @@
 #' @export
 #' @examples
 #' load(system.file("exampleData/mlData.RData", package="cn.farms"))
+#' mlData <- mlData[, 1:3]
 #' colnames(assayData(mlData)$L_z) <- sampleNames(mlData)
 #' segments <- dnaCopySf(
 #'         x         = assayData(mlData)$L_z, 

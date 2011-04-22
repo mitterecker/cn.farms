@@ -6,8 +6,9 @@
 #' @param summaryMethod allowed versions for the summarization step are: 
 #' Gaussian, Variational, Exact. Default is Variational.
 #' @param summaryParam summaryParam
-#' @param callFunc callFunc
 #' @param callParam callParam
+#' @param returnValues List with return values. 
+#' For possible values see summaryMethod.
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -25,8 +26,8 @@
 #'         summaryMethod, summaryParam)
 #' assayData(mlData)
 mlSummarization <- function(object, windowMethod, windowParam, 
-        summaryMethod, summaryParam, callFunc="callSummarize", 
-        callParam=list(runtype="ff")) {
+        summaryMethod, summaryParam, callParam=list(runtype="ff"), 
+        returnValues) {
     t00 <- Sys.time()
     summaryWindowName <- paste("summarizeWindow", paste(
                     toupper(substring(windowMethod, 1,1)), 
@@ -70,12 +71,13 @@ mlSummarization <- function(object, windowMethod, windowParam,
                         ")"))
     }
     
-    myData <- do.call(callFunc, c(alist(
+    myData <- do.call("callSummarize", c(alist(
                             object = assayData(object)$intensity, 
                             psInfo = runIdx,
                             batchList = phenoData(object)$batch,
                             summaryMethod = summaryMethodName, 
-                            summaryParam = summaryParam), 
+                            summaryParam = summaryParam, 
+                            returnValues = returnValues), 
                     callParam))
     
     eSet <- new("ExpressionSet")

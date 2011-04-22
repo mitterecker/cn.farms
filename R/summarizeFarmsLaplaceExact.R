@@ -74,13 +74,14 @@ summarizeFarmsExact <- function(
         eps2=10^-10, 
         cyc=c(10,10), 
         tol=0.00001, 
-        weightType = "mean", 
-        centering = "median", 
+        weightType="mean", 
+        centering="median", 
         ...) {
+    
     probes <- as.matrix(probes)
     sigmaZ <- 1.0/weightZ
     if(length(cyc)==1)
-        cyc <- c(cyc,cyc)
+        cyc <- c(cyc, cyc)
     additional <- list(...)
     
     if("initPsi" %in% names(additional)) 
@@ -100,7 +101,7 @@ summarizeFarmsExact <- function(
             boundedLapla <- TRUE
     }
     
-    #Initialize variables
+    ## Initialize variables
     Data <- probes
     DataT <- t(probes)
     n <- ncol(Data)
@@ -114,10 +115,10 @@ summarizeFarmsExact <- function(
     NData <- NData / (sd.Data + 10^-3)
     NDataT <- t(NData)
     DataCov <- NData %*% NDataT / n
-    DataCov[DataCov == 0] <- 10^-3
+    DataCov[DataCov <= 0] <- 10^-3
     DataCov <- (DataCov + t(DataCov)) / 2
     
-    myLambda <- rep(0,dimension)
+    myLambda <- rep(0, dimension)
     PsiLambda <- rep(mean(diag(DataCov)) / weight, dimension)
     
     Psi <- initPsi * diag(DataCov)
@@ -137,8 +138,10 @@ summarizeFarmsExact <- function(
     Psi_old <- Psi
     
     for (i in 1:cyc[2]) {
+        
         ## E-Step
-        if(algorithm=="exact") {
+        
+        if (algorithm == "exact") {
             InvPsi <- 1 / Psi
             av <- rep(-0.5 * (t(lambda) %*% (InvPsi * lambda))[1], n)
             bv <- as.vector((lambda * InvPsi) %*% NData)
@@ -150,7 +153,7 @@ summarizeFarmsExact <- function(
             avg_xEz <- as.vector(NData %*% moments$moment1 / n)
             avg_Ez2 <- mean(moments$moment2)
             
-        } else if(algorithm=="v") {
+        } else if (algorithm=="v") {
             InvPsi <- 1 / Psi
             sigma2 <- 1 / (lapla + (t(lambda) %*% (InvPsi * lambda))[1])
             Ez <- as.vector((lambda * InvPsi) %*% NData) * sigma2
@@ -158,13 +161,11 @@ summarizeFarmsExact <- function(
             avg_xEz <- as.vector(NData %*% Ez / n)
             avg_Ez2 <- mean(Ez2)
             
-            
-            
             ## M-Step only for v
             lapla <- 1 / sqrt(Ez2)
             if(boundedLapla)
-                lapla[lapla<1] <- 1 
-        } else if(algorithm == "g") {
+                lapla[lapla < 1] <- 1 
+        } else if (algorithm == "g") {
             PsiM1_Lambda <- lambda / Psi
             sigmaZ2 <- 1 / (1 + sum(lambda * PsiM1_Lambda))
             avg_xEz <- (as.vector(DataCov %*% PsiM1_Lambda) * sigmaZ2)
@@ -230,7 +231,7 @@ summarizeFarmsExact <- function(
     
     ICtransform <- 1 / exp(IC * 2.0)
     
-    sdz <- sd(z, na.rm=T)
+    sdz <- sd(z, na.rm=TRUE)
     if(sdz == 0.0) {
         sdz <- 1
     } else {
@@ -249,53 +250,93 @@ summarizeFarmsExact <- function(
     names(z) <- colnames(probes)
     
     if(weightType == "square") {
-        PsiLL <- (lambda^2/Psi)^2
-        sumPsiLL <- sum(PsiLL)
-        if(sumPsiLL == 0)
-            sumPsiLL <- 1
-        propPsiLL <- PsiLL / sumPsiLL
-        L_c <- as.vector(crossprod(lambda1, propPsiLL)) * z
-        mean_int <- mean(lambda0)
-        express <- L_c + mean_int
-        median_int <- median(lambda0)
-        rawCN <- (2^(L_c + mean_int) / 2^median_int)
-    } else if (weightType=="linear") {
-        PsiLL <- (lambda^2/Psi)^2
-        sumPsiLL <- sum(PsiLL)
-        if(sumPsiLL==0)
-            sumPsiLL <- 1       
-        propPsiLL <- PsiLL / sumPsiLL
-        L_c <- as.vector(crossprod(lambda1, propPsiLL)) * z
-        mean_int <- mean(lambda0)
-        express <- L_c + mean_int
-        median_int <- median(lambda0)
-        rawCN <- (2^(L_c + mean_int) / 2^median_int)
-    } else if (weightType=="median") {
-        L_c <- median(lambda1) * z
-        mean_int <- mean(lambda0)
-        express <- L_c + mean_int
-        median_int <- median(lambda0)
-        rawCN <- (2^(L_c + mean_int)/2^median_int)
+        
+            PsiLL <- (lambda^2 / Psi)^2
+        
+            sumPsiLL <- sum(PsiLL)
+            
+            if(sumPsiLL == 0) { sumPsiLL <- 1 }
+            
+            propPsiLL <- PsiLL / sumPsiLL
+            
+            L_c <- as.vector(crossprod(lambda1, propPsiLL)) * z
+            
+            mean_int <- mean(lambda0)
+            
+            express <- L_c + mean_int
+            
+            median_int <- median(lambda0)
+            
+            rawCN <- (2^(L_c + mean_int) / 2^median_int)
+            
+    } else if (weightType == "linear") {
+        
+            PsiLL <- (lambda^2 / Psi)^2
+            
+            sumPsiLL <- sum(PsiLL)
+            
+            if (sumPsiLL == 0) { sumPsiLL <- 1 }
+        
+            propPsiLL <- PsiLL / sumPsiLL
+            
+            L_c <- as.vector(crossprod(lambda1, propPsiLL)) * z
+        
+            mean_int <- mean(lambda0)
+            
+            express <- L_c + mean_int
+            
+            median_int <- median(lambda0)
+            
+            rawCN <- (2^(L_c + mean_int) / 2^median_int)
+            
+    } else if (weightType == "median") {
+        
+            L_c <- median(lambda1) * z
+        
+            mean_int <- median(lambda0)
+            
+            express <- L_c + mean_int
+            
+            median_int <- median(lambda0)
+            
+            rawCN <- (2^(L_c + mean_int) / 2^median_int)
+            
     } else if (weightType == "mean") {
-        L_c <- mean(lambda1) * z
-        mean_int <- mean(lambda0)
-        express <- L_c + mean_int
-        median_int <- median(lambda0)
-        rawCN <- (2^(L_c + mean_int) / 2^median_int)
-    } else if (weightType=="softmax") {
-        PsiLL <- exp(lambda1)
-        sumPsiLL <- sum(PsiLL)
-        if(sumPsiLL==0) {
-            sumPsiLL <- 1
-        }
-        propPsiLL <- PsiLL / sumPsiLL
-        L_c <- as.vector(crossprod(lambda1, propPsiLL)) * z
-        mean_int <- mean(lambda0)
-        express <- L_c + mean_int
-        median_int <- median(lambda0)
-        rawCN <- (2^(L_c + mean_int) / 2^median_int)
+        
+            L_c <- mean(lambda1) * z
+        
+            mean_int <- mean(lambda0)
+            
+            express <- L_c + mean_int
+            
+            median_int <- median(lambda0)
+            
+            rawCN <- (2^(L_c + mean_int) / 2^median_int)
+            
+    } else if (weightType == "softmax") {
+        
+            PsiLL <- exp(lambda1)
+            
+            sumPsiLL <- sum(PsiLL)
+            
+            if (sumPsiLL == 0) { sumPsiLL <- 1 }
+            
+            propPsiLL <- PsiLL / sumPsiLL
+            
+            L_c <- as.vector(crossprod(lambda1, propPsiLL)) * z
+            
+            mean_int <- mean(lambda0)
+            
+            express <- L_c + mean_int
+            
+            median_int <- median(lambda0)
+            
+            rawCN <- (2^(L_c + mean_int) / 2^median_int)
+            
     }
+    
     L1median <- median(lambda1)
+    
     SNR <- 1 / (1 + (lambda1 %*% (1 / Psi * lambda1)))
     
     return(list(lambda0=lambda0, 

@@ -11,7 +11,7 @@ Andreas Mitterecker \email{mitterecker@bioinf.jku.at}}
 \item{colorLabels}{A color label with the dimension of the columns.}
 }
 \examples{load(system.file("exampleData/normData.RData", package="cn.farms"))
-x <- assayData(normData)$intensity
+x <- assayData(normData)$intensity[, 1:3]
 y <- distributionDistance(x)
 attr(y, "Labels") <- substr(sampleNames(normData), 1, 7)
 plotDendrogram(y)}

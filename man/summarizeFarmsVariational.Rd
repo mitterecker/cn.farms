@@ -1,8 +1,8 @@
 \name{summarizeFarmsVariational}
 \alias{summarizeFarmsVariational}
 \title{Summarization variational Laplacian approach...}
-\usage{summarizeFarmsVariational(probes, weight=0.15, mu=0, cyc=10, tol=1e-04, weightType="mean",
-    init=0.6, correction=0, minNoise=0.35, spuriousCorrelation=0.3,
+\usage{summarizeFarmsVariational(probes, weight=0.15, mu=0, cyc=10, weightType="median", init=0.6,
+    correction=0, minNoise=0.35, spuriousCorrelation=0.3,
     centering="median")
 }
 \description{Summarization variational Laplacian approach}
@@ -18,7 +18,6 @@ potential prior knowledge. Values near zero assumes that most genes do not
 contain a signal, and introduces a bias for loading matrix elements near 
 zero. Default value is 0.}
 \item{cyc}{Number of cycles for the EM algorithm.}
-\item{tol}{States the termination tolerance. Default is 0.00001.}
 \item{weightType}{Flag, that is used to summarize the loading matrix. 
 The default value is set to mean.}
 \item{init}{Parameter for estimation.}

@@ -37,7 +37,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
         
         if (pkgname ==  "pd.genomewideex.6") {
             pkgname <- "pd.genomewidesnp.6"
-        }
+        } 
         
     } else if (!is.null(annotation)){
         mapping <- annotation
@@ -65,10 +65,14 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
     }
     
     knownPackages <- c(
+            "pd.mapping50k.hind240",
+            "pd.mapping50k.xba240",
             "pd.genomewidesnp.5",
             "pd.genomewidesnp.6", 
             "pd.mapping250k.nsp", 
-            "pd.mapping250k.sty")
+            "pd.mapping250k.sty", 
+            "pd.cytogenetics.array")
+    
     if (!(pkgname %in% knownPackages)) {
         stop("Unknown annotation")
     } else {
@@ -77,17 +81,27 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
         cat(paste(Sys.time(), "|   Annotation will be saved in", 
                         annotDir, " \n"))
         
+        ## featureSet
         sql <- "SELECT * FROM featureSet"
         tmp <- DBI::dbGetQuery(oligoClasses::db(get(pkgname)), sql)
         tmp$chrom <- oligoClasses::chromosome2integer(tmp$chrom)
         idx <- !is.na(tmp$chrom)
         tmp <- tmp[idx, ]
+        
+        if (pkgname == "pd.cytogenetics.array") {
+            tmp$physical_pos <- tmp$position
+            tmp$position <- NULL
+        }
+        
         featureSetFull <- tmp[order(tmp$chrom, tmp$physical_pos, tmp$fsetid), ]
         save(featureSetFull, file=file.path(annotDir, "featureSetFull.RData"))
+        
         if (pkgname %in% c("pd.genomewidesnp.5", "pd.genomewidesnp.6")) {
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
                             "dbsnp_rs_id", "chrom", "physical_pos", "allele_a",
                             "allele_b", "fragment_length", "fragment_length2")]
+        } else if (pkgname == "pd.cytogenetics.array") { 
+            featureSet <- featureSetFull
         } else {
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
                             "dbsnp_rs_id", "chrom", "physical_pos", "allele_a",
@@ -97,6 +111,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
         gc()
         rm(featureSetFull)
         
+        ## pmfeature
         sql <- "SELECT * FROM pmfeature"
         pmfeatureTmp <- DBI::dbGetQuery(db(get(pkgname)), sql)
         idxTmp <- match(pmfeatureTmp$fsetid, featureSet$fsetid)
@@ -106,27 +121,45 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
         rm(idxTmp, idx, pmfeatureTmp)
         gc()
         
-        sql <- "SELECT * FROM sequence"    
-        sequence <- DBI::dbGetQuery(db(get(pkgname)), sql)
-        save(sequence, file=file.path(annotDir, "sequence.RData"))
-        rm(sequence)
-        gc()
+        ## sequence
+        if (pkgname != "pd.cytogenetics.array") {
+            sql <- "SELECT * FROM sequence"    
+            sequence <- DBI::dbGetQuery(db(get(pkgname)), sql)
+            save(sequence, file=file.path(annotDir, "sequence.RData"))
+            rm(sequence)
+            gc()
+        }
         
         cat(paste(Sys.time(), "|   SNP information done \n"))
         
-        ## available only for SNP6
-        if (pkgname %in% c("pd.genomewidesnp.5", "pd.genomewidesnp.6")) {
+        ## available only for newer Affymetrix arrays
+        if (pkgname %in% c("pd.genomewidesnp.5", "pd.genomewidesnp.6", 
+                "pd.cytogenetics.array")) {
+            
+            ## featureSetCNV
             sql <- "SELECT * FROM featureSetCNV"
             tmp <- DBI::dbGetQuery(db(get(pkgname)), sql)
             tmp$chrom <- oligoClasses::chromosome2integer(tmp$chrom)
             idx <- !is.na(tmp$chrom)
             tmp <- tmp[idx, ]
+            
+            if (pkgname == "pd.cytogenetics.array") {
+                tmp$chrom_start <- tmp$position
+                tmp$chrom_stop <- tmp$position
+                tmp$position <- NULL
+            }
+            
             featureSetCNVFull <- tmp[order(tmp$chrom, 
                             tmp$chrom_start, tmp$fsetid), ]
             
-            featureSetCNV <- featureSetCNVFull[, c("fsetid", "man_fsetid", 
-                            "chrom", "chrom_start", "chrom_stop", 
-                            "fragment_length", "fragment_length2")]
+            if (pkgname == "pd.cytogenetics.array") { 
+                featureSetCNV <- featureSetCNVFull
+            } else {
+                featureSetCNV <- featureSetCNVFull[, c("fsetid", "man_fsetid", 
+                                "chrom", "chrom_start", "chrom_stop", 
+                                "fragment_length", "fragment_length2")]
+            }
+            
             save(featureSetCNV, file=file.path(annotDir, "featureSetCNV.RData"))
             save(featureSetCNVFull, 
                     file=file.path(annotDir, "featureSetCNVFull.RData"))
@@ -141,27 +174,28 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
             rm(idxTmp, idx, pmfeatureCNVTmp)
             gc()
             
-            sql <- "SELECT * FROM sequenceCNV"    
-            sequenceCNV <- DBI::dbGetQuery(db(get(pkgname)), sql)
-            save(sequenceCNV, file=file.path(annotDir, "sequenceCNV.RData"))
-            gc()
-            
+            if (pkgname != "pd.cytogenetics.array") {
+                sql <- "SELECT * FROM sequenceCNV"    
+                sequenceCNV <- DBI::dbGetQuery(db(get(pkgname)), sql)
+                save(sequenceCNV, file=file.path(annotDir, "sequenceCNV.RData"))
+                gc()
+            }
         }
         
-        cat(paste(Sys.time(), "|   NP information done \n"))
+        cat(paste(Sys.time(), "|   Non polymorphic information done \n"))
         
         ## for normalization
         tmp <- match(pmfeature$fsetid, featureSet$fsetid)
         pmfeatureAllele <- featureSet[tmp, ]
         rm(featureSet)
         
-        idxOfAlleleA <- which(pmfeature[, "allele"]==0)
-        idxOfAlleleB <- which(pmfeature[, "allele"]==1)
+        idxOfAlleleA <- which(pmfeature[, "allele"] == 0)
+        idxOfAlleleB <- which(pmfeature[, "allele"] == 1)
         alleleA <- pmfeatureAllele[idxOfAlleleA, "allele_a"]
         alleleB <- pmfeatureAllele[idxOfAlleleB, "allele_b"]
         
-        idxOfStrandA <- which(pmfeature[, "strand"]==0)
-        idxOfStrandB <- which(pmfeature[, "strand"]==1)
+        idxOfStrandA <- which(pmfeature[, "strand"] == 0)
+        idxOfStrandB <- which(pmfeature[, "strand"] == 1)
         
         pairs <- paste(alleleA, alleleB, sep="")
         uniquePairs <- unique(pairs)
