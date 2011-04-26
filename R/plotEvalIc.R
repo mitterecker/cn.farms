@@ -30,7 +30,7 @@ plotEvalIc <- function(
         pointType=4, 
         bandwidth=c(0.01, 1000), 
         nbin=100) { 
-    
+
     if (missing(chrom)) {
         stop("Please state for which chromosome you want to create the plot!")
     }
@@ -60,10 +60,7 @@ plotEvalIc <- function(
             min(phInf[chrIdx, 2] / (1E+6)),
             max(phInf[chrIdx, 2] / (1E+6)))
     
-    
     cnvrPosChr <- segments[which(segments[, 1] == chrom), c(2, 3)]
-    
-    cnvrPosChr <- segments[which(segments[,1] == chrom), c(2, 3)]
     Chr1_regions_conrad <- unlist(apply(cnvrPosChr, 1, 
                     function(x){ x[1]:x[2] }))
     tmp01 <- phInf[chrIdx, 2] %in% Chr1_regions_conrad
