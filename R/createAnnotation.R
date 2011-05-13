@@ -27,7 +27,7 @@
 #' createAnnotation(filenames=filenames)
 #' }
 createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NULL) {
-    
+
     ## check parameters
     if (is.null(filenames) & is.null(annotation) & is.null(annotDir)) {
         stop("Either provide celfile names or annotation string")

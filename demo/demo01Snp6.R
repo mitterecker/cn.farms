@@ -1,4 +1,4 @@
-## HapMap samp60 analysis on SNP6
+## HapMap analysis on SNP6
 library(hapmapsnp6)  
 library(oligoClasses)
 library(cn.farms)
@@ -7,7 +7,7 @@ library(cn.farms)
 ## general settings
 ###############################################################################
 
-workDir <- "~/tmp"
+workDir <- tempdir()
 dir.create(workDir, showWarnings=F, recursive=T)
 setwd(workDir)
 
@@ -143,8 +143,7 @@ callParam <- list()
 callParam = list(cores=cores, runtype=runtype)
 
 mlData <- mlSummarization(combData, windowMethod, windowParam, 
-		summaryMethod, summaryParam, callFunc="callSummarize", 
-		callParam = callParam)
+		summaryMethod, summaryParam, callParam = callParam)
 
 assayData(mlData)$intensity
 

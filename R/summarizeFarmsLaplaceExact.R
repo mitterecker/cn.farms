@@ -72,15 +72,15 @@ summarizeFarmsExact <- function(
         weightZ=1.0, 
         eps1=0.01, 
         eps2=10^-10, 
-        cyc=c(10,10), 
+        cyc=c(10, 10), 
         tol=0.00001, 
         weightType="mean", 
         centering="median", 
         ...) {
     
     probes <- as.matrix(probes)
-    sigmaZ <- 1.0/weightZ
-    if(length(cyc)==1)
+    sigmaZ <- 1.0 / weightZ
+    if(length(cyc) == 1)
         cyc <- c(cyc, cyc)
     additional <- list(...)
     
@@ -107,8 +107,8 @@ summarizeFarmsExact <- function(
     n <- ncol(Data)
     dimension <- nrow(Data)
     
-    if (centering=="median") { mean.Data <- apply(Data, 1, median) }
-    if (centering=="mean") { mean.Data <- rowMeans(Data) } 
+    if (centering == "median") { mean.Data <- apply(Data, 1, median) }
+    if (centering == "mean") { mean.Data <- rowMeans(Data) } 
     NData <- Data - mean.Data
     
     sd.Data <- sqrt(rowSums(NData^2) / n)
@@ -153,7 +153,7 @@ summarizeFarmsExact <- function(
             avg_xEz <- as.vector(NData %*% moments$moment1 / n)
             avg_Ez2 <- mean(moments$moment2)
             
-        } else if (algorithm=="v") {
+        } else if (algorithm == "v") {
             InvPsi <- 1 / Psi
             sigma2 <- 1 / (lapla + (t(lambda) %*% (InvPsi * lambda))[1])
             Ez <- as.vector((lambda * InvPsi) %*% NData) * sigma2
@@ -349,6 +349,7 @@ summarizeFarmsExact <- function(
                     KL=KL, 
                     IC=IC, 
                     ICtransform=ICtransform, 
+                    INICall=min(ICtransform),
                     Case=moments$Case, 
                     L1median=L1median, 
                     intensity=as.numeric(express), 

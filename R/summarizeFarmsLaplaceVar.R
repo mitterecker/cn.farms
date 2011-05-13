@@ -81,7 +81,7 @@ summarizeFarmsVariational <- function(
         
         X <- x - xmean
         
-        XX <- crossprod(X,X) / n_array
+        XX <- crossprod(X, X) / n_array
         
         diag(XX)[index] <- 1
         
@@ -125,7 +125,7 @@ summarizeFarmsVariational <- function(
                 
                 if(minEigenValues < minNoise){
                     
-                    diag(XX)<-diag(XX)+(minNoise - minEigenValues)
+                    diag(XX) <- diag(XX) + (minNoise - minEigenValues)
                     
                 }
                 
@@ -135,7 +135,7 @@ summarizeFarmsVariational <- function(
                     
                     eigenValues_XX[which(eigenValues_XX<minNoise)] <- minNoise
                     
-                    XX <- eigenVectors_XX%*%diag(eigenValues_XX)%*%t(eigenVectors_XX)
+                    XX <- eigenVectors_XX %*% diag(eigenValues_XX) %*% t(eigenVectors_XX)
                     
                 }
                 

@@ -2,4 +2,5 @@ demo01Snp6	Demo for an Affymetrix SNP6 data set
 demo02Snp5	Demo for an Affymetrix SNP5 data set
 demo03Snp500k	Demo for an Affymetrix 500K data set
 demo04Snp250k	Demo for an Affymetrix 250K NSP data set
-demo05Testing	Run the examples
+demo05Snp50k	Demo for an Affymetrix 50K hind data set
+demo99Testing	Run the examples

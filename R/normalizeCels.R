@@ -29,7 +29,7 @@ normalizeCels <- function (
         filenames, 
         method = c("SOR", "quantiles"), 
         cores=1, 
-        alleles=F, 
+        alleles=FALSE, 
         runtype="bm", 
         annotDir=NULL, ...) {
 
@@ -47,7 +47,7 @@ normalizeCels <- function (
     } else {
         loadFile <- paste("normData.RData")
     }
-    
+
     method <- match.arg(method)
     normMethods <- c("SOR", "quantiles")
        

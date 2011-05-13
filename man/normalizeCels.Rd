@@ -1,7 +1,7 @@
 \name{normalizeCels}
 \alias{normalizeCels}
 \title{Wrapper for the normalization functions...}
-\usage{normalizeCels(filenames, method=c("SOR", "quantiles"), cores=1, alleles=F,
+\usage{normalizeCels(filenames, method=c("SOR", "quantiles"), cores=1, alleles=FALSE,
     runtype="bm", annotDir, ...)
 }
 \description{Wrapper for the normalization functions}

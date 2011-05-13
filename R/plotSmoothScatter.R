@@ -22,7 +22,7 @@ plotSmoothScatter <- function(
         ylim, 
         pdfname, 
         ...) {
-    
+
     if (missing(variable)) variable <- "L_z"
     if (missing(ylim)) ylim <- c(-1, 1)
     if (missing(pdfname)) pdfname <- "envSumHapMap.pdf"

@@ -51,7 +51,7 @@
 #' slData <- slSummarization(normData, 
 #'         summaryMethod = summaryMethod, 
 #'         summaryParam = summaryParam)
-#' assayData(slData)$L_z[1:10, ]
+#' assayData(slData)$L_z[1:10, 1:10]
 slSummarization <- function(
         object, 
         summaryMethod = "Variational", 

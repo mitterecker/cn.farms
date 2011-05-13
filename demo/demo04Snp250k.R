@@ -1,4 +1,4 @@
-## HapMap samp60 analysis on SNP6
+## HapMap analysis on 250K
 library(hapmap500knsp)  
 library(cn.farms)
 
@@ -6,7 +6,7 @@ library(cn.farms)
 ## general settings
 ###############################################################################
 
-workDir <- "~/tmp"
+workDir <- tempdir()
 dir.create(workDir, showWarnings=F, recursive=T)
 setwd(workDir)
 
@@ -110,7 +110,6 @@ callParam <- list()
 callParam = list(cores=cores, runtype=runtype)
 
 mlData <- mlSummarization(slData, windowMethod, windowParam, 
-		summaryMethod, summaryParam, callFunc="callSummarize", 
-		callParam = callParam)
+		summaryMethod, summaryParam, callParam = callParam)
 
 assayData(mlData)$intensity

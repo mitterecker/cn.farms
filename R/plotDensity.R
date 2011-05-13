@@ -22,7 +22,7 @@
 #' load(system.file("exampleData/slData.RData", package="cn.farms"))
 #' plotDensity(assayData(slData)$intensity)
 #' @export
-plotDensity <- function(x, xlim=c(0,16), ylim, col, lty, 
+plotDensity <- function(x, xlim=c(0, 16), ylim, col, lty, 
         lwd, add=FALSE, xlab, ylab, log=TRUE, ...) {
     
     if (missing(ylab)) {

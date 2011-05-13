@@ -34,8 +34,8 @@
 #' 
 #' @export
 combineData <- function (object01, object02, 
-        obj01Var="intensity",    obj02Var="intensity", runtype="ff") {
-    
+        obj01Var="intensity", obj02Var="intensity", runtype="ff") {
+
     if (runtype=="bm" & file.exists("combData.RData")) {
         message("Combining the data has already been done")
         message("Trying to load combined data ...")
@@ -72,11 +72,15 @@ combineData <- function (object01, object02,
     nbrOfProbes <- nrow(phInf)
     nbrOfSamples <- ncol(assayData(object01)[[obj01Var]])
     
-    if (runtype == "bm") {
-        intensity <- initializeBigMatrix("", nbrOfProbes, nbrOfSamples, "double")    
-    } else if (runtype == "ff") {
-        intensity <- ff(vmode="double", dim=c(nbrOfProbes, nbrOfSamples))    
-    }
+#    if (runtype == "bm") {
+#        intensity <- initializeBigMatrix("", nbrOfProbes, nbrOfSamples, "double")    
+#    } else if (runtype == "ff") {
+#        intensity <- ff(vmode="double", dim=c(nbrOfProbes, nbrOfSamples))    
+#    }
+    
+    intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type="double",
+            bmName="comb_")
+    
     
     intensity[which(idx <= cutoff), ] <- assayData(object01)[[obj01Var]][]
     intensity[which(idx > cutoff), ] <- assayData(object02)[[obj02Var]][]

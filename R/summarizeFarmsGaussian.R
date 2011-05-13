@@ -57,7 +57,7 @@ summarizeFarmsGaussian <- function(probes,
     
     sd.probes <- sqrt(diag(crossprod(t(centered.probes))) / n_array) 
     
-    if(0 %in% sd.probes){
+    if (0 %in% sd.probes) {
         
         index <- which(sd.probes == 0)
         
@@ -103,7 +103,7 @@ summarizeFarmsGaussian <- function(probes,
     
     minEigenValues <- -1
     
-    if(correction >= 1){
+    if (correction >= 1) {
         
         while(minEigenValues < 0){
             
@@ -115,7 +115,7 @@ summarizeFarmsGaussian <- function(probes,
             
             minEigenValues <- min(eigenValues_XX)
             
-            if(correction < 2){
+            if (correction < 2) {
                 
                 if(minEigenValues<minNoise){
                     
@@ -129,7 +129,7 @@ summarizeFarmsGaussian <- function(probes,
                     
                     eigenValues_XX[which(eigenValues_XX<minNoise)] <- minNoise
                     
-                    XX <- eigenVectors_XX%*%diag(eigenValues_XX)%*%t(eigenVectors_XX)
+                    XX <- eigenVectors_XX%*%diag(eigenValues_XX) %*% t(eigenVectors_XX)
                     
                 }
                 
@@ -194,7 +194,7 @@ summarizeFarmsGaussian <- function(probes,
     
     c <- X %*% bar ## hidden variable c - factor
     
-    if(EZZ == 0){
+    if (EZZ == 0) {
         
         var_z_scale <- 1 ## avoiding division by zero
         

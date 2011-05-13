@@ -2,6 +2,8 @@
 library(cn.farms)
 dontrun <- T
 
+
+
 ## combineData
 load(system.file("exampleData/normData.RData", package="cn.farms"))
 experimentData(normData)@other$annotDir <- 
@@ -105,7 +107,7 @@ plotDensity(assayData(slData)$intensity)
 load(system.file("exampleData/slData.RData", package="cn.farms"))
 load(system.file("exampleData/testSegments.RData", package="cn.farms"))
 plotEvalIc(slData, featureData(testSegments)@data, 
-        variable=assayData(slData)$L_z[, 1],  23)
+        variable=assayData(slData)$L_z[, 1],  chrom=23)
 
 
 ## plotRegions
@@ -138,7 +140,7 @@ summaryParam$cyc <- c(10)
 slData <- slSummarization(normData, 
         summaryMethod = summaryMethod, 
         summaryParam = summaryParam)
-assayData(slData)$L_z[1:10, ]
+assayData(slData)$L_z[1:10, 1:10]
 
 load(system.file("exampleData/normData.RData", package="cn.farms"))
 summaryMethod <- "Gaussian"
@@ -147,7 +149,7 @@ summaryParam$cyc <- c(10)
 slData <- slSummarization(normData, 
         summaryMethod = summaryMethod, 
         summaryParam = summaryParam)
-assayData(slData)$L_z[1:10, ]
+assayData(slData)$L_z[1:10, 1:10]
 
 load(system.file("exampleData/normData.RData", package="cn.farms"))
 summaryMethod <- "Exact"
@@ -156,7 +158,7 @@ summaryParam$cyc <- c(10, 20)
 slData <- slSummarization(normData, 
         summaryMethod = summaryMethod, 
         summaryParam = summaryParam)
-assayData(slData)$L_z[1:10, ]
+assayData(slData)$L_z[1:10, 1:10]
 
 
 ## sparseFarmsC

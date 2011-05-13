@@ -96,7 +96,7 @@ plotRegions <- function(object, segments, addInd=NULL, ylim, variable,
                             pch="", 
                             xaxt="n", 
                             col=myColPlot[myPlotInstant], 
-                            ylab="Intensity", 
+                            ylab=variable, 
                             main=paste("chr", chr, ":", start, "-", end, sep=""),  
                             ylim = ylim)
                     abline(h = 0, col="grey")
@@ -108,7 +108,7 @@ plotRegions <- function(object, segments, addInd=NULL, ylim, variable,
                                 col=myColPlot[myPlotInstant])    
                     }
                     if(plotLegend) {
-                        legend("topright", 
+                        legend("top", 
                                 legend = myDescr,
                                 fill = myColors)
                     }
@@ -119,7 +119,7 @@ plotRegions <- function(object, segments, addInd=NULL, ylim, variable,
                             pch="", 
                             xaxt="n", 
                             col=myColPlot,  
-                            ylab="Intensity", 
+                            ylab=variable, 
                             main=paste("chr", chr, ":", start, "-", end, sep=""),  
                             ylim=ylim)
                     abline(h = 0, col="grey")
@@ -133,7 +133,7 @@ plotRegions <- function(object, segments, addInd=NULL, ylim, variable,
                         type="l", 
                         pch="", 
                         xaxt="n",  
-                        ylab="Intensity", 
+                        ylab=variable, 
                         main=paste("chr", chr, ":", start, "-", end, sep=""),  
                         ylim=ylim)
                 abline(h=0, col="grey")
@@ -142,7 +142,7 @@ plotRegions <- function(object, segments, addInd=NULL, ylim, variable,
             axis(1, at=seq(dim(ySl)[1]), labels=FALSE)
             struges <- round(seq(1, dim(ySl)[1], 
                             length.out=nclass.Sturges(xSl)), 0)
-            text(struges, par("usr")[3] - diff(ylim)/20, srt = 45, adj = 1,
+            text(struges, par("usr")[3] - diff(ylim) / 20, srt = 45, adj = 1,
                     labels = xSl[struges], xpd = TRUE)
             
             
