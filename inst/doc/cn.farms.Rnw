@@ -301,8 +301,8 @@ slData <- slSummarization(normData,
 		summaryWindow = "std")
 
 show(slData)
-assayData(slData)$intensity[1:10, ] ## intensity values
-assayData(slData)$L_z[1:10, ] ## relative values
+assayData(slData)$intensity[1:10, 1:5] ## intensity values
+assayData(slData)$L_z[1:10, 1:5] ## relative values
 @
 
 
@@ -356,7 +356,9 @@ mlData <- mlSummarization(slData,
 		summaryMethod = summaryMethod, 
 		summaryParam = summaryParam, 
 		callParam = callParam)
-assayData(mlData)
+names(assayData(mlData))
+assayData(mlData)$intensity[1:10, 1:5]
+assayData(mlData)$L_z[1:10, 1:5]
 @
 
 \noindent Next, the summarized data will be segmented in order to identify break points. Therefore we provide a parallelized version of
@@ -366,12 +368,12 @@ assayData(mlData)
 << echo=TRUE>>=
 colnames(assayData(mlData)$L_z) <- sampleNames(mlData)
 segments <- dnaCopySf(
-		x         = assayData(mlData)$L_z, 
+		x         = assayData(mlData)$L_z[, 1:10], 
 		chrom     = featureData(mlData)@data$chrom, 
 		maploc    = featureData(mlData)@data$start, 
 		cores     = cores, 
 		smoothing = FALSE)
-featureData(segments)@data
+head(featureData(segments)@data)
 @
 
 \noindent To get further information, e.g. how to process Affymetrix 500K arrays, please check the followings demos.  
