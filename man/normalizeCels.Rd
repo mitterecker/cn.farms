@@ -2,7 +2,7 @@
 \alias{normalizeCels}
 \title{Wrapper for the normalization functions...}
 \usage{normalizeCels(filenames, method=c("SOR", "quantiles"), cores=1, alleles=FALSE,
-    runtype="bm", annotDir, ...)
+    runtype="bm", annotDir, saveFile="normData", ...)
 }
 \description{Wrapper for the normalization functions}
 \details{This functions provides different normalization methods for microarray data.
@@ -19,6 +19,7 @@ SOR, quantiles}
 If ff is chosen the data will not be saved automatically. 
 With bm the results will be saved permanently.}
 \item{annotDir}{An optional annotation directory.}
+\item{saveFile}{Name of the file to save.}
 \item{...}{Further parameters for the normalization method.}
 }
 \examples{\dontrun{

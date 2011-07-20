@@ -25,6 +25,8 @@
 #' matrix)
 #' @param minNoise States the minimal noise. Default is 0.35.
 #' @param centering States how the data is centered. Default is median.
+#' @param refIdx index or indices which are used for computation of the 
+#' centering
 #' @return A list containing the results of the run.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -41,7 +43,8 @@ summarizeFarmsGaussian <- function(probes,
         init = 0.6, 
         correction = 0, 
         minNoise = 0.35, 
-        centering = "median") {
+        centering = "median", 
+        refIdx) {
     
     a_old <- 0.5
     
@@ -49,9 +52,22 @@ summarizeFarmsGaussian <- function(probes,
     
     n_probes <- nrow(probes)
     
-    if (centering=="median") {mean.probes <- apply(probes, 1, median)}
+    if (missing(refIdx)) { refIdx <- 1:n_array }
     
-    if (centering=="mean") {mean.probes <- rowMeans(probes)} 
+    if (centering == "median") {
+        if (length(refIdx) == 1) {
+            mean.probes <- median(probes[, refIdx])
+        } else {
+            mean.probes <- Biobase::rowMedians(probes[, refIdx])
+        }
+        
+    } else if (centering == "mean") {
+        if (length(refIdx) == 1) {
+            mean.probes <- mean(probes[, refIdx])  
+        } else {
+            mean.probes <- rowMeans(probes[, refIdx])
+        } 
+    }
     
     centered.probes <- probes - mean.probes
     
@@ -249,7 +265,7 @@ summarizeFarmsGaussian <- function(probes,
         
     } else if (weightType == "linear") {
         
-        PsiLL <- ((1 / Ph) * L^2 )
+        PsiLL <- (1 / Ph) * L
         
         sumPsiLL <- sum(PsiLL)
         

@@ -2,7 +2,7 @@
 \alias{combineData}
 \title{Combine two ExpressionSet objects...}
 \usage{combineData(object01, object02, obj01Var="intensity", obj02Var="intensity",
-    runtype="ff")
+    runtype="ff", saveFile="combData")
 }
 \description{Combine two ExpressionSet objects}
 \details{Suitable for SNP or non-polymorphic data which were already processed with 
@@ -21,6 +21,7 @@ assayData slot. Default is intensity.}
 \item{runtype}{Mode how the results are saved. Possible values are ff or bm. 
 If ff is chosen the data will not be saved automatically. 
 With bm the results will be saved permanently.}
+\item{saveFile}{Name of the file to save.}
 }
 \examples{load(system.file("exampleData/normData.RData", package="cn.farms"))
 experimentData(normData)@other$annotDir <- 

@@ -62,7 +62,7 @@ distributionDistance <- function(
   	## use a fix reference distribution 
 	if(useQuantileReference){
 		### compute quantile distribution as reference 
-      	referenceDistribution <- apply(apply(intensityData, 2, sort), 1, median)
+      	referenceDistribution <- Biobase::rowMedians(apply(intensityData, 2, sort))
        	res <- rep(NA, nbrOfCols)
        	for(i in 1:nbrOfCols){
    			### compute distance against the reference

@@ -55,7 +55,7 @@ summarizeFarmsVariational <- function(
     
     eps <- 1E-5
     
-    if (centering == "median") { mean.probes <- apply(probes, 1, median) }
+    if (centering == "median") { mean.probes <- Biobase::rowMedians(probes) }
     
     if (centering == "mean") { mean.probes <- rowMeans(probes) } 
     
@@ -133,7 +133,7 @@ summarizeFarmsVariational <- function(
                 
                 if(minEigenValues < minNoise) {
                     
-                    eigenValues_XX[which(eigenValues_XX<minNoise)] <- minNoise
+                    eigenValues_XX[which(eigenValues_XX < minNoise)] <- minNoise
                     
                     XX <- eigenVectors_XX %*% diag(eigenValues_XX) %*% t(eigenVectors_XX)
                     
@@ -255,7 +255,7 @@ summarizeFarmsVariational <- function(
         
     } else if (weightType == "linear") {
         
-        PsiLL <- (1 / Ph) * L^2
+        PsiLL <- (1 / Ph) * L
         
         sumPsiLL <- sum(PsiLL)
         

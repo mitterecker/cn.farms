@@ -2,7 +2,7 @@
 \alias{mlSummarization}
 \title{Does summarization...}
 \usage{mlSummarization(object, windowMethod, windowParam, summaryMethod, summaryParam,
-    callParam=list(runtype = "ff"), returnValues)
+    callParam=list(runtype = "ff"), returnValues, saveFile="mlData")
 }
 \description{Does summarization}
 \value{Some data}
@@ -16,7 +16,8 @@ Possible values are Std and Bps.}
 Gaussian, Variational, Exact. Default is Variational.}
 \item{summaryParam}{summaryParam}
 \item{callParam}{callParam}
-\item{returnValues}{List with return values. 
+\item{returnValues}{List with return values.}
+\item{saveFile}{Name of the file to save.
 For possible values see summaryMethod.}
 }
 \examples{load(system.file("exampleData/slData.RData", package="cn.farms"))

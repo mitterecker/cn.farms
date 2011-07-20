@@ -39,19 +39,20 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
     }
     
     if (cores == 1) {
-        sfInit(parallel=FALSE)
+        sfInit(parallel = FALSE)
     } else {
-        sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
+        sfInit(parallel = TRUE, cpus = cores, type="SOCK")        
     }
-    
-    sfLibrary("ff", character.only=TRUE, verbose=FALSE)
-    sfLibrary("DNAcopy", character.only=TRUE, verbose=FALSE)
+
+    sfLibrary("ff", character.only = TRUE, verbose = FALSE)
+    sfLibrary("DNAcopy", character.only = TRUE, verbose = FALSE)
     suppressWarnings(sfExport("x"))
     suppressWarnings(sfExport("chrom"))
     suppressWarnings(sfExport("maploc"))
     suppressWarnings(sfExport("smoothing"))
     
-    res <- suppressWarnings(sfLapply(1:ncol(x), dnaCopySfH01, ...))
+    #res <- suppressWarnings(sfLapply(1:ncol(x), dnaCopySfH01, ...))
+    res <- sfLapply(x = 1:ncol(x), fun = dnaCopySfH01, ...)
     
     ## assign ID
     idSamples <- colnames(x)
@@ -59,10 +60,10 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
         res[[i]]$ID[] <- idSamples[i]
     }
     sfStop()
-    
+
     eSet <- new("ExpressionSet")
     phInf <- do.call("rbind", res)
-    phInf <- cbind(phInf[, -1], individual=phInf[, 1])
+    phInf <- cbind(phInf[, -1], individual = phInf[, 1])
     colnames(phInf)[1:3] <- c("chrom", "start", "end")
     featureData(eSet) <- new("AnnotatedDataFrame", 
             data = phInf)
@@ -77,6 +78,8 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
     return(eSet)
 }
 
+
+
 #' Helper function
 #' @param i i
 #' @param ... ...
@@ -84,25 +87,27 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 dnaCopySfH01 <- function (i, ...) {
+
     if (!exists("min.width")) min.width <- 3
     if (!exists("undo.splits")) undo.splits <- "sdundo"
-    if (!exists("undo.SD")) undo.SD <- 1
+    if (!exists("undo.SD")) undo.SD <- 2
     
     ## non-visible bindings
     x <- x
     chrom <- chrom
     maploc <- maploc
     smoothing <- smoothing
-    
+
     cnaObj <- DNAcopy::CNA(
             x[, i], 
             chrom, 
             maploc,
             data.type="logratio")
 
-    if(smoothing == T) {
+    if(smoothing == TRUE) {
         cnaObj <- DNAcopy::smooth.CNA(cnaObj)
     } 
+    
     segs <- DNAcopy::segment(cnaObj, min.width=min.width, 
             undo.splits=undo.splits, undo.SD=undo.SD, ...)     
     return(segs$output)

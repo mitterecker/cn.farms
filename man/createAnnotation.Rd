@@ -1,7 +1,7 @@
 \name{createAnnotation}
 \alias{createAnnotation}
 \title{Creation of annotation files...}
-\usage{createAnnotation(filenames, annotation, annotDir)
+\usage{createAnnotation(filenames, annotation, annotDir, checks=TRUE)
 }
 \description{Creation of annotation files}
 \details{Annotation files for cn.farms are created}
@@ -14,6 +14,7 @@ Andreas Mitterecker \email{mitterecker@bioinf.jku.at}}
 \arguments{\item{filenames}{An absolute path of the CEL files to process.}
 \item{annotation}{Optional parameter stating the annotation from a pd-mapping.}
 \item{annotDir}{Optional parameter stating where the annotation should go.}
+\item{checks}{States if sanity checks should be done.}
 }
 \examples{\dontrun{
 library("hapmapsnp6") 

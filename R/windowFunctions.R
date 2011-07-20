@@ -36,7 +36,6 @@ getFragmentSet <- function(fragLength) {
     z <- diff(y, lag=1)
     
     x03 <- cbind(fragLength, c(1, y), c(-1, z, 1))
-    x03[1:30, ]
     
     a01 <- which(x03[, 3] == -1)
     a02 <- which(x03[, 3] == 1)

@@ -2,9 +2,9 @@
 \alias{slSummarization}
 \alias{slSummarization}
 \title{Method for computation of the single-locus summarization...}
-\usage{slSummarization(object, summaryMethod="Variational", summaryParam,
-    callParam=list(runtype = "ff", cores = 1), summaryWindow=c("std",
-    "fragment"), returnValues)
+\usage{slSummarization(object, summaryMethod="Exact", summaryParam, callParam=list(runtype =
+    "ff", cores = 1), summaryWindow=c("std", "fragment"), returnValues,
+    saveFile="slData")
 }
 \description{Method for computation of the single-locus summarization}
 \details{The different probes of the SNPs of the array are summarized to a probeset.}
@@ -28,6 +28,7 @@ cores for parallelization.}
 sl and fragment.}
 \item{returnValues}{List with return values. 
 For possible values see summaryMethod.}
+\item{saveFile}{Name of the file to save.}
 }
 \examples{load(system.file("exampleData/normData.RData", package="cn.farms"))
 experimentData(normData)@other$annotDir <- 
@@ -55,5 +56,5 @@ summaryParam$cyc <- c(10, 20)
 slData <- slSummarization(normData, 
 summaryMethod = summaryMethod, 
 summaryParam = summaryParam)
-assayData(slData)$L_z[1:10, ]}
+assayData(slData)$L_z[1:10, 1:10]}
 

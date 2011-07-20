@@ -8,6 +8,7 @@
 #' @param summaryParam summaryParam
 #' @param callParam callParam
 #' @param returnValues List with return values. 
+#' @param saveFile Name of the file to save.
 #' For possible values see summaryMethod.
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
@@ -25,23 +26,35 @@
 #' mlData <- mlSummarization(slData, windowMethod, windowParam, 
 #'         summaryMethod, summaryParam)
 #' assayData(mlData)
-mlSummarization <- function(object, windowMethod, windowParam, 
-        summaryMethod, summaryParam, callParam=list(runtype="ff"), 
-        returnValues) {
+mlSummarization <- function(
+        object, 
+        windowMethod, 
+        windowParam, 
+        summaryMethod, 
+        summaryParam, 
+        callParam = list(runtype = "ff"), 
+        returnValues,
+        saveFile = "mlData") {
+    
+    ## assure correct file extension
+    saveFile <- gsub("\\.RData", "", saveFile)
+    saveFile <- gsub("\\.rda", "", saveFile)
+    saveFile <- paste(saveFile, ".RData", sep="")
+    
     t00 <- Sys.time()
     summaryWindowName <- paste("summarizeWindow", paste(
                     toupper(substring(windowMethod, 1,1)), 
                     substring(windowMethod, 2),
-                    sep="", collapse=" "), sep="")
+                    sep = "", collapse = " "), sep = "")
     
     if (!exists(summaryWindowName)) {
         stop(paste("Unknown method (can't find function", summaryWindowName, 
                         ")"))
-    } else if (callParam$runtype=="bm" & file.exists("mlData.RData")) {
+    } else if (callParam$runtype=="bm" & file.exists(saveFile)) {
         message("Multi-loci summarization has already been done")
         message("Trying to load data ...")
-        load("mlData.RData", envir=globalenv())
-        return(invisible())    
+        load(saveFile)
+        return(mlData)    
     }
     
     phInf <- featureData(object)[, c("chrom", "start", "man_fsetid")]
@@ -64,7 +77,7 @@ mlSummarization <- function(object, windowMethod, windowParam,
     summaryMethodName <- paste("summarizeFarms", paste(
                     toupper(substring(summaryMethod, 1,1)), 
                     substring(summaryMethod, 2),
-                    sep="", collapse=" "), sep="")
+                    sep = "", collapse = " "), sep = "")
     
     if (!exists(summaryMethodName)) {
         stop(paste("Unknown method (can't find function", summaryMethodName, 
@@ -77,7 +90,8 @@ mlSummarization <- function(object, windowMethod, windowParam,
                             batchList = phenoData(object)$batch,
                             summaryMethod = summaryMethodName, 
                             summaryParam = summaryParam, 
-                            returnValues = returnValues), 
+                            returnValues = returnValues, 
+                            saveFile = saveFile), 
                     callParam))
     
     eSet <- new("ExpressionSet")
@@ -91,10 +105,10 @@ mlSummarization <- function(object, windowMethod, windowParam,
     experimentData(eSet)@other$type <- "mlData"
     annotation(eSet) <- annotation(object)
     
-    if (callParam$runtype=="bm") {
+    if (callParam$runtype == "bm") {
         cat(paste(Sys.time(), "|   Saving data \n"))
         mlData <- eSet
-        save(mlData, file="mlData.RData")
+        save(mlData, file = saveFile)
     }
     
     return(eSet)

@@ -7,6 +7,7 @@
 #' If ff is chosen the data will not be saved automatically. 
 #' With bm the results will be saved permanently. 
 #' @param pkgname Optional parameter for the CEL mapping.
+#' @param saveFile Name of the file to save.
 #' @return An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -20,8 +21,13 @@
 #' @importFrom snowfall sfLapply
 #' @importFrom snowfall sfClusterEval
 #' @importFrom snowfall sfStop
-normalizeSor <- function (filenames, cores=1, 
-        annotDir=NULL, alleles=F, runtype="ff", cyc=5, pkgname=NULL, ...) {
+normalizeSor <- function (filenames, cores=1, annotDir = NULL, alleles = FALSE, 
+        runtype = "ff", cyc = 5, pkgname = NULL, saveFile = "Sor", ...) {
+    
+    ## assure correct file extension
+    saveFile <- gsub("\\.RData", "", saveFile)
+    saveFile <- gsub("\\.rda", "", saveFile)
+    saveFile <- paste(saveFile, ".RData", sep="")
     
     if(is.null(pkgname)) {
         mapping <- affxparser::readCelHeader(filenames[1])$chiptype
@@ -54,13 +60,13 @@ normalizeSor <- function (filenames, cores=1,
     nbrOfProbes <- length(which(pmfeature[, "allele"]==1))
     
     intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type="double",
-            bmName="SOR_")
+            bmName=gsub("\\.rda", "", saveFile))
     
     if (alleles) {
         intensityA <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
-                type="double", bmName="SOR_")
+                type="double", bmName=gsub("\\.rda", "", saveFile))
         intensityB <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
-                type="double", bmName="SOR_")        
+                type="double", bmName=gsub("\\.rda", "", saveFile))        
     }
 
     sfLibrary("cn.farms", character.only=TRUE)

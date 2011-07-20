@@ -15,7 +15,7 @@ runtype <- "ff"
 #runtype <- "bm"
 
 ## settings for test run
-testing <- T
+testing <- TRUE
 myChr <- "16"
 
 ## settings for ff

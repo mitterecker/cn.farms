@@ -16,7 +16,7 @@ runtype <- "ff"
 #runtype <- "bm"
 
 ## settings for test run
-testing <- T
+testing <- TRUE
 myChr <- "16"
 
 ## settings for ff
@@ -140,7 +140,7 @@ summaryParam <- list()
 summaryParam$cyc <- c(20)
 
 callParam <- list()
-callParam = list(cores=cores, runtype=runtype)
+callParam <- list(cores=cores, runtype=runtype)
 
 mlData <- mlSummarization(combData, windowMethod, windowParam, 
 		summaryMethod, summaryParam, callParam = callParam)

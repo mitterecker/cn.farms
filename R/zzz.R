@@ -1,7 +1,17 @@
 .onLoad <- function(libname, pkgname) {
-	library("methods", quietly=TRUE)
-	library("Biobase", quietly=TRUE)
-	library("ff", quietly=TRUE)
+#    suppressMessages(library(Biobase, quietly=TRUE))
+#    suppressMessages(library(ff, quietly=TRUE))
+#    suppressMessages(library(oligo, quietly=TRUE))
+#    suppressMessages(library(oligoClasses, quietly=TRUE))
+#    suppressMessages(library(snowfall, quietly=TRUE))
+#    suppressMessages(library(snow, quietly=TRUE))
+#    suppressMessages(library(DBI, quietly=TRUE))
+#    suppressMessages(library(affxparser, quietly=TRUE))
+#    suppressMessages(library(DNAcopy, quietly=TRUE))
+#    suppressMessages(library(preprocessCore, quietly=TRUE))
+#    suppressMessages(library(lattice, quietly=TRUE))
+#    suppressMessages(library(methods, quietly=TRUE))
+
 	
 	if(interactive() && .Platform$OS.type == "windows" && .Platform$GUI ==  "Rgui")
 		addVigs2WinMenu("cn.farms")
@@ -23,7 +33,7 @@
 			"Homepage: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html","\n\n",
 			"cn.farms Package Version ", 
             utils::packageDescription("cn.farms")$Version, "\n")
-	#suppressPackageStartupMessages()
+	#suppressMessages()
     
     pi <- utils::packageDescription(pkgname);
       packageStartupMessage(pkgname, " v", pi$Version, " (", 

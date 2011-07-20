@@ -29,8 +29,13 @@ double debug=false;
 
 const double Pi=M_PI;
 const double E=M_E;
+const double sqrtPi=1.7724538509055160272981674833411451827975494561224;
+const double sqrt2=1.4142135623730950488016887242096980785696718753769;
 const double sqrt3=1.7320508075688772935274463415058723669428052538104;
 const double sqrt2Pi=2.5066282746310005024157652848110452530069867406099;
+const double sqrt2DPi=0.79788456080286535587989211986876373695171726232987;
+const double logarithm2=0.69314718055994530941723212145817656807550013436026;
+const double log2Pi=1.8378770664093454835606594728112352797227949472756;
 const double logSqrt2Pi=0.91893853320467274178032973640561763986139747363778;
 
 double eps1=1e-10;
@@ -47,8 +52,7 @@ double logMultiplyFactor=log(0.01);
 ofstream debugOutput;
 
 
-void quadratic(double a, double b, double c, double& D, double& z1,
-		double& z2) {
+void quadratic(double a, double b, double c, double& D, double& z1, double& z2) {
 	double maxCoeff=fmax(fmax(fabs(a), fabs(b)), fabs(c));
 	a=a/maxCoeff;
 	b=b/maxCoeff;
@@ -69,151 +73,246 @@ void quadratic(double a, double b, double c, double& D, double& z1,
 	}
 }
 
-double evalLogGauss(double z, double my, double sigma) {
-	return -((-my + z)*(-my + z))/(2.*sigma*sigma) - log(2*Pi)/2. - log(sigma);
+double evalLogGauss(double z, double my, double sigma, double logSigma) {
+	return -((-my + z)*(-my + z))/(2.*sigma*sigma) - log2Pi/2. - logSigma;
 }
 
-double evalLogUnnormalizedPosterior(double a, double b, double c, double sigmaZ,
-		double logNormfact, double z) {
+double evalLogUnnormalizedPosterior(double a, double b, double c, double sigmaZ, double logNormfact, double z) {
 	double z2=z*z;
 	return (a*z2+b*z+c-fabs(z)/sigmaZ)+logNormfact;
 }
 
-double evalApproximation(double leftWeight, double rightWeight, double leftMy,
-		double rightMy, double leftSigma, double rightSigma, double z) {
+double evalApproximation(double logLeftWeight, double logRightWeight, double leftMy, double rightMy, double leftSigma, double logLeftSigma, double rightSigma, double logRightSigma, double z) {
 	if(z<0) {
-		return log(leftWeight)+evalLogGauss(z, leftMy, leftSigma);
+		return logLeftWeight+evalLogGauss(z, leftMy, leftSigma, logLeftSigma);
 	}
 	else {
-		return log(rightWeight)+evalLogGauss(z, rightMy, rightSigma);
+		return logRightWeight+evalLogGauss(z, rightMy, rightSigma, logRightSigma);
 	}
 }
 
 
-void computeParameters(double a, double b, double c, double sigmaZ,
+/*
+double asymp(double x) {
+  double sumx=1.0;
+  double x2=x*x;
+  double zaehler=1.0;
+  double nenner=2*x2;
+  for(int i=1; i<100; i++) {
+    if(i%2==0) {
+      sumx=sumx+zaehler/nenner;
+    }
+    else {
+      sumx=sumx-zaehler/nenner;
+    }
+    nenner=nenner*2*x2;
+    zaehler=zaehler*(2*i+1);
+  }
+  sumx=sumx/(x*sqrt(Pi))
+  return sumx;
+}
+
+*/
+
+double chainErfc(double x)
+{
+  double eps=1E-15;
+  double bound=1E-30;
+
+  double a;
+  double delta;
+
+  double b=x;
+  double f=b;
+  if(fabs(b)<bound)
+    f=bound;
+  double c=f;
+  double d=0.0;
+  int i;
+  for(i=1; i<=20; i++) {
+    a=i*0.5;
+    d=a*d+b;
+    if(fabs(d)<bound)
+      d=bound;
+    c=b+a/c;
+    if(fabs(c)<bound)
+      c=bound;
+    d=1.0/d;
+    delta=d*c;
+    f *= delta;
+    if(fabs(delta-1.0)<=eps) break;
+  }
+  //printf("%d Iterations\n", i);
+  return 1/(f*sqrtPi);
+}
+
+
+
+
+
+
+void computeParameters(double a, double b, double c, double sigmaZ, double logSigmaZ,
 		double logNormfact, int& Case, double& maxZ, double& logMaxValue,
 		double &alpha, double& leftWeight, double& rightWeight, double&leftMy,
 		double& rightMy, double& leftSigma, double& rightSigma,double& moment1,
 		double& moment2, double& entropy, double& crossentropy) {
 
 	//"sigmaZ" is considered to be "b" in a Laplace distribution
+	double thres=5.0;
 
-	//Cases:
-	//1: Laplace
-	//2: Gauss
-	//3: Mixt. of Truncated Gauss
-
-	if(fabs(a)<=eps1) {
-		Case=1;
+	if(fabs(a) < 1E-4 && fabs(b) < 1E-2) {
+		Case=0;
+		//Rprintf("CaseSpecial\n");
+		maxZ=0.0;
+		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, 0.0);
+		alpha=exp(logMaxValue)*2.0*sigmaZ;
 		moment1=0.0;
 		moment2=2.0*sigmaZ*sigmaZ;
-		entropy=log(2.0*exp(1.0)*sigmaZ);
-		crossentropy=log(2.0*exp(1.0)*sigmaZ);
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ,
-				logNormfact, 0.0);
-		alpha=exp(logMaxValue+log(2.0*sigmaZ));
-		maxZ=0.0;
+		//entropy=log(2.0*exp(1.0)*sigmaZ);
+		entropy=logarithm2+1.0+logSigmaZ;
+		//crossentropy=log(2.0*exp(1.0)*sigmaZ);
+		crossentropy=logarithm2+1.0+logSigmaZ;
 		return;
 	}
 
-	leftSigma=sqrt(-1.0/(2.0*a));
-	rightSigma=sqrt(-1.0/(2.0*a));
+	double sqrtMa=sqrt(-a);
+	//leftSigma=sqrt(-1.0/(2.0*a));
+	leftSigma=1.0/(sqrt2*sqrtMa);
+	//rightSigma=sqrt(-1.0/(2.0*a));
+	rightSigma=leftSigma;
+	double logLeftSigma=log(leftSigma);
+	double logRightSigma=logLeftSigma;
 	leftMy=(-b-1.0/sigmaZ)/(2.0*a);
 	rightMy=(-b+1.0/sigmaZ)/(2.0*a);
 
-	double areaLeft=0.5*erfc(-(-leftMy/leftSigma)/sqrt(2.0));
-	double areaRight=1.0-0.5*erfc(-(-rightMy/rightSigma)/sqrt(2.0));
+	double argLeft=(b+(1.0/sigmaZ))/(2.0*sqrtMa);
+	double argRight=(b-(1.0/sigmaZ))/(2.0*sqrtMa);
+	
+	double areaLeft=0.5*erfc(argLeft);
+	//double areaRight=1.0-0.5*erfc(argRight);
+	double areaRight=0.5*erfc(-argRight);
+	double logAreaLeft=log(areaLeft);
+	double logAreaRight=log(areaRight);
 
-	//Special Case: Zero == Laplace
-	if(areaLeft<=eps2&&areaRight<=eps2) {
-		Case=1;
-		moment1=0.0;
-		moment2=2.0*sigmaZ*sigmaZ;
-		entropy=log(2.0*exp(1.0)*sigmaZ);
-		crossentropy=log(2.0*exp(1.0)*sigmaZ);
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ,
-				logNormfact, 0.0);
-		alpha=exp(logMaxValue+log(2.0*sigmaZ));
-		maxZ=0.0;
-		return;
+	double I1left;
+	double I1right;
+	
+	if(argLeft >= 0.0 && argRight <= 0.0) {
+		Case=100;
+		if(argLeft > thres) {
+			Case=Case+10;
+			double chainLeft=chainErfc(argLeft);
+			//I1left=-(sqrt(2.0))/(sqrt(Pi)*chainLeft);
+			I1left=-sqrt2DPi/chainLeft;
+			//Rprintf("1..logAreaLeft OLD: %.50lf\n", logAreaLeft);
+			logAreaLeft=-argLeft*argLeft+log(0.5*chainLeft);
+			//Rprintf("1..logAreaLeft NEW: %.50lf\n", logAreaLeft);
+		}
+		else {
+			//I1left=-exp(evalLogGauss(-leftMy/leftSigma, 0.0, 1.0, 0.0))/areaLeft;
+			//I1left=-exp(-argLeft*argLeft-log(2*Pi)/2.)/areaLeft;
+			I1left=-exp(-argLeft*argLeft-log2Pi/2.)/areaLeft;
+		}
+		
+		if(argRight < -thres) {
+			Case=Case+1;
+			double chainRight=chainErfc(-argRight);
+			//I1right=(sqrt(2.0))/(sqrt(Pi)*chainRight);
+			I1right=sqrt2DPi/chainRight;
+			//Rprintf("1..logAreaRight OLD: %.50lf\n", logAreaRight);
+			logAreaRight=-argRight*argRight+log(0.5*chainRight);
+			//Rprintf("1..logAreaRight NEW: %.50lf\n", logAreaRight);
+		}
+		else {
+			//I1right=exp(evalLogGauss(-rightMy/rightSigma, 0.0, 1.0, 0.0))/areaRight;
+			//I1right=exp(-argRight*argRight-log(2*Pi)/2.)/areaRight;
+			I1right=exp(-argRight*argRight-log2Pi/2.)/areaRight;
+		}
 	}
-
-	//Special Case: Outlier == Gauss
-	if(areaLeft<=eps2) {
-		//if(areaLeft==0.0) {
-		Case=2;
-		moment1=rightMy;
-		moment2=rightMy*rightMy+rightSigma*rightSigma;
-		entropy=0.5*log(2.0*Pi*exp(1.0)*rightSigma*rightSigma);
-		crossentropy=-(-log(2.0*sigmaZ)-moment1/sigmaZ);
-		leftWeight=0.0;
-		rightWeight=1.0;
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact,
-				rightMy);
-		alpha=exp(logMaxValue+log(rightSigma*sqrt(2*Pi)));
-		maxZ=rightMy;
-		return;
+	else if(argLeft <= 0.0 && argRight <= 0.0) {
+		if(areaLeft >= 0.99) {
+			//Rprintf("Case21\n");
+			Case=210;
+			maxZ=leftMy;
+			logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, leftMy);
+			//alpha=exp(logMaxValue+log(leftSigma*sqrt(2*Pi)));
+			alpha=exp(logMaxValue+logLeftSigma+logSqrt2Pi);
+			leftWeight=1.0;
+			rightWeight=0.0;
+			moment1=leftMy;
+			moment2=leftMy*leftMy+leftSigma*leftSigma;
+			//entropy=0.5*log(2.0*Pi*exp(1.0)*leftSigma*leftSigma);
+			entropy=0.5*log2Pi+0.5+logLeftSigma;
+			//crossentropy=-(-log(2.0*sigmaZ)+moment1/sigmaZ);
+			crossentropy=logarithm2+logSigmaZ-moment1/sigmaZ;
+			return;
+		}
+		else {
+			//Rprintf("Case22\n");
+			Case=220;
+			//I1left=-exp(evalLogGauss(-leftMy/leftSigma, 0.0, 1.0, 0.0))/areaLeft;
+			//I1left=-exp(-argLeft*argLeft-log(2*Pi)/2.)/areaLeft;
+			I1left=-exp(-argLeft*argLeft-log2Pi/2.)/areaLeft;
+			
+			if(argRight < -thres) {
+				Case=Case+1;
+				double chainRight=chainErfc(-argRight);
+				//I1right=(sqrt(2.0))/(sqrt(Pi)*chainRight);
+				I1right=sqrt2DPi/chainRight;
+				//Rprintf("22..logAreaRight OLD: %.50lf\n", logAreaRight);
+				logAreaRight=-argRight*argRight+log(0.5*chainRight);
+				//Rprintf("22..logAreaRight NEW: %.50lf\n", logAreaRight);
+			}
+			else {
+				//I1right=exp(evalLogGauss(-rightMy/rightSigma, 0.0, 1.0, 0.0))/areaRight;
+				//I1right=exp(-argRight*argRight-log(2*Pi)/2.)/areaRight;
+				I1right=exp(-argRight*argRight-log2Pi/2.)/areaRight;
+			}
+		}
 	}
-
-	//Special Case: Outlier == Gauss
-	if(areaRight<=eps2) {
-		//if(areaRight==0.0) {
-		Case=2;
-		moment1=leftMy;
-		moment2=leftMy*leftMy+leftSigma*leftSigma;
-		entropy=0.5*log(2.0*Pi*exp(1.0)*leftSigma*leftSigma);
-		crossentropy=-(-log(2.0*sigmaZ)+moment1/sigmaZ);
-		leftWeight=1.0;
-		rightWeight=0.0;
-		logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact,
-				leftMy);
-		alpha=exp(logMaxValue+log(leftSigma*sqrt(2*Pi)));
-		maxZ=leftMy;
-		return;
+	else if(argLeft >= 0.0 && argRight >= 0.0) {
+		if(areaRight >= 0.99) {
+			//Rprintf("Case31\n");
+			Case=310;
+			maxZ=rightMy;
+			logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, rightMy);
+			alpha=exp(logMaxValue+logRightSigma+logSqrt2Pi);
+			leftWeight=0.0;
+			rightWeight=1.0;
+			moment1=rightMy;
+			moment2=rightMy*rightMy+rightSigma*rightSigma;
+			//entropy=0.5*log(2.0*Pi*exp(1.0)*rightSigma*rightSigma);
+			entropy=0.5*log2Pi+0.5+logRightSigma;
+			//crossentropy=-(-log(2.0*sigmaZ)-moment1/sigmaZ);
+			crossentropy=logarithm2+logSigmaZ+moment1/sigmaZ;
+			maxZ=rightMy;
+			return;
+		}
+		else {
+			//Rprintf("Case32\n");
+			Case=320;
+			if(argLeft>thres) {
+				Case=Case+1;
+				double chainLeft=chainErfc(argLeft);
+				//I1left=-(sqrt(2.0))/(sqrt(Pi)*chainLeft);
+				I1left=-sqrt2DPi/chainLeft;
+				//Rprintf("32..logAreaLeft OLD: %.50lf\n", logAreaLeft);
+				logAreaLeft=-argLeft*argLeft+log(0.5*chainLeft);
+				//Rprintf("32..logAreaLeft NEW: %.50lf\n", logAreaLeft);
+			}
+			else {
+				//I1left=-exp(evalLogGauss(-leftMy/leftSigma, 0.0, 1.0, 0.0))/areaLeft;
+				//I1left=-exp(-argLeft*argLeft-log(2*Pi)/2.)/areaLeft;
+				I1left=-exp(-argLeft*argLeft-log2Pi/2.)/areaLeft;
+			}
+			//I1right=exp(evalLogGauss(-rightMy/rightSigma, 0.0, 1.0, 0.0))/areaRight;
+			//I1right=exp(-argRight*argRight-log(2*Pi)/2.)/areaRight;
+			I1right=exp(-argRight*argRight-log2Pi/2.)/areaRight;
+		}
 	}
-
-	Case=3;
-
-	double weight=exp(evalLogGauss(0, rightMy, rightSigma)-
-			evalLogGauss(0, leftMy, leftSigma)+log(areaLeft)-log(areaRight));
-	leftWeight=weight/(weight+1.0);
-	rightWeight=1.0/(weight+1.0);
-
-	//Computation of Moments and Entropy
-	double I0left=1.0;
-	double I0right=1.0;
-	double I1left=-exp(evalLogGauss(-leftMy/leftSigma, 0.0, 1.0))/areaLeft;
-	double I1right=exp(evalLogGauss(-rightMy/rightSigma, 0.0, 1.0))/areaRight;
-	double I2left=(-leftMy/leftSigma)*I1left+I0left;
-	double I2right=(-rightMy/rightSigma)*I1right+I0right;
-
-	double leftMoment1=1.0*leftMy*I0left+1.0*leftSigma*I1left;
-	double rightMoment1=1.0*rightMy*I0right+1.0*rightSigma*I1right;
-	double leftMoment2=1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+
-			1.0*leftSigma*leftSigma*I2left;
-	double rightMoment2=1.0*rightMy*rightMy*I0right+
-			2.0*rightMy*rightSigma*I1right+1.0*rightSigma*rightSigma*I2right;
-
-	moment1=leftWeight*(1.0*leftMy*I0left+1.0*leftSigma*I1left)+rightWeight*
-			(1.0*rightMy*I0right+1.0*rightSigma*I1right);
-	moment2=leftWeight*(1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+
-			1.0*leftSigma*leftSigma*I2left)+rightWeight*
-			(1.0*rightMy*rightMy*I0right+2.0*rightMy*rightSigma*I1right+1.0*
-					rightSigma*rightSigma*I2right);
-
-	double leftEntropy=-(-log(sqrt(2.0*Pi)*leftSigma*areaLeft)+
-			(-leftMoment2/2.0+leftMoment1*leftMy-leftMy*leftMy/2.0)/
-			(leftSigma*leftSigma));
-	double rightEntropy=-(-log(sqrt(2.0*Pi)*rightSigma*areaRight)+
-			(-rightMoment2/2.0+rightMoment1*rightMy-rightMy*rightMy/2.0)/
-			(rightSigma*rightSigma));
-	entropy=-leftWeight*log(leftWeight)-rightWeight*log(rightWeight)+
-			leftWeight*leftEntropy+rightWeight*rightEntropy;
-
-	crossentropy=-(-log(2.0*sigmaZ)+
-			(leftWeight*leftMoment1-rightWeight*rightMoment1)/sigmaZ);
-
-	//Computation of MaxZ
+	
+	//Rprintf("Case%d\n", Case);
+	
 	double max1Z;
 	if(leftMy<0.0)
 		max1Z=leftMy;
@@ -224,14 +323,91 @@ void computeParameters(double a, double b, double c, double sigmaZ,
 		max2Z=rightMy;
 	else
 		max2Z=0.0;
-	if(log(leftWeight/areaLeft)+evalLogGauss(max1Z, leftMy, leftSigma)>
-	log(rightWeight/areaRight)+evalLogGauss(max2Z, rightMy, rightSigma))
+
+	if(max1Z!=0.0)
 		maxZ=max1Z;
-	else
+	if(max2Z!=0.0)
 		maxZ=max2Z;
+	if(max1Z==0.0&&max2Z==0.0)
+		maxZ=0.0;
 	logMaxValue=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, maxZ);
-	alpha=exp(logMaxValue-evalApproximation(leftWeight/areaLeft,
-			rightWeight/areaRight, leftMy, rightMy, leftSigma, rightSigma, maxZ));
+	
+	
+	//double weight=-I1right/I1left;
+	//leftWeight=weight/(weight+1.0);
+	//rightWeight=1.0/(weight+1.0);
+
+	double I0left=1.0;
+	double I0right=1.0;
+	
+	double I2left=(-leftMy/leftSigma)*I1left+I0left;
+	double I2right=(-rightMy/rightSigma)*I1right+I0right;
+
+	double leftMoment1=1.0*leftMy*I0left+1.0*leftSigma*I1left;
+	double rightMoment1=1.0*rightMy*I0right+1.0*rightSigma*I1right;
+	double leftMoment2=1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+1.0*leftSigma*leftSigma*I2left;
+	double rightMoment2=1.0*rightMy*rightMy*I0right+2.0*rightMy*rightSigma*I1right+1.0*rightSigma*rightSigma*I2right;
+	
+	
+	leftWeight=I1right/(I1right-I1left);
+	rightWeight=I1left/(I1left-I1right);
+	
+	double logLeftWeight=log(leftWeight);
+	double logRightWeight=log(rightWeight);
+	alpha=exp(logMaxValue-evalApproximation(logLeftWeight-logAreaLeft, logRightWeight-logAreaRight, leftMy, rightMy, leftSigma, logLeftSigma, rightSigma, logRightSigma, maxZ));
+	
+	
+	//moment1=leftWeight*(1.0*leftMy*I0left+1.0*leftSigma*I1left)+rightWeight*(1.0*rightMy*I0right+1.0*rightSigma*I1right);
+	//Rprintf("moment1 OLD: %.50lf\n", moment1);
+	//moment1=(leftMy*I1right-rightMy*I1left)/(I1right-I1left);
+	moment1=rightMy-leftWeight/(a*sigmaZ);
+        //Rprintf("moment1 NEW: %.50lf\n", moment1);
+	
+	
+	//moment2=leftWeight*(1.0*leftMy*leftMy*I0left+2.0*leftMy*leftSigma*I1left+1.0*leftSigma*leftSigma*I2left)+rightWeight*(1.0*rightMy*rightMy*I0right+2.0*rightMy*rightSigma*I1right+1.0*rightSigma*rightSigma*I2right);
+	//Rprintf("moment2 OLD: %.50lf\n", moment2);
+	//moment2 = (I1right*leftMy*leftMy+I1right*I1left*leftMy*leftSigma-I1left*rightMy*rightMy-I1left*I1right*rightMy*rightSigma)/(I1right-I1left)+leftSigma*leftSigma; 
+	//moment2 = rightMy*rightMy+(b*leftWeight)/(a*a*sigmaZ)+leftSigma*leftSigma+(leftWeight*I1left)/(sqrtMa*sqrtMa*sqrtMa*sqrt(2.0)*sigmaZ);
+        moment2 = (-0.5*a+0.25*(b-1/sigmaZ)*(b-1/sigmaZ)+(b*leftWeight)/(sigmaZ)+(leftWeight*I1left*sqrtMa)/(sqrt(2.0)*sigmaZ))/(a*a);
+	//Rprintf("moment2 NEW: %.50lf\n", moment2);
+	
+	//double leftEntropy=-(-log(sqrt(2.0*Pi)*leftSigma)-logAreaLeft+(-leftMoment2/2.0+leftMoment1*leftMy-leftMy*leftMy/2.0)/(leftSigma*leftSigma));
+	double leftEntropy=logSqrt2Pi+logLeftSigma+logAreaLeft-(-leftMoment2/2.0+leftMoment1*leftMy-leftMy*leftMy/2.0)/(leftSigma*leftSigma);
+	//double rightEntropy=-(-log(sqrt(2.0*Pi)*rightSigma)-logAreaRight+(-rightMoment2/2.0+rightMoment1*rightMy-rightMy*rightMy/2.0)/(rightSigma*rightSigma));
+	double rightEntropy=logSqrt2Pi+logRightSigma+logAreaRight-(-rightMoment2/2.0+rightMoment1*rightMy-rightMy*rightMy/2.0)/(rightSigma*rightSigma);
+	
+	//entropy=-leftWeight*log(leftWeight)-rightWeight*log(rightWeight)+leftWeight*leftEntropy+rightWeight*rightEntropy;
+	entropy=-leftWeight*logLeftWeight-rightWeight*logRightWeight+leftWeight*leftEntropy+rightWeight*rightEntropy;
+	//crossentropy=-(-log(2.0*sigmaZ)+(leftWeight*leftMoment1-rightWeight*rightMoment1)/sigmaZ);
+	crossentropy=logarithm2+logSigmaZ-(leftWeight*leftMoment1-rightWeight*rightMoment1)/sigmaZ;
+	
+	/*
+	Rprintf("a:          %50.25lf\n", a);
+	Rprintf("b:          %50.25lf\n", b);
+	Rprintf("I1right:    %50.25lf\n", I1right);
+	Rprintf("I1left:     %50.25lf\n", I1left);
+	Rprintf("leftMy:     %50.25lf\n", leftMy);
+	Rprintf("leftSigma:  %50.25lf\n", leftSigma);
+	Rprintf("rightMy:    %50.25lf\n", rightMy);
+	Rprintf("rightSigma: %50.25lf\n", rightSigma);
+	*/
+	
+	
+	/*Rprintf("argLeft:      %29.25lf   argRight:     %29.25lf\n", argLeft, argRight);
+	Rprintf("areaLeft:     %29.25lf   areaRight:    %29.25lf\n", areaLeft, areaRight);
+	Rprintf("leftMy:       %29.25lf   rightMy:      %29.25lf\n", leftMy, rightMy);
+	Rprintf("leftSigma:    %29.25lf   rightSigma:   %29.25lf\n", leftSigma, rightSigma);
+	Rprintf("leftweight:   %29.25lf   rightweight:  %29.25lf\n", leftWeight, rightWeight);
+	Rprintf("I1left:       %29.25lf   I1right:      %29.25lf\n", I1left, I1right);
+	Rprintf("I2left:       %29.25lf   I2right:      %29.25lf\n", I2left, I2right);
+	Rprintf("leftMoment1:  %29.25lf   rightMoment1: %29.25lf\n", leftMoment1, rightMoment1);
+	Rprintf("leftMoment2:  %29.25lf   rightMoment2: %29.25lf\n", leftMoment2, rightMoment2);
+	Rprintf("moment1:      %29.25lf\n", moment1);
+	Rprintf("moment2:      %29.25lf\n", moment2);
+	Rprintf("a:            %29.25lf\n", a);
+	Rprintf("b:            %29.25lf\n", b);
+	Rprintf("1/sigmaz:     %29.25lf\n", 1/sigmaZ);*/
+	
 }
 
 
@@ -258,6 +434,9 @@ extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS,
 
 	eps1=(double)(REAL(eps1S)[0]);
 	eps2=(double)(REAL(eps2S)[0]);
+	double sigmaZ=(double) ((REAL(sigmaZS))[0]);
+	double logSigmaZ=log(sigmaZ);
+
 
 	for(int j=0; j<elements; j++) {
 
@@ -278,9 +457,10 @@ extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS,
 		double moment2;
 		double entropy;
 		double crossentropy;
+		//Rprintf("%d:\n", j);
 
 
-		computeParameters(a, b, c, sigmaZ, logNormfact, 
+		computeParameters(a, b, c, sigmaZ, logSigmaZ, logNormfact, 
 				Case,
 				maxZ, logMaxValue,
 				alpha, leftWeight, rightWeight, leftMy, rightMy, leftSigma,
@@ -330,7 +510,7 @@ void evalIntegration(double z, double a, double b, double c, double sigmaZ,
 		newLogFmax=eval;
 	value=exp(eval-logFmax);
 	entropy=value*(eval-logFmax);
-	crossentropy=value*(-log(sigmaZ)-fabs(z)/sigmaZ);
+	crossentropy=value*(-log(2*sigmaZ)-fabs(z)/sigmaZ);
 }
 
 void sumTrapez(double a, double b, double eps, int n, double* integral,
@@ -397,13 +577,14 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S,
 
 	eps1=(double)(REAL(eps1S)[0]);
 	eps2=(double)(REAL(eps2S)[0]);
+	double sigmaZ=(double) ((REAL(sigmaZS))[0]);
+	double logSigmaZ=log(sigmaZ);
 
 	for(int j=0; j<elements; j++) {
 
 		double a=(double)(REAL(aS)[j]);
 		double b=(double)(REAL(bS)[j]);
 		double c=(double)(REAL(cS)[j]);
-		double sigmaZ=(double) ((REAL(sigmaZS))[0]);
 		double logNormfact=log((double)(REAL(normfactS)[j]));
 
 		int Case;
@@ -418,7 +599,7 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S,
 		double entropy;
 		double crossentropy;
 
-		computeParameters(a, b, c, sigmaZ, logNormfact,
+		computeParameters(a, b, c, sigmaZ, logSigmaZ, logNormfact,
 				Case,
 				maxZ, logMaxValue,
 				alpha, leftWeight, rightWeight, leftMy, rightMy, leftSigma,
@@ -428,10 +609,8 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S,
 			logNormfact=logNormfact+log(2.0);
 		}
 		double left, right, D, variable;
-		quadratic(a, b+1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact,
-				D, left, variable);
-		quadratic(a, b-1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact,
-				D, variable, right);
+		quadratic(a, b+1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact, D, left, variable);
+		quadratic(a, b-1.0/sigmaZ, c-logBorderFactor-logMaxValue+logNormfact, D, variable, right);
 
 		if(method==1) {
 			left=0.0;
@@ -441,8 +620,7 @@ extern "C" SEXP momentsIntegrationTrapez(SEXP it, SEXP eps1S, SEXP eps2S,
 		}
 
 
-		double logFmax=evalLogUnnormalizedPosterior(a, b, c, sigmaZ,
-				logNormfact, maxZ);
+		double logFmax=evalLogUnnormalizedPosterior(a, b, c, sigmaZ, logNormfact, maxZ);
 		double newLogFmax=logFmax;
 
 

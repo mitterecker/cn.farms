@@ -1,7 +1,8 @@
 \name{normalizeNpData}
 \alias{normalizeNpData}
 \title{Processes the non-polymorphic data...}
-\usage{normalizeNpData(filenames, cores=1, annotDir, runtype="ff")
+\usage{normalizeNpData(filenames, cores=1, annotDir, runtype="ff", saveFile="npData",
+    method=c("baseline", "quantiles"))
 }
 \description{Processes the non-polymorphic data}
 \details{Normalization for non-polymorphic data for Affymetrix SNP5 and SNP6}
@@ -15,6 +16,8 @@ Andreas Mitterecker \email{mitterecker@bioinf.jku.at}}
 \item{runtype}{Mode how the results are saved. Possible values are ff or bm. 
 If ff is chosen the data will not be saved automatically. 
 With bm the results will be saved permanently.}
+\item{saveFile}{Name of the file to save.}
+\item{method}{The method for the normalization.}
 }
 \examples{\dontrun{
 library("hapmapsnp6") 

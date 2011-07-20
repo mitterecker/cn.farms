@@ -1,8 +1,9 @@
 \name{summarizeFarmsExact}
 \alias{summarizeFarmsExact}
 \title{Summarization Laplacian approach with exact computation...}
-\usage{summarizeFarmsExact(probes, mu=0, weight=0.5, weightZ=1, eps1=0.01, eps2=10^-10, cyc=c(10,
-    10), tol=1e-05, weightType="mean", centering="median", ...)
+\usage{summarizeFarmsExact(probes, mu=0, weight=0.5, weightZ=1, eps1=0.01, eps2=10^-10, cyc=c(20,
+    20), tol=1e-05, weightType="mean", centering="median",
+    rescale=FALSE, maxIntensity=FALSE, refIdx, ...)
 }
 \description{Summarization Laplacian approach with exact computation}
 \details{This function implements an exact Laplace FARMS algorithm. Users should be 
@@ -63,6 +64,11 @@ value is interpreted as the exact number of cycles to be executed
 Default is 0.00001.}
 \item{weightType}{Flag, that is used to summarize the loading matrix.}
 \item{centering}{States how the data is centered. Default is median.}
+\item{rescale}{Rescales the Moments.}
+\item{maxIntensity}{Use of the mode values for building expression values, 
+if set to TRUE.}
+\item{refIdx}{index or indices which are used for computation of the 
+centering}
 \item{...}{Further parameters for expert users.}
 }
 \examples{x <- matrix(rnorm(100, 11), 20, 5)

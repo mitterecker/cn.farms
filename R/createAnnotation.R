@@ -8,6 +8,7 @@
 #' @param filenames An absolute path of the CEL files to process.
 #' @param annotation Optional parameter stating the annotation from a pd-mapping.
 #' @param annotDir Optional parameter stating where the annotation should go.
+#' @param checks States if sanity checks should be done.
 #' @return \code{NULL}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -26,18 +27,36 @@
 #' filenames <- dir(path=celDir, full.names=TRUE)
 #' createAnnotation(filenames=filenames)
 #' }
-createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NULL) {
-
+createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL, 
+        checks=TRUE) {
+    
+    if (checks) {
+            ## check for correct CEL-files
+            celfiles <- filenames[grep("\\.[cC][eE][lL]$", filenames)]
+            if (length(celfiles) != length(filenames)) {
+            message("It looks like that not all filenames are CEL-files!")
+            message("Especially: ")
+            message(paste("   ", setdiff(filenames, celfiles), sep=" ", 
+                            collapse="\n"))
+            stop("Check CEL-files!")
+            }
+            
+            ## check for equal mappings
+            mappings <- sapply(filenames, 
+                            function (x) affxparser::readCelHeader(x)$chiptype)
+            if (length(unique(mappings)) != 1) {
+                    print(mappings)
+                    stop("Different mappings found!")
+            }
+    }
+    
     ## check parameters
     if (is.null(filenames) & is.null(annotation) & is.null(annotDir)) {
         stop("Either provide celfile names or annotation string")
     } else if (!is.null(filenames) & is.null(annotation)) {
         mapping <- affxparser::readCelHeader(filenames[1])$chiptype
         pkgname <- oligo::cleanPlatformName(mapping)
-        
-        if (pkgname ==  "pd.genomewideex.6") {
-            pkgname <- "pd.genomewidesnp.6"
-        } 
+        pkgname <- correctPkgname(pkgname)
         
     } else if (!is.null(annotation)){
         mapping <- annotation
@@ -51,7 +70,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL, annotDir = NUL
     
     require(pkgname, character.only=TRUE, quietly=TRUE)
     version <- installed.packages()[pkgname, "Version"]
-    
+
     ## check annotation directory
     if (is.null(annotDir)) {
         annotDir <- file.path(getwd(), "annotation", pkgname, version)

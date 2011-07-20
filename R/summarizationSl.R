@@ -18,6 +18,7 @@
 #' sl and fragment.
 #' @param returnValues List with return values. 
 #' For possible values see summaryMethod.
+#' @param saveFile Name of the file to save.
 #' @seealso \code{\link{summarizeFarmsExact}}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -54,23 +55,28 @@
 #' assayData(slData)$L_z[1:10, 1:10]
 slSummarization <- function(
         object, 
-        summaryMethod = "Variational", 
+        summaryMethod = "Exact", 
         summaryParam, 
-        callParam = list(runtype="ff", cores=1), 
+        callParam = list(runtype = "ff", cores = 1), 
         summaryWindow = c("std", "fragment"), 
-        returnValues) {
+        returnValues, 
+        saveFile = "slData") {
+    
+    ## assure correct file extension
+    saveFile <- gsub("\\.RData", "", saveFile)
+    saveFile <- gsub("\\.rda", "", saveFile)
+    saveFile <- paste(saveFile, ".RData", sep="")
     
     normAdd <- normAdd(object@annotation)
     if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
-        loadFile <- paste("slData", normAdd, ".RData", sep="")
-    } else {
-        loadFile <- paste("slData.RData")
+        saveFile <- paste(gsub("\\.RData", "", saveFile), 
+                normAdd, ".RData", sep="")
     }
     
-    if (callParam$runtype=="bm" & file.exists(loadFile)) {
+    if (callParam$runtype=="bm" & file.exists(saveFile)) {
         message("Single-locus summarization has already been done.")
         message("Trying to load data ...")
-        load("slData.RData")
+        load(saveFile)
         return(slData)    
     }
     
@@ -103,7 +109,8 @@ slSummarization <- function(
                             batchList = phenoData(object)$batch,
                             summaryMethod = summaryMethodName, 
                             summaryParam = summaryParam,
-                            returnValues = returnValues), 
+                            returnValues = returnValues, 
+                            saveFile = saveFile), 
                     callParam))
     
     eSet <- new("ExpressionSet")
@@ -145,7 +152,7 @@ slSummarization <- function(
     if (callParam$runtype=="bm") {
         cat(paste(Sys.time(), "|   Saving data \n"))
         slData <- eSet
-        save(slData, file=loadFile)
+        save(slData, file=saveFile)
     }
     return(eSet)
 }

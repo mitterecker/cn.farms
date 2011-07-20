@@ -20,8 +20,15 @@
 #' load(system.file("exampleData/testSegments.RData", package="cn.farms"))
 #' plotRegions(slData, testSegments, addInd=10, ylim=c(-2, 2), 
 #'         variable="L_z", colorVersion=1, plotLegend=TRUE, pdfname="slData.pdf")
-plotRegions <- function(object, segments, addInd=NULL, ylim, variable, 
-        colorVersion=0, plotLegend=TRUE, pdfname) {
+plotRegions <- function(
+        object, 
+        segments, 
+        addInd = NULL, 
+        ylim, 
+        variable, 
+        colorVersion = 0, 
+        plotLegend=TRUE, 
+        pdfname) {
     if (missing(pdfname)) pdfname <- "plotRegions.pdf"
     if (is.null(addInd)) addInd <- 10
     if (missing(variable)) variable <- "intensity"
@@ -130,18 +137,18 @@ plotRegions <- function(object, segments, addInd=NULL, ylim, variable,
                 }
             } else {
                 matplot(ySl, 
-                        type="l", 
-                        pch="", 
-                        xaxt="n",  
-                        ylab=variable, 
-                        main=paste("chr", chr, ":", start, "-", end, sep=""),  
-                        ylim=ylim)
-                abline(h=0, col="grey")
+                        type = "l", 
+                        pch  = "", 
+                        xaxt = "n",  
+                        ylab = variable, 
+                        main = paste("chr", chr, ":", start, "-", end, sep=""),  
+                        ylim = ylim)
+                abline(h = 0, col = "grey")
             }
             
-            axis(1, at=seq(dim(ySl)[1]), labels=FALSE)
+            axis(1, at = seq(dim(ySl)[1]), labels = FALSE)
             struges <- round(seq(1, dim(ySl)[1], 
-                            length.out=nclass.Sturges(xSl)), 0)
+                            length.out = nclass.Sturges(xSl)), 0)
             text(struges, par("usr")[3] - diff(ylim) / 20, srt = 45, adj = 1,
                     labels = xSl[struges], xpd = TRUE)
             

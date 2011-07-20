@@ -10,11 +10,20 @@
 #' With bm the results will be saved permanently. 
 #' @param returnValues List with return values. 
 #' For possible values see summaryMethod.
+#' @param saveFile Name of the file to save.
 #' @return Results of FARMS run with specified parameters - exact FARMS version
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
-callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
-        batchList=NULL, cores=1, runtype="ff", returnValues){
+callSummarize <- function(
+        object, 
+        psInfo, 
+        summaryMethod, 
+        summaryParam,
+        batchList = NULL, 
+        cores = 1, 
+        runtype = "ff", 
+        returnValues, 
+        saveFile = "summData"){
 
     cat(paste(Sys.time(), " |   Starting summarization \n", sep = ""))
     
@@ -25,11 +34,13 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
     cat(paste(Sys.time(), " |   Computations will take some time,", 
                     " please be patient \n", sep = ""))
     
-    if(runtype=="ram") cores=1
+    if(runtype == "ram") cores = 1
     
     nbrOfSamples <- ncol(object)
     maxNbrOfProbes <- max((psInfo$end - psInfo$start) + 1)
     nbrOfProbes <- length(psInfo$start)
+    
+
     
     varNames <- rbind(
             c("slot01", "intensity",    nbrOfSamples, nbrOfProbes),
@@ -46,8 +57,9 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
             c("slot12", "INICall",      1,            nbrOfProbes),
             c("slot13", "probesize",    1,            nbrOfProbes), 
             c("slot14", "INI_sigVar",   1,            nbrOfProbes),
-            c("slot15", "ICtransform",  nbrOfSamples, nbrOfProbes))
-    varNames <- data.frame(varNames, stringsAsFactors=FALSE)
+            c("slot15", "ICtransform",  nbrOfSamples, nbrOfProbes),
+            c("slot16", "INI",          1,            nbrOfProbes))
+    varNames <- data.frame(varNames, stringsAsFactors = FALSE)
     varNames[, 3] <- as.numeric(varNames[, 3])
     varNames[, 4] <- as.numeric(varNames[, 4])
     
@@ -62,6 +74,7 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
             idxNames <- c(1, 5)
         }
     } else {
+        ##FIXME: check for valid slots
         idxNames <- which(varNames[, 2] %in% returnValues)
     }
     
@@ -73,7 +86,7 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
                 runtype, "\'",  
                 ", nrow=", varNames[i, 4],
                 ", ncol=", varNames[i, 3],
-                ", bmName=\'summData_\'",
+                ", bmName=\'", gsub("\\.RData", "", saveFile), "\'",
                 ")", 
                 sep="")   
         eval(parse(text=tmp))
@@ -99,10 +112,11 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
         sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
     }
     
-    sfLibrary("cn.farms", character.only=TRUE)
-    #suppressWarnings(sfExport("summarizeFarmsGaussian", namespace="cn.farms"))
-    #suppressWarnings(sfExport("summarizeFarmsVariational", namespace="cn.farms"))
-    #suppressWarnings(sfExport("summarizeFarmsExact", namespace="cn.farms"))
+    sfLibrary("cn.farms", character.only = TRUE)
+    suppressWarnings(sfExport("summarizeFarmsGaussian", namespace="cn.farms"))
+    suppressWarnings(sfExport("summarizeFarmsVariational", namespace="cn.farms"))
+    suppressWarnings(sfExport("summarizeFarmsExact", namespace="cn.farms"))
+    suppressWarnings(sfExport("summarizeFarmsStatistics", namespace="cn.farms"))
     
     suppressWarnings(sfExport("psInfo"))
     suppressWarnings(sfExport("object"))
@@ -110,7 +124,7 @@ callSummarize <- function(object, psInfo, summaryMethod, summaryParam,
     suppressWarnings(sfExport("resCommands"))
     for (i in idxNames) {
         tmp <- paste("sfExport(\"", varNames[i, 1],"\")", sep="")
-        suppressWarnings(eval(parse(text=tmp)))
+        suppressWarnings(eval(parse(text = tmp)))
     }
     
     batches <- as.character(sort(unique(batchList)))

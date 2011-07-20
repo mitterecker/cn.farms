@@ -4,7 +4,8 @@
 #' @param ... Further parameters
 #' @return Some data
 #' @author Andreas Mitterecker
-summarizeFarmsStatistics <- function(probes, type="mean", ...) {
+#' @export
+summarizeFarmsStatistics <- function(probes, type = "median", ...) {
     if (type == "median") {
         intensity <- apply(probes, 2, median)
         L_z <- intensity - median(intensity)
@@ -12,5 +13,5 @@ summarizeFarmsStatistics <- function(probes, type="mean", ...) {
         intensity <- apply(probes, 2, mean)
         L_z <- intensity - mean(intensity)
     }
-    return(list(intensity=intensity, L_z=L_z))
+    return(list(intensity = intensity, L_z = L_z))
 }

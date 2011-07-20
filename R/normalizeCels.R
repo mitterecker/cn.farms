@@ -12,6 +12,7 @@
 #' If ff is chosen the data will not be saved automatically. 
 #' With bm the results will be saved permanently. 
 #' @param annotDir An optional annotation directory.
+#' @param saveFile Name of the file to save.
 #' @param ... Further parameters for the normalization method. 
 #' @return An ExpressionSet object with the normalized data.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
@@ -28,48 +29,51 @@
 normalizeCels <- function (
         filenames, 
         method = c("SOR", "quantiles"), 
-        cores=1, 
-        alleles=FALSE, 
-        runtype="bm", 
-        annotDir=NULL, ...) {
+        cores = 1, 
+        alleles = FALSE, 
+        runtype = "bm", 
+        annotDir = NULL, 
+        saveFile = "normData", 
+        ...) {
 
+    ## assure correct file extension
+    saveFile <- gsub("\\.RData", "", saveFile)
+    saveFile <- gsub("\\.rda", "", saveFile)
+    saveFile <- paste(saveFile, ".RData", sep="")    
+    
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
     pkgname <- oligo::cleanPlatformName(mapping)
-    
-    if (pkgname == "pd.genomewideex.6") {
-        pkgname <- "pd.genomewidesnp.6"
-    }
+    pkgname <- correctPkgname(pkgname)
     
     normAdd <- normAdd(pkgname)
     
     if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
-        loadFile <- paste("normData", normAdd, ".RData", sep="")
-    } else {
-        loadFile <- paste("normData.RData")
-    }
-
+        saveFile <- paste(gsub("\\.RData", "", saveFile), 
+                normAdd, ".RData", sep="")
+    } 
+    
     method <- match.arg(method)
     normMethods <- c("SOR", "quantiles")
        
     if (!method %in% normMethods) {
         stop("Normalization method not found!")
-    } else if (runtype=="bm" & 
-            file.exists(loadFile)) {
+    } else if (runtype == "bm" & file.exists(saveFile)) {
         message("Normalization has already been done")
         message("Trying to load normalized data ...")
-        load(loadFile)
+        load(saveFile)
         return(normData)
     }
     normData <- switch(method, 
-            SOR = normalizeSor(filenames=filenames, cores=cores, 
-                    alleles=alleles, runtype=runtype, annotDir=annotDir, 
-                    pkgname=pkgname, ...), 
-            quantiles = normalizeQuantiles(filenames=filenames, cores=cores, 
-                    runtype=runtype, annotDir=annotDir, pkgname=pkgname, ...))
+            SOR = normalizeSor(filenames = filenames, cores = cores, 
+                    alleles = alleles, runtype = runtype, annotDir = annotDir, 
+                    pkgname = pkgname, saveFile = saveFile, ...), 
+            quantiles = normalizeQuantiles(filenames = filenames, cores = cores, 
+                    runtype = runtype, annotDir = annotDir, pkgname = pkgname, 
+                    saveFile = saveFile, ...))
     
-    if (runtype=="bm") {
+    if (runtype == "bm") {
         cat(paste(Sys.time(), "|   Saving normalized data \n"))
-        save(normData, file=loadFile)
+        save(normData, file=saveFile)
     }
     return(normData)
 }

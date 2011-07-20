@@ -2,7 +2,7 @@
 \alias{summarizeFarmsGaussian}
 \title{Summarization Gaussian approach...}
 \usage{summarizeFarmsGaussian(probes, weight=0.15, mu=0, cyc=10, tol=1e-04, weightType="mean",
-    init=0.6, correction=0, minNoise=0.35, centering="median")
+    init=0.6, correction=0, minNoise=0.35, centering="median", refIdx)
 }
 \description{Summarization Gaussian approach}
 \details{This function runs the FARMS algorithm.}
@@ -32,6 +32,8 @@ matrix under the given non-negative correlation constraints of the covariance
 matrix)}
 \item{minNoise}{States the minimal noise. Default is 0.35.}
 \item{centering}{States how the data is centered. Default is median.}
+\item{refIdx}{index or indices which are used for computation of the 
+centering}
 }
 \examples{x <- matrix(rnorm(100, 11), 20, 5)
 summarizeFarmsGaussian(x)}

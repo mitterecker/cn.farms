@@ -64,7 +64,7 @@ plotSmoothScatter <- function(
                         nbrOfSamples, "\n", sep = ""))
         
         ySl <- assayData(x)[[variable]][, i]
-        smoothScatter(x=xSl, y = ySl, ylim=ylim, ylab = "L_z", xlab = "bp", 
+        smoothScatter(x = xSl, y = ySl, ylim = ylim, ylab = "L_z", xlab = "bp", 
                 nrpoints = 1000, ...) 
         abline(h=0)
         loess.out <- loess(ySl ~ xSl)
