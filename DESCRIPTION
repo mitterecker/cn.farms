@@ -12,16 +12,17 @@ Description: This package implements the cn.FARMS algorithm for copy
     number variation (CNV) analysis. cn.FARMS allows to analyse all
     existing Affymetrix (10K-SNP6.0) array types, supports
     high-performance computing using snow and ff.
-Version: 1.1.2
+Version: 1.1.6
 biocViews: Microarray, Bioinformatics, CopyNumberVariants
 URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-Date: 2011-04-22
-Depends: R (>= 2.12), Biobase, methods, ff, oligoClasses, snowfall
+Date: 2011-06-15
+Depends: R (>= 2.11), Biobase, methods, ff, oligoClasses, snowfall
 Suggests: pd.mapping250k.sty, pd.mapping250k.nsp, pd.genomewidesnp.5,
     pd.genomewidesnp.6
-Collate: 'callSummarize.R' 'combineData.R' 'createAnnotation.R'
-    'createMatrix.R' 'distributionDistance.R' 'dnaCopySf.R'
-    'doCnFarms.R' 'fragLengthCorr.R' 'normAdd.R' 'normalizeAverage.R'
+Collate: 'callSummarize.R' 'combineData.R' 'correctPkgname.R'
+    'createAnnotation.R' 'createMatrix.R' 'determineBaselineArray.R'
+    'distributionDistance.R' 'dnaCopySf.R' 'doCnFarms.R'
+    'fragLengthCorr.R' 'normAdd.R' 'normalizeAverage.R'
     'normalizeCels.R' 'normalizeNpData.R' 'normalizeQuantiles.R'
     'normalizeSor.R' 'plotDendrogram.R' 'plotDensity.R' 'plotEvalIc.R'
     'plotSmoothScatter.R' 'plotsRegions.R' 'plotViolines.R'
