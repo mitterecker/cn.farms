@@ -11,13 +11,17 @@
 #' @examples
 #' x <- matrix(rnorm(100, 11), 20, 5)
 #' normalizeAverage(x, x[, 1])
-normalizeAverage <- function(x, baselineArray, avg=median, targetAvg=2200, ...) {
-
+normalizeAverage <- function(x, baselineArray, avg = median, 
+        targetAvg = 2200, ...) {
+    if (missing(baselineArray)) {
+        baselineArray <- x[, 1:2, drop = FALSE]
+    }
+    
     ## Estimate the scale for each channel
-    scale <- apply(x, MARGIN=2, FUN=avg, ...)
+    scale <- apply(x, MARGIN = 2, FUN = avg, ...)
     
     ##FIXME: 
-    #scale1 <- apply(x, MARGIN=2, FUN=avg, ...)
+    #scale1 <- apply(x, MARGIN = 2, FUN = avg, ...)
     scale1 <- median(baselineArray)
     targetAvg <- 2200
     

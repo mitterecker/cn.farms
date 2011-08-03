@@ -51,30 +51,30 @@ normalizeSor <- function (filenames, cores=1, annotDir = NULL, alleles = FALSE,
     }    
     
     if (cores == 1) {
-        sfInit(parallel=FALSE)
+        sfInit(parallel = FALSE)
     } else {
-        sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
+        sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
     
     nbrOfSamples <- length(filenames)
     nbrOfProbes <- length(which(pmfeature[, "allele"]==1))
     
-    intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type="double",
-            bmName=gsub("\\.rda", "", saveFile))
+    intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
+            type = "double", bmName = gsub("\\.rda", "", saveFile))
     
     if (alleles) {
         intensityA <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
-                type="double", bmName=gsub("\\.rda", "", saveFile))
+                type = "double", bmName = gsub("\\.rda", "", saveFile))
         intensityB <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
-                type="double", bmName=gsub("\\.rda", "", saveFile))        
+                type = "double", bmName = gsub("\\.rda", "", saveFile))        
     }
 
-    sfLibrary("cn.farms", character.only=TRUE)
-    sfLibrary("affxparser", character.only=TRUE)
-    sfLibrary("oligo", character.only=TRUE)
+    sfLibrary("cn.farms", character.only = TRUE)
+    sfLibrary("affxparser", character.only = TRUE)
+    sfLibrary("oligo", character.only = TRUE)
     
     suppressWarnings(
-            sfExport(list=c(
+            sfExport(list = c(
                             "pmfeature", "uniquePairs", 
                             "idxOfAlleleA", "idxOfStrandA",
                             "idxOfStrandB", "idxOfAlleleB", 
@@ -98,9 +98,9 @@ normalizeSor <- function (filenames, cores=1, annotDir = NULL, alleles = FALSE,
     ## assay data    
     if (alleles) {
         assayData(eSet) <- list(
-                intensity=intensity, 
-                intensityA=intensityA, 
-                intensityB=intensityB)
+                intensity  = intensity, 
+                intensityA = intensityA, 
+                intensityB = intensityB)
     } else {
         assayData(eSet) <- list(intensity=intensity)
     }
@@ -110,14 +110,14 @@ normalizeSor <- function (filenames, cores=1, annotDir = NULL, alleles = FALSE,
     
     ## feature data
     featureData(eSet) <- new("AnnotatedDataFrame", 
-            data = pmfeature[pmfeature$allele==1, c("fid", "fsetid")])
+            data = pmfeature[pmfeature$allele == 1, c("fid", "fsetid")])
     
     ## experiment data
     experimentData(eSet) <- new("MIAME", 
-            other=list(
-                    annotDir=annotDir, 
-                    normalization="SOR", 
-                    type="normData"))    
+            other = list(
+                    annotDir = annotDir, 
+                    normalization = "SOR", 
+                    type = "normData"))    
     
     ## annotation
     annotation(eSet) <- pkgname
@@ -135,11 +135,12 @@ normalizeSor <- function (filenames, cores=1, annotDir = NULL, alleles = FALSE,
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @noRd
 normalizeSorH01 <- function (ii, filenames, cyc) {
     
     ## non-visible bindings
-    pmfeature <- pmfeature
-    uniquePairs <- uniquePairs
+    pmfeature    <- pmfeature
+    uniquePairs  <- uniquePairs
     idxOfStrandA <- idxOfStrandA
     idxOfStrandB <- idxOfStrandB
     idxOfAlleleA <- idxOfAlleleA
@@ -147,12 +148,12 @@ normalizeSorH01 <- function (ii, filenames, cyc) {
     alleles <- alleles
     
     tmpExprs <- affxparser::readCelIntensities(filenames[ii], 
-            indices=pmfeature$fid)
+            indices = pmfeature$fid)
     
     LZExprs <- matrix(NA, dim(tmpExprs)[1], dim(tmpExprs)[2])
     for (jj in 1:length(uniquePairs)) {
         for (kk in 1:2) { # strand
-            tmp_indices <- which(pairs==uniquePairs[jj])
+            tmp_indices <- which(pairs == uniquePairs[jj])
             if (kk == 1) {
                 tmp_indices <- intersect(idxOfStrandA, tmp_indices)    
             } else {
@@ -162,12 +163,13 @@ normalizeSorH01 <- function (ii, filenames, cyc) {
             tmp_exprs_A <- tmpExprs[idxOfAlleleA[tmp_indices]]
             tmp_exprs_B <- tmpExprs[idxOfAlleleB[tmp_indices]]
             foo1 <- matrix(c(tmp_exprs_A, tmp_exprs_B), length(tmp_exprs_A), 2, 
-                    byrow=FALSE)
+                    byrow = FALSE)
             foo1[, 1] <- foo1[, 1] - mean(sort(foo1[, 1])[1:100])
             foo1[, 2] <- foo1[, 2] - mean(sort(foo1[, 2])[1:100])
             res <- sparseFarmsC(foo1, cyc)
             LzId1 <- t(res$Lz)
-            LzId1 <- normalizeAverage(LzId1)
+
+            #LzId1 <- normalizeAverage(LzId1)
             LZExprs[idxOfAlleleA[tmp_indices]] <- LzId1[, 1]
             LZExprs[idxOfAlleleB[tmp_indices]] <- LzId1[, 2]
             

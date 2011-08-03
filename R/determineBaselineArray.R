@@ -7,7 +7,8 @@
 #' @param cores 
 #' @param saveFile 
 #' @return Some data
-#' @author Andreas Mitterecker
+#' @author Andreas Mitterecke
+#' @noRd
 determineBaselineArray <- function(
         filenames, 
         nbrOfProbes=10000, 
@@ -47,6 +48,7 @@ determineBaselineArray <- function(
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @noRd
 determineBaselineArrayH01 <- function (i) {
     ## non-visible bindings
     filenames <- filenames

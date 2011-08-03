@@ -9,7 +9,6 @@
 #' @param pkgname Optional parameter for the CEL mapping.
 #' @param saveFile Name of the file to save.
 #' @importFrom preprocessCore normalize.quantiles.use.target
-#' @param ... 
 #' @return The normalized data.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
@@ -20,8 +19,7 @@ normalizeQuantiles <- function (
         annotDir = NULL, 
         runtype = "ff", 
         pkgname = NULL, 
-        saveFile = "normDataQuant", 
-        ...) { 
+        saveFile = "normDataQuant") { 
     
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
@@ -142,6 +140,7 @@ normalizeQuantiles <- function (
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @noRd
 normalizeQuantilesH01 <- function (ii, filenames) {
     
     ## non-visible bindings

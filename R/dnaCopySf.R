@@ -69,8 +69,8 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
             data = phInf)
     nbrOfSamples <- length(idSamples)
     nbrOfCnvrs <- nrow(featureData(eSet))
-    assayData(eSet) <- list(cnv=matrix(rep(2, nbrOfSamples * nbrOfCnvrs), 
-                    ncol=nbrOfSamples)) 
+    assayData(eSet) <- list(cnv = matrix(rep(2, nbrOfSamples * nbrOfCnvrs), 
+                    ncol = nbrOfSamples)) 
     experimentData(eSet)@other$cnvLabels <- list(
             color=c("red", "black", "green"), 
             desc=c("deletion", "normal", "duplication"))
@@ -86,6 +86,7 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @noRd
 dnaCopySfH01 <- function (i, ...) {
 
     if (!exists("min.width")) min.width <- 3

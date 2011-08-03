@@ -134,7 +134,7 @@ normalizeNpData <- function(
     phenoData(eSet) <- new("AnnotatedDataFrame", data = data.frame(filenames))
     featureData(eSet) <- new("AnnotatedDataFrame", data = phInf)
     experimentData(eSet) <- new("MIAME", 
-            other=list(
+            other = list(
                     annotDir = annotDir, 
                     normalization = "SOR",
                     type = "npData"))    
@@ -142,10 +142,10 @@ normalizeNpData <- function(
     
     sampleNames(eSet) <- gsub("\\.[Cc][Ee][Ll]", "", basename(filenames))    
     
-    if (runtype=="bm") {
+    if (runtype == "bm") {
         cat(paste(Sys.time(), "|   Saving normalized data \n"))
         npData <- eSet
-        save(npData, file=saveFile)
+        save(npData, file = saveFile)
     }
     
     return(eSet)
@@ -158,6 +158,7 @@ normalizeNpData <- function(
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @importFrom affxparser readCelIntensities
+#' @noRd
 normalizeNpDataH01 <- function(i) {
     
     ## non-visible bindings
@@ -167,6 +168,7 @@ normalizeNpDataH01 <- function(i) {
     
     LZExprs <- affxparser::readCelIntensities(filenames[i], 
             indices = pmfeatureCNV$fid)
+    browser()
     LZExprs <- normalizeAverage(LZExprs, baselineArray)
     LZExprs <- log2(LZExprs)
     intensity[, i] <- LZExprs
@@ -179,6 +181,7 @@ normalizeNpDataH01 <- function(i) {
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @noRd
 normalizeQuantilesNpH01 <- function(i) {
     
     ## non-visible bindings

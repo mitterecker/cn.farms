@@ -164,6 +164,7 @@ flcStd <- function(y, fragmentLengths, targetFcn = NULL, subsetToFit = NULL,
 #' @return Some data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @noRd
 flcStdH01 <- function (i, ...) {
     
     ## non-visible bindings
@@ -285,6 +286,7 @@ flcSnp6Std <- function(y, fragmentLengths, targetFcn=NULL,
 #' @return Data
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @noRd
 flcSnp6StdH01 <- function (i, ...) {
     
     ## non-visible bindings
