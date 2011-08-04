@@ -1,40 +1,63 @@
 \name{summarizeFarmsVariational}
 \alias{summarizeFarmsVariational}
-\title{Summarization variational Laplacian approach...}
-\usage{summarizeFarmsVariational(probes, weight=0.15, mu=0, cyc=10, weightType="median", init=0.6,
-    correction=0, minNoise=0.35, spuriousCorrelation=0.3,
-    centering="median")
+\title{Summarization variational Laplacian approach}
+\usage{
+  summarizeFarmsVariational(probes, weight = 0.15, mu = 0,
+  cyc = 10, weightType = "median", init = 0.6, correction =
+  0, minNoise = 0.35, spuriousCorrelation = 0.3, centering
+  = "median")
 }
-\description{Summarization variational Laplacian approach}
-\details{This function runs the FARMS algorithm.}
-\value{A list containing the results of the run.}
-\author{Djork-Arne Clevert \email{okko@clevert.de} and 
-Andreas Mitterecker \email{mitterecker@bioinf.jku.at}}
-\arguments{\item{probes}{A matrix with numeric values.}
-\item{weight}{Hyperparameter value in the range of [0,1] which determines 
-the influence of the prior.}
-\item{mu}{Hyperparameter value which allows to quantify different aspects of
-potential prior knowledge. Values near zero assumes that most genes do not
-contain a signal, and introduces a bias for loading matrix elements near 
-zero. Default value is 0.}
-\item{cyc}{Number of cycles for the EM algorithm.}
-\item{weightType}{Flag, that is used to summarize the loading matrix. 
-The default value is set to mean.}
-\item{init}{Parameter for estimation.}
-\item{correction}{Value that indicates whether the covariance matrix should 
-be corrected for negative eigenvalues which might emerge from the 
-non-negative correlation constraints or not. 
-Default = O  (means that no correction is done), 
-1 (minimal noise (0.0001) is added to the diagonal elements of the 
-covariance matrix to force positive definiteness), 
-2 (Maximum Likelihood solution to compute the nearest positive definite 
-matrix under the given non-negative correlation constraints of the covariance
-matrix)}
-\item{spuriousCorrelation}{Numeric value for suppression of spurious 
-correlation.}
-\item{minNoise}{States the minimal noise. Default is 0.35.}
-\item{centering}{States how the data is centered. Default is median.}
+\arguments{
+  \item{probes}{A matrix with numeric values.}
+
+  \item{weight}{Hyperparameter value in the range of [0,1]
+  which determines the influence of the prior.}
+
+  \item{mu}{Hyperparameter value which allows to quantify
+  different aspects of potential prior knowledge. Values
+  near zero assumes that most genes do not contain a
+  signal, and introduces a bias for loading matrix elements
+  near zero. Default value is 0.}
+
+  \item{cyc}{Number of cycles for the EM algorithm.}
+
+  \item{weightType}{Flag, that is used to summarize the
+  loading matrix. The default value is set to mean.}
+
+  \item{init}{Parameter for estimation.}
+
+  \item{correction}{Value that indicates whether the
+  covariance matrix should be corrected for negative
+  eigenvalues which might emerge from the non-negative
+  correlation constraints or not. Default = O (means that
+  no correction is done), 1 (minimal noise (0.0001) is
+  added to the diagonal elements of the covariance matrix
+  to force positive definiteness), 2 (Maximum Likelihood
+  solution to compute the nearest positive definite matrix
+  under the given non-negative correlation constraints of
+  the covariance matrix)}
+
+  \item{spuriousCorrelation}{Numeric value for suppression
+  of spurious correlation.}
+
+  \item{minNoise}{States the minimal noise. Default is
+  0.35.}
+
+  \item{centering}{States how the data is centered. Default
+  is median.}
 }
-\examples{x <- matrix(rnorm(100, 11), 20, 5)
-summarizeFarmsVariational(x)}
+\value{
+  A list containing the results of the run.
+}
+\description{
+  This function runs the FARMS algorithm.
+}
+\examples{
+x <- matrix(rnorm(100, 11), 20, 5)
+summarizeFarmsVariational(x)
+}
+\author{
+  Djork-Arne Clevert \email{okko@clevert.de} and Andreas
+  Mitterecker \email{mitterecker@bioinf.jku.at}
+}
 

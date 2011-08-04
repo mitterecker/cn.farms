@@ -3,6 +3,7 @@
 #' @param cores cores
 #' @param annotDir annotDir
 #' @param alleles alleles
+#' @param cyc states the number of cycles for the EM algorithm.
 #' @param runtype Mode how the results are saved. Possible values are ff or bm. 
 #' If ff is chosen the data will not be saved automatically. 
 #' With bm the results will be saved permanently. 
@@ -21,8 +22,8 @@
 #' @importFrom snowfall sfLapply
 #' @importFrom snowfall sfClusterEval
 #' @importFrom snowfall sfStop
-normalizeSor <- function (filenames, cores=1, annotDir = NULL, alleles = FALSE, 
-        runtype = "ff", cyc = 5, pkgname = NULL, saveFile = "Sor", ...) {
+normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE, 
+        runtype = "ff", cyc = 5, pkgname = NULL, saveFile = "Sor") {
     
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
@@ -57,7 +58,7 @@ normalizeSor <- function (filenames, cores=1, annotDir = NULL, alleles = FALSE,
     }
     
     nbrOfSamples <- length(filenames)
-    nbrOfProbes <- length(which(pmfeature[, "allele"]==1))
+    nbrOfProbes <- length(which(pmfeature[, "allele"] == 1))
     
     intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
             type = "double", bmName = gsub("\\.rda", "", saveFile))

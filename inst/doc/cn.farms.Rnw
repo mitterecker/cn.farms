@@ -34,7 +34,7 @@ Linz\\Altenberger Str. 69, 4040 Linz, Austria\\
 \begin{document}
 
 << echo=FALSE,results=hide>>=
-options(width=75)
+options(width = 80)
 set.seed(0)
 library(cn.farms)
 farmsVers <- packageDescription("cn.farms")$Version
@@ -228,7 +228,7 @@ library(cn.farms)
 \noindent  Next, the user specifies a working directory on the harddisk whereto save the results.
 
 \begin{Sinput}
-> workDir <- "~/tmp"
+> workDir <- tempdir()
 > dir.create(workDir, showWarnings=F, recursive=T)
 > setwd(workDir)
 \end{Sinput}
@@ -240,7 +240,7 @@ Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save 
 
 \begin{Sinput}
 > cores <- 2
-> runtype <- "bm"
+> runtype <- "ff"
 \end{Sinput}
 
 \noindent  Next, the user specifies a subdirectory whereto save the flat-files.
@@ -292,7 +292,7 @@ or if the DNA probe loci are summarized separately (\verb+summaryWindow="std"+ i
 summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(10)
-callParam <- list(cores=cores, runtype=runtype)
+callParam <- list(cores = cores, runtype = runtype)
 
 slData <- slSummarization(normData, 
 		summaryMethod = summaryMethod, 
@@ -319,8 +319,8 @@ assayData(slData)$L_z[1:10, 1:5] ## relative values
 \noindent This step combines non-polymorphic probes and single-locus summarized SNP-probes.
 
 << echo=TRUE>>=
- combData <- combineData(slData, npData, runtype=runtype)
- show(combData) 
+combData <- combineData(slData, npData, runtype = runtype)
+show(combData) 
 @
 
 \noindent In this final step intensity values of non-polymorphic probes and single-locus 
@@ -349,13 +349,13 @@ windowParam$overlap <- TRUE
 summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(20)
-callParam <- list(cores=cores, runtype=runtype)
+callParam <- list(cores = cores, runtype = runtype)
 mlData <- mlSummarization(slData, 
-		windowMethod =windowMethod, 
-		windowParam = windowParam, 
+		windowMethod  = windowMethod, 
+		windowParam   = windowParam, 
 		summaryMethod = summaryMethod, 
-		summaryParam = summaryParam, 
-		callParam = callParam)
+		summaryParam  = summaryParam, 
+		callParam     = callParam)
 names(assayData(mlData))
 assayData(mlData)$intensity[1:10, 1:5]
 assayData(mlData)$L_z[1:10, 1:5]

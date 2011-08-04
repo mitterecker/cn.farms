@@ -24,7 +24,7 @@ Description: This package implements the cn.FARMS algorithm
 Version: 1.1.9
 biocViews: Microarray, Bioinformatics, CopyNumberVariants
 URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-Date: 2011-08-01
+Date: 2011-08-04
 Depends:
     R (>= 2.11),
     Biobase,

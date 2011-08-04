@@ -13,6 +13,7 @@
 #' normalizeAverage(x, x[, 1])
 normalizeAverage <- function(x, baselineArray, avg = median, 
         targetAvg = 2200, ...) {
+    
     if (missing(baselineArray)) {
         baselineArray <- x[, 1:2, drop = FALSE]
     }
