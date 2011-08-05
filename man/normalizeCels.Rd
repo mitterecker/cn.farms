@@ -42,10 +42,10 @@
 \examples{
 \dontrun{
 library("hapmapsnp6")
-celDir <- system.file("celFiles", package="hapmapsnp6")
-filenames <- dir(path=celDir, full.names=TRUE)
-createAnnotation(filenames=filenames)
-normData <- normalizeCels(filenames, method="SOR")
+celDir <- system.file("celFiles", package = "hapmapsnp6")
+filenames <- dir(path = celDir, full.names = TRUE)
+createAnnotation(filenames = filenames)
+normData <- normalizeCels(filenames, method = "SOR")
 }
 }
 \author{

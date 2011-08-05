@@ -1,4 +1,23 @@
 Package: cn.farms
+Title: cn.farms - Factor Analysis for copy number
+    estimation
+Version: 1.1.11
+Maintainer: Andreas Mitterecker
+    <mitterecker@bioinf.jku.at>, Djork-Arne Clevert
+    <okko@clevert.de>
+License: LGPL (>= 2.0)
+Type: Package
+LazyLoad: Yes
+Author: Andreas Mitterecker <mitterecker@bioinf.jku.at>,
+    Djork-Arne Clevert <okko@clevert.de>
+Description: This package implements the cn.FARMS algorithm
+    for copy number variation (CNV) analysis. cn.FARMS
+    allows to analyze all existing Affymetrix (10K-SNP6.0)
+    array types, supports high-performance computing using
+    snow and ff.
+biocViews: Microarray, Bioinformatics, CopyNumberVariants
+URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
+Date: 2011-08-04
 Imports:
     DBI,
     affxparser,
@@ -6,25 +25,6 @@ Imports:
     DNAcopy,
     preprocessCore,
     lattice
-Maintainer: Andreas Mitterecker
-    <mitterecker@bioinf.jku.at>, Djork-Arne Clevert
-    <okko@clevert.de>
-License: LGPL (>= 2.0)
-Title: cn.farms - Factor Analysis for copy number
-    estimation
-Type: Package
-LazyLoad: Yes
-Author: Andreas Mitterecker <mitterecker@bioinf.jku.at>,
-    Djork-Arne Clevert <okko@clevert.de>
-Description: This package implements the cn.FARMS algorithm
-    for copy number variation (CNV) analysis. cn.FARMS
-    allows to analyse all existing Affymetrix (10K-SNP6.0)
-    array types, supports high-performance computing using
-    snow and ff.
-Version: 1.1.9
-biocViews: Microarray, Bioinformatics, CopyNumberVariants
-URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-Date: 2011-08-04
 Depends:
     R (>= 2.11),
     Biobase,

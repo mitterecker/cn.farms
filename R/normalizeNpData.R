@@ -168,7 +168,6 @@ normalizeNpDataH01 <- function(i) {
     
     LZExprs <- affxparser::readCelIntensities(filenames[i], 
             indices = pmfeatureCNV$fid)
-    browser()
     LZExprs <- normalizeAverage(LZExprs, baselineArray)
     LZExprs <- log2(LZExprs)
     intensity[, i] <- LZExprs

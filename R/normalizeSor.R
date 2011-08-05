@@ -169,17 +169,22 @@ normalizeSorH01 <- function (ii, filenames, cyc) {
             foo1[, 2] <- foo1[, 2] - mean(sort(foo1[, 2])[1:100])
             res <- sparseFarmsC(foo1, cyc)
             LzId1 <- t(res$Lz)
-
-            #LzId1 <- normalizeAverage(LzId1)
+           
             LZExprs[idxOfAlleleA[tmp_indices]] <- LzId1[, 1]
             LZExprs[idxOfAlleleB[tmp_indices]] <- LzId1[, 2]
+
+            #LzId1 <- normalizeAverage(LzId1)
             
-            tmp2 <- log2(LZExprs + 175)
+            tmp2 <- LZExprs + 175
             if (alleles) {
                 intensityA[, ii] <- tmp2[idxOfAlleleA]
                 intensityB[, ii] <- tmp2[idxOfAlleleB]
             }
-            intensity[, ii] <- (tmp2[idxOfAlleleA] + tmp2[idxOfAlleleB]) / 2
+            tmp01 <- (tmp2[idxOfAlleleA] + tmp2[idxOfAlleleB]) / 2
+            corr <- mean(tmp01, na.rm = TRUE) / 2200
+            tmp02 <- tmp01 / corr
+            
+            intensity[, ii] <- log2(tmp02)
         }
     }
     gc()

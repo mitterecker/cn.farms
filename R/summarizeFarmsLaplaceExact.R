@@ -89,27 +89,27 @@ summarizeFarmsExact <- function(
     probes <- as.matrix(probes)
     #sigmaZ <- 1.0 / weightZ
     sigmaZ <- 1 / sqrt(2 * weightZ)
-    if(length(cyc) == 1)
+    if (length(cyc) == 1)
         cyc <- c(cyc, cyc)
     additional <- list(...)
     
-    if("initPsi" %in% names(additional)) 
+    if ("initPsi" %in% names(additional)) 
         initPsi <- additional$initPsi 
     else 
         initPsi <- 0.5
     
-    if("algorithm" %in% names(additional)) 
+    if ("algorithm" %in% names(additional)) 
         algorithm <- additional$algorithm
     else
         algorithm <- "exact"
     
-    if(algorithm == "v" || algorithm == "ard") {
-        if("boundedLapla" %in% names(additional))
+    if (algorithm == "v" || algorithm == "ard") {
+        if ("boundedLapla" %in% names(additional))
             boundedLapla <- additional$boundedLapla
         else
             boundedLapla <- TRUE
         
-        if("spuriousCorrelation" %in% names(additional))
+        if ("spuriousCorrelation" %in% names(additional))
             spuriousCorrelation <- additional$spuriousCorrelation
         else
             spuriousCorrelation <- 1.0
@@ -149,7 +149,7 @@ summarizeFarmsExact <- function(
     
     myLambda <- rep(0, dimension)
     PsiLambda <- rep(mean(diag(DataCov)) / weight, dimension)
-    if(weightProbes == TRUE)
+    if (weightProbes == TRUE)
         PsiLambda <- rep(mean(diag(DataCov)) / (weight * dimension), dimension)
     
     Psi <- initPsi * diag(DataCov)
@@ -171,7 +171,6 @@ summarizeFarmsExact <- function(
     for (i in 1:cyc[2]) {
     
         ## E-Step
-        
         if (algorithm == "exact") {
             InvPsi <- 1 / Psi
             av <- rep(-0.5 * (t(lambda) %*% (InvPsi * lambda))[1], n)
@@ -179,7 +178,7 @@ summarizeFarmsExact <- function(
             cv <- -0.5 * colSums(NData2 * InvPsi)
             nv <- rep(1 / ((2 * pi)^(dimension / 2) * prod(Psi)^(1/2) * 2 * sigmaZ), n)
             moments <- .Call("momentsGauss", i, eps1, eps2, av, bv, cv, sigmaZ, nv, 1, 0, PACKAGE="cn.farms")
-            if(rescale) {
+            if (rescale) {
                 sdmom <- sqrt(1 / n * sum(moments$moment2)) / (sqrt(2.0) * sigmaZ) + 10^-3
                 moments$moment1 <- moments$moment1 / sdmom 
                 moments$moment2 <- moments$moment2 / sdmom^2
@@ -196,7 +195,7 @@ summarizeFarmsExact <- function(
             
             ## M-Step only for v
             lapla <- 1 / sqrt(Ez2)
-            if(boundedLapla)
+            if (boundedLapla)
                 lapla[lapla < spuriousCorrelation] <- spuriousCorrelation 
         } else if (algorithm == "ard") {
             InvPsi <- 1 / Psi
@@ -208,7 +207,7 @@ summarizeFarmsExact <- function(
             
             ## M-Step only for ard
             lapla <- 1 / Ez2
-            if(boundedLapla)
+            if (boundedLapla)
                 lapla[lapla < spuriousCorrelation] <- spuriousCorrelation 
         } else if (algorithm == "g") {
             PsiM1_Lambda <- lambda / Psi
@@ -224,7 +223,7 @@ summarizeFarmsExact <- function(
         Psi <- diag(DataCov) - avg_xEz * lambda + Psi_PsiLambdaM1 * (myLambda - lambda) * lambda
         Psi[Psi < 10^-3] <- 10^-3
         
-        if(i > cyc[1] && max(abs(Psi - PsiOld)) / max(abs(PsiOld)) < tol) {
+        if (i > cyc[1] && max(abs(Psi - PsiOld)) / max(abs(PsiOld)) < tol) {
             nrCyc <- i + 1
             break
         }
@@ -267,7 +266,7 @@ summarizeFarmsExact <- function(
     }
     ICtransform <- 1 / exp(IC * 2.0)
     
-    if(sdz == 0.0)
+    if (sdz == 0.0)
         sdz <- 1
     
     z <- z / sdz
@@ -276,7 +275,7 @@ summarizeFarmsExact <- function(
     lambda0 <- mean.Data
     lambda1 <- lambda * sd.Data
     Psi <- Psi * sd.Data^2
-    if(algorithm == "v")
+    if (algorithm == "v")
         lapla <- lapla / sdz
     else if (algorithm=="ard")
         lapla <- lapla / sdz^2
@@ -291,7 +290,7 @@ summarizeFarmsExact <- function(
     MLQ <- pchisq(2 * (sum(log(momentsRET$normConst) - (cvCOMP + log(nvCOMP)))), dimension)
     log_p_ges <- sum(log(momentsRET$normConst))
     
-    if(algorithm == "exact") {
+    if (algorithm == "exact") {
         zScaled <- momentsRET$moment1
         maxZScaled <- momentsRET$max
         varzxScaled <- momentsRET$moment2 - momentsRET$moment1^2
@@ -315,15 +314,15 @@ summarizeFarmsExact <- function(
     }
     ICtransformScaled <- 1 / exp(ICScaled * 2.0)
     
-    if(backscaleComputation==TRUE) {
+    if (backscaleComputation == TRUE) {
         z <- zScaled
         maxZ <- maxZScaled
     }
     
-    if(maxIntensity)
-        zint=maxZ
+    if (maxIntensity)
+        zint <- maxZ
     else
-        zint=z
+        zint <- z
     
     names(z) <- colnames(probes)
     names(maxZ) <- colnames(probes)
@@ -332,10 +331,10 @@ summarizeFarmsExact <- function(
     names(lambda1) <- rownames(probes)
     names(Psi) <- rownames(probes)
     
-    if(weightType == "square") {
+    if (weightType == "square") {
         PsiLL <- (lambda^2 / Psi)^2
         sumPsiLL <- sum(PsiLL)
-        if(sumPsiLL == 0) { 
+        if (sumPsiLL == 0) { 
             sumPsiLL <- 1 
         }
         propPsiLL <- PsiLL / sumPsiLL
@@ -385,13 +384,13 @@ summarizeFarmsExact <- function(
     SNR <- 1 / (1 + (lambda1 %*% (1 / Psi * lambda1)))
     
     return(list(
-                    sdData    = sd.Data,
-                    lambda    = lambda,
-                    lambda0   = lambda0, 
-                    lambda1   = lambda1, 
-                    Psi       = Psi,
-                    z         = z, 
-                    maxZ      = maxZ, 
+                    sdData                  = sd.Data,
+                    lambda                  = lambda,
+                    lambda0                 = lambda0, 
+                    lambda1                 = lambda1, 
+                    Psi                     = Psi,
+                    z                       = z, 
+                    maxZ                    = maxZ, 
                     
                     ExactMaxZ               = moments$max,
                     ExactMaxZScaled         = momentsRET$max,
