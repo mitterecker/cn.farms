@@ -1,73 +1,16 @@
 Package: cn.farms
-Title: cn.farms - Factor Analysis for copy number
-    estimation
-Version: 1.1.11
-Maintainer: Andreas Mitterecker
-    <mitterecker@bioinf.jku.at>, Djork-Arne Clevert
-    <okko@clevert.de>
+Title: cn.farms - Factor Analysis for copy number estimation
+Version: 1.1.12
+Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>, Djork-Arne Clevert <okko@clevert.de>
 License: LGPL (>= 2.0)
 Type: Package
 LazyLoad: Yes
-Author: Andreas Mitterecker <mitterecker@bioinf.jku.at>,
-    Djork-Arne Clevert <okko@clevert.de>
-Description: This package implements the cn.FARMS algorithm
-    for copy number variation (CNV) analysis. cn.FARMS
-    allows to analyze all existing Affymetrix (10K-SNP6.0)
-    array types, supports high-performance computing using
-    snow and ff.
+Author: Andreas Mitterecker <mitterecker@bioinf.jku.at>, Djork-Arne Clevert <okko@clevert.de>
+Description: This package implements the cn.FARMS algorithm for copy number variation (CNV) analysis. cn.FARMS allows to analyze all existing Affymetrix (10K-SNP6.0) array types, supports high-performance computing using snow and ff.
 biocViews: Microarray, Bioinformatics, CopyNumberVariants
 URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-Date: 2011-08-04
-Imports:
-    DBI,
-    affxparser,
-    oligo,
-    DNAcopy,
-    preprocessCore,
-    lattice
-Depends:
-    R (>= 2.11),
-    Biobase,
-    methods,
-    ff,
-    oligoClasses,
-    snowfall
-Suggests:
-    pd.mapping250k.sty,
-    pd.mapping250k.nsp,
-    pd.genomewidesnp.5,
-    pd.genomewidesnp.6
-Collate:
-    'callSummarize.R'
-    'combineData.R'
-    'correctPkgname.R'
-    'createAnnotation.R'
-    'createMatrix.R'
-    'determineBaselineArray.R'
-    'distributionDistance.R'
-    'dnaCopySf.R'
-    'doCnFarms.R'
-    'fragLengthCorr.R'
-    'normAdd.R'
-    'normalizeAverage.R'
-    'normalizeCels.R'
-    'normalizeNpData.R'
-    'normalizeQuantiles.R'
-    'normalizeSor.R'
-    'plotDendrogram.R'
-    'plotDensity.R'
-    'plotEvalIc.R'
-    'plotSmoothScatter.R'
-    'plotsRegions.R'
-    'plotViolines.R'
-    'sparseFarmsC.R'
-    'summarizationMl.R'
-    'summarizationSl.R'
-    'summarizeFarmsGaussian.R'
-    'summarizeFarmsLaplaceExact.R'
-    'summarizeFarmsLaplaceVar.R'
-    'summarizeFarmsMethods.R'
-    'summarizeStatistics.R'
-    'windowFunctions.R'
-    'windowMethods.R'
-    'zzz.R'
+Date: 2011-08-05
+Imports: DBI, affxparser, oligo, DNAcopy, preprocessCore, lattice
+Depends: R (>= 2.11), Biobase, methods, ff, oligoClasses, snowfall 
+Suggests: pd.mapping250k.sty, pd.mapping250k.nsp, pd.genomewidesnp.5, pd.genomewidesnp.6
+Collate: callSummarize.R combineData.R correctPkgname.R createAnnotation.R createMatrix.R determineBaselineArray.R distributionDistance.R dnaCopySf.R doCnFarms.R fragLengthCorr.R normAdd.R normalizeAverage.R normalizeCels.R normalizeNpData.R normalizeQuantiles.R normalizeSor.R plotDendrogram.R plotDensity.R plotEvalIc.R plotSmoothScatter.R plotsRegions.R plotViolines.R sparseFarmsC.R summarizationMl.R summarizationSl.R summarizeFarmsGaussian.R summarizeFarmsLaplaceExact.R summarizeFarmsLaplaceVar.R summarizeFarmsMethods.R summarizeStatistics.R windowFunctions.R windowMethods.R zzz.R
