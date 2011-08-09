@@ -1,7 +1,7 @@
 Package: cn.farms
 Title: cn.farms - Factor Analysis for copy number estimation
 Version: 1.1.12
-Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>, Djork-Arne Clevert <okko@clevert.de>
+Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>
 License: LGPL (>= 2.0)
 Type: Package
 LazyLoad: Yes
