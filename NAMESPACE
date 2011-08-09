@@ -46,3 +46,4 @@ importFrom(snowfall,sfStop)
 importMethodsFrom(DBI,dbGetQuery)
 importMethodsFrom(oligoClasses,db)
 useDynLib(cn.farms)
+
