@@ -213,7 +213,7 @@ summarizeFarmsVariational <- function(
     
     c <- mu_ZX  
     
-    var_scale <- sd(c) * (1 - 1 / n_array)
+    var_scale <- sd(as.vector(c)) * (1 - 1 / n_array)
     
     if(var_scale == 0){
         
