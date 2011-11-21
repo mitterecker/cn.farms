@@ -54,107 +54,107 @@
 #'         summaryParam = summaryParam)
 #' assayData(slData)$L_z[1:10, 1:10]
 slSummarization <- function(
-        object, 
-        summaryMethod = "Exact", 
-        summaryParam, 
-        callParam = list(runtype = "ff", cores = 1), 
-        summaryWindow = c("std", "fragment"), 
-        returnValues, 
-        saveFile = "slData") {
-    
-    ## assure correct file extension
-    saveFile <- gsub("\\.RData", "", saveFile)
-    saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep = "")
-    
-    normAdd <- normAdd(object@annotation)
-    if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
-        saveFile <- paste(gsub("\\.RData", "", saveFile), 
-                normAdd, ".RData", sep = "")
-    }
-    
-    if (callParam$runtype == "bm" & file.exists(saveFile)) {
-        message("Single-locus summarization has already been done.")
-        message("Trying to load data ...")
-        load(saveFile)
-        return(slData)    
-    }
-    
-    summaryWindow <- match.arg(summaryWindow)
-    if (summaryWindow == "fragment") {
-        featureSet <- data.frame()
-        load(file.path(notes(experimentData(object))$annotDir, 
-                        "featureSet.RData"))
-        tmp <- match(featureData(object)$fsetid, featureSet$fsetid)
-        runIdx <- getFragmentSet(featureSet$fragment_length[tmp])
-        rm(tmp)
-    } else {
-        runIdx <- getSingleProbeSetSize(featureData(object)$fsetid)        
-    }
-    
-    t00 <- Sys.time()
-    summaryMethodName <- paste("summarizeFarms", paste(
-                    toupper(substring(summaryMethod, 1,1)), 
-                    substring(summaryMethod, 2),
-                    sep = "", collapse = " "), sep = "")
-    
-    if (!exists(summaryMethodName)) {
-        stop(paste("Unknown method (can't find function", summaryMethodName, 
-                        ")"))
-    }
-    
-    myData <- do.call("callSummarize", c(alist(
-                            object = assayData(object)$intensity, 
-                            psInfo = runIdx,
-                            batchList = phenoData(object)$batch,
-                            summaryMethod = summaryMethodName, 
-                            summaryParam = summaryParam,
-                            returnValues = returnValues, 
-                            saveFile = saveFile), 
-                    callParam))
-    
-    eSet <- new("ExpressionSet")
-    
-    ## assay data    
-    assayData(eSet) <- myData
-    
-    ## pheno data
-    phenoData(eSet) <- phenoData(object)
-    
-    ## feature data
-    load(file.path(notes(experimentData(object))$annotDir, "featureSet.RData"))
-    if (object@annotation == "pd.mapping250k.nsp" | 
-            object@annotation == "pd.mapping250k.sty" |
-            object@annotation == "pd.mapping50k.hind240" |
-            object@annotation == "pd.mapping50k.xba240" ) {
-        tmp <- featureSet[, c(4, 5, 5, 1:3, 6:8)]    
-    } else {
-        tmp <- featureSet[, c(4, 5, 5, 1:3, 6:9)]
-    }
-    
-    colnames(tmp)[2:3] <- c("start", "end") 
-    featureData(eSet) <- new("AnnotatedDataFrame", 
-            data = tmp[match(featureData(object)$fsetid[runIdx[, 1]], 
-                            tmp$fsetid), ])
-    
-    ## experiment data
-    experimentData(eSet) <- experimentData(object)
-    experimentData(eSet)@other$summaryMethod <- summaryMethod
-    experimentData(eSet)@other$summaryParam <- summaryParam
-    experimentData(eSet)@other$type <- "slData"
-    
-    ## annotation
-    annotation(eSet) <- annotation(object)
-    
-    t01 <- Sys.time()
-    print(difftime(t01, t00))
-    
-    if (callParam$runtype == "bm") {
-        cat(paste(Sys.time(), "|   Saving data \n"))
-        slData <- eSet
-        save(slData, file = saveFile)
-    }
-    return(eSet)
+		object, 
+		summaryMethod = "Exact", 
+		summaryParam, 
+		callParam = list(runtype = "ff", cores = 1), 
+		summaryWindow = c("std", "fragment"), 
+		returnValues, 
+		saveFile = "slData") {
+	
+	## assure correct file extension
+	saveFile <- gsub("\\.RData", "", saveFile)
+	saveFile <- gsub("\\.rda", "", saveFile)
+	saveFile <- paste(saveFile, ".RData", sep = "")
+	
+	normAdd <- normAdd(object@annotation)
+	if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
+		saveFile <- paste(gsub("\\.RData", "", saveFile), 
+				normAdd, ".RData", sep = "")
+	}
+	
+	if (callParam$runtype == "bm" & file.exists(saveFile)) {
+		message("Single-locus summarization has already been done.")
+		message("Trying to load data ...")
+		load(saveFile)
+		return(slData)    
+	}
+	
+	summaryWindow <- match.arg(summaryWindow)
+	if (summaryWindow == "fragment") {
+		featureSet <- data.frame()
+		load(file.path(notes(experimentData(object))$annotDir, 
+						"featureSet.RData"))
+		tmp <- match(featureData(object)$fsetid, featureSet$fsetid)
+		runIdx <- getFragmentSet(featureSet$fragment_length[tmp])
+		rm(tmp)
+	} else {
+		runIdx <- getSingleProbeSetSize(featureData(object)$fsetid)        
+	}
+	
+	t00 <- Sys.time()
+	summaryMethodName <- paste("summarizeFarms", paste(
+					toupper(substring(summaryMethod, 1,1)), 
+					substring(summaryMethod, 2),
+					sep = "", collapse = " "), sep = "")
+	
+	if (!exists(summaryMethodName)) {
+		stop(paste("Unknown method (can't find function", summaryMethodName, 
+						")"))
+	}
+	
+	myData <- do.call("callSummarize", c(alist(
+							object = assayData(object)$intensity, 
+							psInfo = runIdx,
+							batchList = phenoData(object)$batch,
+							summaryMethod = summaryMethodName, 
+							summaryParam = summaryParam,
+							returnValues = returnValues, 
+							saveFile = saveFile), 
+					callParam))
+	
+	eSet <- new("ExpressionSet")
+	
+	## assay data    
+	assayData(eSet) <- myData
+	
+	## pheno data
+	phenoData(eSet) <- phenoData(object)
+	
+	## feature data
+	load(file.path(notes(experimentData(object))$annotDir, "featureSet.RData"))
+	if (object@annotation == "pd.mapping250k.nsp" | 
+			object@annotation == "pd.mapping250k.sty" |
+			object@annotation == "pd.mapping50k.hind240" |
+			object@annotation == "pd.mapping50k.xba240" ) {
+		tmp <- featureSet[, c(4, 5, 5, 1:3, 6)]    
+	} else {
+		tmp <- featureSet[, c(4, 5, 5, 1:3, 6:7)]
+	}
+	
+	colnames(tmp)[2:3] <- c("start", "end") 
+	featureData(eSet) <- new("AnnotatedDataFrame", 
+			data = tmp[match(featureData(object)$fsetid[runIdx[, 1]], 
+							tmp$fsetid), ])
+	
+	## experiment data
+	experimentData(eSet) <- experimentData(object)
+	experimentData(eSet)@other$summaryMethod <- summaryMethod
+	experimentData(eSet)@other$summaryParam <- summaryParam
+	experimentData(eSet)@other$type <- "slData"
+	
+	## annotation
+	annotation(eSet) <- annotation(object)
+	
+	t01 <- Sys.time()
+	print(difftime(t01, t00))
+	
+	if (callParam$runtype == "bm") {
+		cat(paste(Sys.time(), "|   Saving data \n"))
+		slData <- eSet
+		save(slData, file = saveFile)
+	}
+	return(eSet)
 }
 
 
