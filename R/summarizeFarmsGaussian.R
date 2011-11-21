@@ -83,9 +83,9 @@ summarizeFarmsGaussian <- function(probes,
         
         x <- t(probes)
         
-        if (centering=="median") {y_v <- apply(x, 2, median)}
+        if (centering == "median") {y_v <- apply(x, 2, median)}
         
-        if (centering=="mean") {y_v <- colMeans(x)}
+        if (centering == "mean") {y_v <- colMeans(x)}
         
         xmean <- matrix(y_v, n_array, n_probes, byrow = TRUE)
         
@@ -101,9 +101,9 @@ summarizeFarmsGaussian <- function(probes,
         
         x <- t(probes)
         
-        if (centering=="median") {y_v <- apply(x, 2, median)}
+        if (centering == "median") {y_v <- apply(x, 2, median)}
         
-        if (centering=="mean") {y_v <- colMeans(x)}
+        if (centering == "mean") {y_v <- colMeans(x)}
         
         xmean <- matrix(y_v, n_array, n_probes, byrow = TRUE)
         
@@ -161,7 +161,7 @@ summarizeFarmsGaussian <- function(probes,
     
     diag(XX_tmp) <- 0
     
-    L <- init*sqrt(apply(XX_tmp,1,max))
+    L <- init * sqrt(apply(XX_tmp,1,max))
     
     Ph <- 1 - L^2
     
@@ -233,7 +233,7 @@ summarizeFarmsGaussian <- function(probes,
     SIG <- as.vector(crossprod(L, diag(as.vector(1/Ph)))) %*% XX %*% 
             diag(as.vector(1/Ph)) %*% L * a^-2
     
-    signal_info <- numeric(length=4)
+    signal_info <- numeric(length = 4)
     
     signal_info[1] <- SNR
     
@@ -265,7 +265,7 @@ summarizeFarmsGaussian <- function(probes,
         
     } else if (weightType == "linear") {
         
-        PsiLL <- (1 / Ph) * L
+        PsiLL <- (1 / Ph) * L^2
         
         sumPsiLL <- sum(PsiLL)
         

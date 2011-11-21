@@ -17,9 +17,9 @@
 #' @examples 
 #' \dontrun{
 #' library("hapmapsnp6") 
-#' celDir <- system.file("celFiles", package="hapmapsnp6")
-#' filenames <- dir(path=celDir, full.names=TRUE)
-#' createAnnotation(filenames=filenames)
+#' celDir <- system.file("celFiles", package = "hapmapsnp6")
+#' filenames <- dir(path = celDir, full.names = TRUE)
+#' createAnnotation(filenames = filenames)
 #' npData <- normalizeNpData(filenames)
 #' }
 #' @export
@@ -41,7 +41,7 @@ normalizeNpData <- function(
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep="")
+    saveFile <- paste(saveFile, ".RData", sep = "")
     
     mapping <- affxparser::readCelHeader(filenames[1])$chiptype
     pkgname <- oligo::cleanPlatformName(mapping)
@@ -76,7 +76,7 @@ normalizeNpData <- function(
     nbrOfSamples <- length(filenames)
     nbrOfProbes <- nrow(pmfeatureCNV)
     
-    intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type="double",
+    intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type = "double",
             bmName = gsub("\\.RData", "", saveFile))
     
     if (cores == 1 & method == "quantiles") {
@@ -94,8 +94,8 @@ normalizeNpData <- function(
                 indices = pmfeatureCNV$fid)
         
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
-        suppressWarnings(sfExport("normalizeAverage", namespace="cn.farms"))
-        suppressWarnings(sfExport("readCelIntensities", namespace="affxparser"))
+        suppressWarnings(sfExport("normalizeAverage", namespace = "cn.farms"))
+        suppressWarnings(sfExport("readCelIntensities", namespace = "affxparser"))
         suppressWarnings(sfExport("pmfeatureCNV"))
         suppressWarnings(sfExport("intensity"))
         suppressWarnings(sfExport("filenames"))
@@ -168,7 +168,7 @@ normalizeNpDataH01 <- function(i) {
     
     LZExprs <- affxparser::readCelIntensities(filenames[i], 
             indices = pmfeatureCNV$fid)
-    LZExprs <- normalizeAverage(LZExprs, baselineArray)
+    #LZExprs <- normalizeAverage(LZExprs, baselineArray)
     LZExprs <- log2(LZExprs)
     intensity[, i] <- LZExprs
 }
@@ -192,5 +192,5 @@ normalizeQuantilesNpH01 <- function(i) {
             indices = pmfeatureCNV$fid)
 #    intensity[, i] <- log2(preprocessCore::normalize.quantiles.use.target(
 #                    as.matrix(tmpExprs), baselineArray))
-    intensity[, i] <- log(baselineArray[rank(tmpExprs)])
+    intensity[, i] <- log2(baselineArray[rank(tmpExprs)])
 }

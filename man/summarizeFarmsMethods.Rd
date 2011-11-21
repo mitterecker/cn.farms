@@ -1,6 +1,9 @@
 \name{summarizeFarmsMethods}
 \alias{summarizeFarmsMethods}
 \title{Lists methods for possible FARMS summarization}
+\usage{
+  summarizeFarmsMethods()
+}
 \value{
   Returns a data frame with all possible FARMS calls.
 }

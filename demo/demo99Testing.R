@@ -6,7 +6,7 @@ dontrun <- T
 
 ## combineData
 load(system.file("exampleData/normData.RData", package="cn.farms"))
-experimentData(normData)@other$annotDir <- 
+notes(experimentData(normData))$annotDir <- 
         system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
                 package="cn.farms")
 
@@ -130,7 +130,7 @@ plotViolines(normData, variable="intensity", groups, xlab="Intensity values")
 
 ## slSummarization
 load(system.file("exampleData/normData.RData", package="cn.farms"))
-experimentData(normData)@other$annotDir <- 
+notes(experimentData(normData))$annotDir <- 
         system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
                 package="cn.farms")
 

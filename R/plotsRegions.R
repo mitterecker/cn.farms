@@ -16,10 +16,11 @@
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @export 
 #' @examples
-#' load(system.file("exampleData/slData.RData", package="cn.farms"))
-#' load(system.file("exampleData/testSegments.RData", package="cn.farms"))
-#' plotRegions(slData, testSegments, addInd=10, ylim=c(-2, 2), 
-#'         variable="L_z", colorVersion=1, plotLegend=TRUE, pdfname="slData.pdf")
+#' load(system.file("exampleData/slData.RData", package = "cn.farms"))
+#' load(system.file("exampleData/testSegments.RData", package = "cn.farms"))
+#' plotRegions(slData, testSegments, addInd = 10, ylim = c(-2, 2), 
+#'         variable = "L_z", colorVersion = 1, plotLegend = TRUE, 
+#'         pdfname = "slData.pdf")
 plotRegions <- function(
         object, 
         segments, 
@@ -27,7 +28,7 @@ plotRegions <- function(
         ylim, 
         variable, 
         colorVersion = 0, 
-        plotLegend=TRUE, 
+        plotLegend = TRUE, 
         pdfname) {
     if (missing(pdfname)) pdfname <- "plotRegions.pdf"
     if (is.null(addInd)) addInd <- 10
@@ -63,13 +64,13 @@ plotRegions <- function(
         myLength <- length(tmpIdx)
         
         if (myLength == 0) {
-            plot(c(1), ylab="", xaxt = "n", col="white", 
-                    main=paste("chr", chr, ":", start, "-", end, sep=""), 
+            plot(c(1), ylab = "", xaxt = "n", col = "white", 
+                    main = paste("chr", chr, ":", start, "-", end, sep=""), 
                     yaxt = "n")
             text(1, 1, "no probe in region")
         } else if (myLength > 500) {
-            plot(c(1), ylab="", xaxt = "n", col="white", 
-                    main=paste("chr", chr, ":", start, "-", end, sep=""), 
+            plot(c(1), ylab = "", xaxt = "n", col = "white", 
+                    main = paste("chr", chr, ":", start, "-", end, sep = ""), 
                     yaxt = "n")
             text(1, 1, "region too large to plot")
         } else {
@@ -99,20 +100,20 @@ plotRegions <- function(
                     ## plot cn == 2
                     myPlotInstant <- c(which(sampCn == 2), which(sampCn == 99))
                     matplot(ySl[, myPlotInstant], 
-                            type="l", 
-                            pch="", 
-                            xaxt="n", 
-                            col=myColPlot[myPlotInstant], 
-                            ylab=variable, 
-                            main=paste("chr", chr, ":", start, "-", end, sep=""),  
+                            type = "l", 
+                            pch  = "", 
+                            xaxt = "n", 
+                            col  = myColPlot[myPlotInstant], 
+                            ylab = variable, 
+                            main = paste("chr", chr, ":", start, "-", end, sep = ""),  
                             ylim = ylim)
-                    abline(h = 0, col="grey")
+                    abline(h = 0, col = "grey")
                     
                     ## plot others
                     myPlotInstant <- setdiff(seq(length(sampCn)), myPlotInstant)
                     if (length(myPlotInstant) != 0) {
                         matlines(ySl[, myPlotInstant], 
-                                col=myColPlot[myPlotInstant])    
+                                col = myColPlot[myPlotInstant])    
                     }
                     if(plotLegend) {
                         legend("top", 
@@ -122,14 +123,14 @@ plotRegions <- function(
                 } else if (colorVersion == 2) {
                     
                     matplot(ySl[], 
-                            type="l", 
-                            pch="", 
-                            xaxt="n", 
-                            col=myColPlot,  
-                            ylab=variable, 
-                            main=paste("chr", chr, ":", start, "-", end, sep=""),  
-                            ylim=ylim)
-                    abline(h = 0, col="grey")
+                            type = "l", 
+                            pch  = "", 
+                            xaxt = "n", 
+                            col  = myColPlot,  
+                            ylab = variable, 
+                            main = paste("chr", chr, ":", start, "-", end, sep=""),  
+                            ylim = ylim)
+                    abline(h = 0, col = "grey")
                     if(plotLegend) {
                         legend("topright", myDescr,
                                 fill = myColors)
@@ -153,8 +154,8 @@ plotRegions <- function(
                     labels = xSl[struges], xpd = TRUE)
             
             
-            abline(v=(addInd + 1))
-            abline(v=(nrow(ySl) - addInd))
+            abline(v = (addInd + 1))
+            abline(v = (nrow(ySl) - addInd))
         }
     }
     dev.off()    

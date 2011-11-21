@@ -3,8 +3,8 @@
 \title{Does a fragment length correction on intensities}
 \usage{
   flcSnp6Std(y, fragmentLengths, targetFcn = NULL,
-  subsetToFit = NULL, runtype = "ff", cores = 1, saveFile =
-  "flc", ...)
+    subsetToFit = NULL, runtype = "ff", cores = 1,
+    saveFile = "flc", ...)
 }
 \arguments{
   \item{y}{y}

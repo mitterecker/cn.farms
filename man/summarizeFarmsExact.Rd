@@ -2,11 +2,11 @@
 \alias{summarizeFarmsExact}
 \title{Summarization Laplacian approach with exact computation}
 \usage{
-  summarizeFarmsExact(probes, mu = 0, weight = 0.5, weightZ
-  = 1, weightProbes = TRUE, cyc = c(10, 10), tol = 1e-05,
-  weightType = "mean", centering = "median", rescale =
-  FALSE, backscaleComputation = FALSE, maxIntensity = TRUE,
-  refIdx, ...)
+  summarizeFarmsExact(probes, mu = 0, weight = 0.5,
+    weightZ = 1, weightProbes = TRUE, cyc = c(10, 10),
+    tol = 1e-05, weightType = "mean", centering = "median",
+    rescale = FALSE, backscaleComputation = FALSE,
+    maxIntensity = TRUE, refIdx, ...)
 }
 \arguments{
   \item{probes}{A matrix with numeric values.}
@@ -15,16 +15,23 @@
   different aspects of potential prior knowledge. Values
   near zero assumes that most positions do not contain a
   signal, and introduces a bias for loading matrix elements
-  near zero. Default value is 0.}
+  near zero. Default value is 0 and it's recommended not to
+  change it.}
 
   \item{weight}{Hyperparameter value which determines the
   influence of the Gaussian prior of the loadings}
 
   \item{weightZ}{Hyperparameter value which determines how
-  strong the Laplace prior of the factor should be at 0.}
+  strong the Laplace prior of the factor should be at 0.
+  Users should be aware, that a change of weightZ in
+  comparison to the default parameter might also entail a
+  need to change other parameters. Unexperienced users
+  should not change weightZ.}
 
-  \item{weightProbes}{States if the probes should be
-  weighted.}
+  \item{weightProbes}{Parameter (TRUE/FALSE), that
+  determines, if the number of probes should additionally
+  be considered in weight. If TRUE, weight will be
+  modified.}
 
   \item{cyc}{Number of cycles. If the length is two, it is
   assumed, that a minimum and a maximum number of cycles is
@@ -36,18 +43,23 @@
   cyc[1]!=cyc[2]. Default is 0.00001.}
 
   \item{weightType}{Flag, that is used to summarize the
-  loading matrix.}
+  probes of a sample.}
 
-  \item{centering}{States how the data is centered. Default
-  is median.}
+  \item{centering}{States how the data should be centered
+  ("mean", "median"). Default is median.}
 
-  \item{rescale}{Rescales the Moments.}
+  \item{rescale}{Parameter (TRUE/FALSE), that determines,
+  if moments in exact Laplace FARMS are rescaled in each
+  iteration. Default is FALSE.}
 
-  \item{backscaleComputation}{New estimation of z values
-  after backscaling.}
+  \item{backscaleComputation}{Parameter (TRUE/FALSE), that
+  determines if the moments of hidden variables should be
+  reestimated after rescaling the parameters.}
 
-  \item{maxIntensity}{Use of the mode values for building
-  expression values, if set to TRUE.}
+  \item{maxIntensity}{Parameter (TRUE/FALSE), that
+  determines if the expectation value (=FALSE) or the
+  maximum value (=TRUE) of p(z|x_i) should be used for an
+  estimation of the hidden varaible.}
 
   \item{refIdx}{index or indices which are used for
   computation of the centering}
@@ -91,11 +103,7 @@
 }
 \description{
   This function implements an exact Laplace FARMS
-  algorithm. Users should be aware, that a change of weight
-  in comparison to the default parameter might also entail
-  a need to change of eps1 and eps2. Unexperienced users
-  should not change weightZ, since a change in weightZ is
-  also connected to weight, eps1 and eps2.
+  algorithm.
 }
 \examples{
 x <- matrix(rnorm(100, 11), 20, 5)

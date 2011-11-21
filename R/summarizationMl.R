@@ -15,7 +15,7 @@
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @export
 #' @examples 
-#' load(system.file("exampleData/slData.RData", package="cn.farms"))
+#' load(system.file("exampleData/slData.RData", package = "cn.farms"))
 #' windowMethod <- "std"
 #' windowParam <- list()
 #' windowParam$windowSize <- 5
@@ -35,11 +35,11 @@ mlSummarization <- function(
         callParam = list(runtype = "ff"), 
         returnValues,
         saveFile = "mlData") {
-    
+
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep="")
+    saveFile <- paste(saveFile, ".RData", sep = "")
     
     t00 <- Sys.time()
     summaryWindowName <- paste("summarizeWindow", paste(
@@ -50,24 +50,41 @@ mlSummarization <- function(
     if (!exists(summaryWindowName)) {
         stop(paste("Unknown method (can't find function", summaryWindowName, 
                         ")"))
-    } else if (callParam$runtype=="bm" & file.exists(saveFile)) {
+    } else if (callParam$runtype == "bm" & file.exists(saveFile)) {
         message("Multi-loci summarization has already been done")
         message("Trying to load data ...")
         load(saveFile)
         return(mlData)    
     }
     
-    phInf <- featureData(object)[, c("chrom", "start", "man_fsetid")]
+    ## check for correct header
+    phInfHeader <- c("chrom", "start", "man_fsetid")
+    correctHeader <- all(phInfHeader %in% colnames(fData(object))) 
+    if (correctHeader) {
+        phInf <- featureData(object)[, phInfHeader]    
+    } else {
+        stop("Feature data must at least have the variables: chrom, start, man_fsetid")
+    }
+    rm(phInfHeader, correctHeader)
+    
+    ## check for correct assay data
+    correctAssayData <- "intensity" %in% names(assayData(object)) 
+    if (correctAssayData) {
+        message("Slot intensity of assayData is used")
+    } else {
+        stop("An assayData slot named intensity must exist for summarization!")
+    }
+    
     runIdx <- do.call(summaryWindowName, c(alist(phInf@data), windowParam))
     
     phInfTmp <- data.frame(
-            chrom=phInf$"chrom"[runIdx[, 1]],
-            start=phInf$"start"[runIdx[, 1]],
-            end=phInf$"start"[runIdx[, 2]],
-            man_fsetid=phInf$"man_fsetid"[runIdx[, 2]], 
-            stringsAsFactors=F)
+            chrom = phInf$"chrom"[runIdx[, 1]],
+            start = phInf$"start"[runIdx[, 1]],
+            end = phInf$"start"[runIdx[, 2]],
+            man_fsetid = phInf$"man_fsetid"[runIdx[, 2]], 
+            stringsAsFactors = FALSE)
     idxDel <- which(phInfTmp$end - phInfTmp$start < 0)
-    
+
     if (length(idxDel) != 0) {
         phInfTmp <- phInfTmp[-idxDel, ]
         runIdx <- runIdx[-idxDel, ]
@@ -97,7 +114,7 @@ mlSummarization <- function(
     eSet <- new("ExpressionSet")
     assayData(eSet) <- myData
     phenoData(eSet) <- phenoData(object)
-    protocolData(eSet)<- protocolData(object)
+    protocolData(eSet) <- protocolData(object)
     featureData(eSet) <- new("AnnotatedDataFrame", data = phInfTmp)    
     experimentData(eSet) <- experimentData(object)
     experimentData(eSet)@other$summaryMethod <- summaryMethod

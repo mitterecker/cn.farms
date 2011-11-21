@@ -9,7 +9,7 @@
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @examples
-#' load(system.file("exampleData/slData.RData", package="cn.farms"))
+#' load(system.file("exampleData/slData.RData", package = "cn.farms"))
 #' slDataFlc <- fragLengCorr(slData)
 #' @export
 fragLengCorr <- function (
@@ -21,7 +21,7 @@ fragLengCorr <- function (
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep="")
+    saveFile <- paste(saveFile, ".RData", sep = "")
     
     normAdd <- normAdd(object@annotation)
     if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
@@ -119,7 +119,7 @@ flcStd <- function(y, fragmentLengths, targetFcn = NULL, subsetToFit = NULL,
     
     nbrOfSamples <- ncol(y)
     nbrOfProbes <- nrow(y)
-    yN <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type="double", 
+    yN <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type = "double", 
             bmName = gsub("\\.RData", "", saveFile))
     ok <- (is.finite(fragmentLengths) & is.finite(y[,i]))
     
@@ -129,8 +129,8 @@ flcStd <- function(y, fragmentLengths, targetFcn = NULL, subsetToFit = NULL,
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
     
-    sfLibrary("stats", character.only = TRUE, verbose = FALSE)
-    sfLibrary("ff", character.only = TRUE, verbose = FALSE)
+    sfLibrary("stats", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
     
     suppressWarnings(sfExport(list = c(
                             "nbrOfSamples", "nbrOfProbes", 
@@ -182,7 +182,7 @@ flcStdH01 <- function (i, ...) {
                 
             })
     
-    yN[,i] <- approx(fit, xout=fragmentLengths, ties=mean)$y
+    yN[,i] <- approx(fit, xout = fragmentLengths, ties = mean)$y
     
 }
 
@@ -203,8 +203,8 @@ flcStdH01 <- function (i, ...) {
 #' @return data frame 
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
-flcSnp6Std <- function(y, fragmentLengths, targetFcn=NULL, 
-        subsetToFit=NULL, runtype="ff", cores=1, saveFile="flc", ...) {
+flcSnp6Std <- function(y, fragmentLengths, targetFcn = NULL, 
+        subsetToFit = NULL, runtype = "ff", cores = 1, saveFile = "flc", ...) {
     
     ## adapted from the aroma.affymetrix package (www.aroma.project.org)
     
@@ -232,15 +232,15 @@ flcSnp6Std <- function(y, fragmentLengths, targetFcn=NULL,
     fl_2_ok <- is.finite(fragmentLengths[, 2]) 
     
     if (cores == 1) {
-        sfInit(parallel=FALSE)
+        sfInit(parallel = FALSE)
     } else {
-        sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
+        sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
     
-    sfLibrary("stats", character.only=TRUE, verbose=FALSE)
-    sfLibrary("ff", character.only=TRUE, verbose=FALSE)
+    sfLibrary("stats", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
     
-    suppressWarnings(sfExport(list=c(
+    suppressWarnings(sfExport(list = c(
                             "nbrOfSamples", "nbrOfProbes", 
                             "yN", "fl_1_ok", "fl_2_ok", "y", 
                             "subsetToFit", "fragmentLengths")))
@@ -248,7 +248,7 @@ flcSnp6Std <- function(y, fragmentLengths, targetFcn=NULL,
     res <- suppressWarnings(sfLapply(1:nbrOfSamples, flcSnp6StdH01))
     sfStop()
     
-    y_median <- ffapply(X=y, MARGIN=1, AFUN="median", RETURN = TRUE)
+    y_median <- ffapply(X = y, MARGIN = 1, AFUN = "median", RETURN = TRUE)
     yN_average <- rep(0, nbrOfProbes)
     y_ok <- is.finite(y_median[])
     ok_1 <- ok <- (fl_1_ok & y_ok)
@@ -257,7 +257,7 @@ flcSnp6Std <- function(y, fragmentLengths, targetFcn=NULL,
     }
     
     fit <- lowess(fragmentLengths[ok,1], y_median[ok])
-    yN_average[ok_1] <- approx(fit, xout=fragmentLengths[ok_1, 1], ties=mean)$y
+    yN_average[ok_1] <- approx(fit, xout = fragmentLengths[ok_1, 1], ties = mean)$y
     ok_2 <- ok <- (fl_2_ok & y_ok)
     
     if (!is.null(subsetToFit)) {
@@ -266,7 +266,7 @@ flcSnp6Std <- function(y, fragmentLengths, targetFcn=NULL,
     
     fit <- lowess(fragmentLengths[ok, 2], y_median[ok])
     yN_average[ok_2] <- yN_average[ok_2] + 
-            approx(fit, xout=fragmentLengths[ok_2,2], ties=mean)$y
+            approx(fit, xout = fragmentLengths[ok_2,2], ties = mean)$y
     yN_average[ok_1 & ok_2] <- yN_average[ok_1 & ok_2] / 2
     
     y_hat <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, type = "double", 
@@ -311,7 +311,7 @@ flcSnp6StdH01 <- function (i, ...) {
             })
     
     ## predict fl effect
-    yN[ok_1, i] <- approx(fit, xout=fragmentLengths[ok_1, 1], ties=mean)$y
+    yN[ok_1, i] <- approx(fit, xout = fragmentLengths[ok_1, 1], ties = mean)$y
     ok_2 <- ok <- (fl_2_ok & y_ok)
     
     if (!is.null(subsetToFit)) {
@@ -325,6 +325,6 @@ flcSnp6StdH01 <- function (i, ...) {
     
     ## predict fl effect
     yN[ok_2, i] <- yN[ok_2, i] + 
-            approx(fit, xout=fragmentLengths[ok_2, 2], ties=mean)$y
+            approx(fit, xout = fragmentLengths[ok_2, 2], ties = mean)$y
     yN[(ok_1 & ok_2), i] <- yN[(ok_1 & ok_2), i] / 2
 }

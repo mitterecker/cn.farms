@@ -188,7 +188,7 @@ SEXP normData(SEXP xS, SEXP E_SX, SEXP nnS){
 
 	E_SX_n	=(double**)Calloc(nn, double*);
 
-	int i,j,k,l;
+	int j,l;
 
 
 	int *nna;
@@ -256,10 +256,10 @@ SEXP sparseFarmsC(SEXP xS, SEXP cycS, SEXP XXS, SEXP nnS) {
 	int nn=(INTEGER(nnS))[0];
 
 
-	double sumhelp,fac1,f1,f2,epsv,ess;
+	double fac1,f1,f2,epsv,ess;
 
 	double LPsiL[3][3], LPsi[3][2], Psi[2][2], sum1[2][3], sum2[3][3], tt[3],
-	tt1[3], xt[2], inva[3][3], invp[2][2], invpPsi[2][2], tmplapla[3];
+	tt1[3], xt[2], inva[3][3], invp[2][2], tmplapla[3];
 
 	void** ret=Calloc(4, void*);	
 

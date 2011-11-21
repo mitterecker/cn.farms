@@ -42,7 +42,7 @@ farmsVers <- packageDescription("cn.farms")$Version
 ##  toy-data which is used for testing the vignette
 load(system.file("exampleData/normData.RData", package="cn.farms"))
 load(system.file("exampleData/slData.RData", package="cn.farms"))
-experimentData(normData)@other$annotDir <- 
+notes(experimentData(normData))$annotDir <- 
 		system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
 				package="cn.farms")
 cores <- 1
@@ -74,7 +74,7 @@ for detecting CNVs by moving from mRNA copy numbers to
 DNA copy numbers.\\
 In the following section we will briefly describe the algorithm and provide
 a quick start guide.
-For furhter information regarding the algorithm and its assessment 
+For further information regarding the algorithm and its assessment 
 see the \Rpackage{cn.farms} homepage at
 \href{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}.
 
@@ -99,8 +99,7 @@ Cross-hybridization arise due to close
 sequence similarity between the probes of different alleles, therefore a
 probe of one allele picks up a signal of the other allele.
 The optional corrections for differences in
-PCR yield can be
-performed at this step or after ``single-locus
+PCR yield can be performed at this step or after ``single-locus
 modeling''.
 \begin{figure}[!b]
 \begin{center}
@@ -210,6 +209,9 @@ signal-to-noise-ratio of the estimated raw copy number.\linebreak
 \section{Getting Started: cn.FARMS}
 \label{sec:started}
 
+The following example was created by a very small subset of the HapMap data set.
+ 
+
 As usual, it is necessary to load the \Rpackage{cn.farms} package:
 \begin{Sinput}
 library(cn.farms)
@@ -221,22 +223,22 @@ library(cn.farms)
 
 \begin{Sinput}
 > library("hapmapsnp6") 
-> celDir <- system.file("celFiles", package="hapmapsnp6")
-> filenames <- dir(path=celDir, full.names=TRUE)
+> celDir <- system.file("celFiles", package = "hapmapsnp6")
+> filenames <- dir(path = celDir, full.names = TRUE)
 \end{Sinput}
 
 \noindent  Next, the user specifies a working directory on the harddisk whereto save the results.
 
 \begin{Sinput}
 > workDir <- tempdir()
-> dir.create(workDir, showWarnings=F, recursive=T)
+> dir.create(workDir, showWarnings = FALSE, recursive = TRUE)
 > setwd(workDir)
 \end{Sinput}
 
 \noindent For reasons of computational time and memory consumption \Rpackage{cn.farms} supports high-performance computation. 
 The parameter  \verb+cores+ specifies number of CPUs requested for the cluster and  the parameter  \verb+runtype+
 indicates how the data matrix should be stored.   \verb+runtype = "ff"+ creates a transient flat-file which will not be saved automatically.
-Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save permanently.
+Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be saved permanently.
 
 \begin{Sinput}
 > cores <- 2
@@ -246,7 +248,7 @@ Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save 
 \noindent  Next, the user specifies a subdirectory whereto save the flat-files.
 
 \begin{Sinput}
-> dir.create("ffObjects/ff", showWarnings=F, recursive=T)
+> dir.create("ffObjects/ff", showWarnings = FALSE, recursive = TRUE)
 > oligoClasses::ldPath(file.path(getwd(), "ffObjects"))
 > options(fftempdir = file.path(oligoClasses::ldPath(), "ff"))
 \end{Sinput}
@@ -254,17 +256,17 @@ Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save 
 \noindent  The directory (\verb+celDir = "where/are/my/cel-files"+) which contain the cel-files has to be specified. 
 
 \begin{Sinput}
-> celDir <- system.file("celFiles", package="hapmapsnp6")
-> filenames <- dir(path=celDir, full.names=TRUE)
+> celDir <- system.file("celFiles", package = "hapmapsnp6")
+> filenames <- dir(path = celDir, full.names = TRUE)
 \end{Sinput}
 
 \noindent The following step will create the annotation file.
 
 \begin{Sinput}
 > if(exists("annotDir")) {
->	createAnnotation(filenames=filenames, annotDir=annotDir)	
+>	createAnnotation(filenames = filenames, annotDir = annotDir)	
 > } else {
-> 	createAnnotation(filenames=filenames)
+> 	createAnnotation(filenames = filenames)
 > }
 \end{Sinput}
 
@@ -275,11 +277,11 @@ Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be save 
 
 > ## normalization of SNP data
 > if(exists("annotDir")) {
-> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, 
-> 			annotDir=annotDir, runtype=runtype)
+> 	normData <- normalizeCels(filenames, method = normMethod, cores, 
+>			alleles = TRUE, annotDir = annotDir, runtype = runtype)
 > } else {
-> 	normData <- normalizeCels(filenames, method=normMethod, cores, alleles=T, 
-> 			runtype=runtype)
+> 	normData <- normalizeCels(filenames, method = normMethod, cores, 
+>           alleles = TRUE, runtype = runtype)
 > }
 \end{Sinput}
 
@@ -310,9 +312,9 @@ assayData(slData)$L_z[1:10, 1:5] ## relative values
 
 \begin{Sinput}
 > if (exists("annotDir")) {
-	npData <- normalizeNpData(filenames, cores, annotDir=annotDir)	
+	npData <- normalizeNpData(filenames, cores, annotDir = annotDir)	
  } else {
-	npData <- normalizeNpData(filenames, cores, runtype=runtype)
+	npData <- normalizeNpData(filenames, cores, runtype = runtype)
  }
 \end{Sinput}
 

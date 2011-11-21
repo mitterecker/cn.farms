@@ -15,26 +15,26 @@
 #' @author Andreas Mitterecker
 #' @export
 #' @examples 
-#' load(system.file("exampleData/slData.RData", package="cn.farms"))
-#' load(system.file("exampleData/testSegments.RData", package="cn.farms"))
-#' plotEvalIc(slData, featureData(testSegments)@@data, 
-#'      variable=assayData(slData)$L_z[, 1], 23)
+#' load(system.file("exampleData/slData.RData", package = "cn.farms"))
+#' load(system.file("exampleData/testSegments.RData", package = "cn.farms"))
+#' plotEvalIc(slData, fData(testSegments), 
+#'      variable = assayData(slData)$L_z[, 1], 23)
 plotEvalIc <- function(
         object,
         segments, 
         chrom,
         variable, 
         ylim,
-        ylab="CN indicator",
-        stripCol="lightgray", 
-        regionCol=rgb(130, 0, 139, max=255),
-        pointSize=0.75, 
-        pointType=4, 
-        bandwidth=c(0.01, 1000), 
-        nbin=100) {
-        
+        ylab = "CN indicator",
+        stripCol = "lightgray", 
+        regionCol = rgb(130, 0, 139, max = 255),
+        pointSize = 0.75, 
+        pointType = 4, 
+        bandwidth = c(0.01, 1000), 
+        nbin = 100) {
+    
     ##FIXME: check with bandwith and so on
-
+    
     if (missing(chrom)) {
         stop("Please state for which chromosome you want to create the plot!")
     }
@@ -89,59 +89,58 @@ plotEvalIc <- function(
     
     ## create plot
     plot(NULL, 
-            xlab=paste("Position on chromosome", 
-                    chrom, "[mb]", sep=" "), 
-            ylab=ylab, 
-            ylim=ylim,
-            cex.lab=1.5,
-            cex.axis=1.5, 
-            xlim=xlim)
+            xlab     = paste("Position on chromosome", chrom, "[mb]", sep = " "), 
+            ylab     = ylab, 
+            ylim     = ylim,
+            cex.lab  = 1.5,
+            cex.axis = 1.5, 
+            xlim     = xlim)
     
     ## positions of true CNVRs
     if (!missing(segments)) {
         rect(cnvrPosChr[, 1] / (1E+6), 
-                ybottom=0, 
+                ybottom = 0, 
                 cnvrPosChr[, 2] / (1E+6), 
-                ytop=1, 
-                col=stripCol,
-                border=stripCol,
-                lwd=0.5)
+                ytop = 1, 
+                col  = stripCol,
+                border = stripCol,
+                lwd = 0.5)
     }
     
     if (length(which(labels == 1)) == 0) {
         x_all <- phInf[chrIdx, 2] / (1E+6)
-        points( y=yOutCn, 
-                x=x_all,
-                cex=.1, 
-                pch=8, 
-                col=densCols(
-                        y=yOutCn,
-                        x=x_all))
-#                col=densCols(
-#                        y=yOutCn,
-#                        x=x_all, 
-#                        nbin=nbin, 
-#                        bandwidth=bandwidth))
+        points( y   = yOutCn, 
+                x   = x_all,
+                cex = 0.1, 
+                pch = 8, 
+                col = densCols(
+                        y = yOutCn,
+                        x = x_all))
+#                col = densCols(
+#                        y = yOutCn,
+#                        x = x_all, 
+#                        nbin = nbin, 
+#                        bandwidth = bandwidth))
     } else {
         x_regions <- phInf[chrIdx[which(labels == 1)], 2] / (1E+6)
         x_all <- phInf[chrIdx[-which(labels == 1)], 2] / (1E+6)
         
-        points( y=yOutCn, 
-                x=x_all,
-                cex=.1, 
-                pch=8,
-                col=densCols(
-                        y=yOutCn,
-                        x=x_all))
-#                        nbin=nbin, 
-#                        bandwidth=bandwidth))
+        points( y   = yOutCn, 
+                x   = x_all,
+                cex = 0.1, 
+                pch = 8,
+                col = densCols(
+                        y = yOutCn,
+                        x = x_all))
+#                       nbin = nbin, 
+#                       bandwidth = bandwidth))
         
-        points( y=yInCn,
-                x=x_regions,
-                col=regionCol,
-                cex=pointSize, 
-                pch=pointType)
+        points( y   = yInCn,
+                x   = x_regions,
+                col = regionCol,
+                cex = pointSize, 
+                pch = pointType)
     }
     
-    mtext("cn.FARMS", side=3, adj=c(0, 0),  at=1, cex=1)
+    mtext("cn.FARMS", side = 3, adj = c(0, 0),  at = 1, cex = 1)
 }

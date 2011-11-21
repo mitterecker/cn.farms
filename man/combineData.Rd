@@ -3,8 +3,8 @@
 \title{Combine two ExpressionSet objects}
 \usage{
   combineData(object01, object02, obj01Var = "intensity",
-  obj02Var = "intensity", runtype = "ff", saveFile =
-  "combData")
+    obj02Var = "intensity", runtype = "ff",
+    saveFile = "combData")
 }
 \arguments{
   \item{object01}{An instance of
@@ -37,16 +37,16 @@
   already processed with single locus FARMS
 }
 \examples{
-load(system.file("exampleData/normData.RData", package="cn.farms"))
-experimentData(normData)@other$annotDir <-
-system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
-package="cn.farms")
+load(system.file("exampleData/normData.RData", package = "cn.farms"))
+notes(experimentData(normData))$annotDir <-
+        system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
+                package = "cn.farms")
 summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(10)
 slData <- slSummarization(normData,
-summaryMethod = summaryMethod,
-summaryParam = summaryParam)
+        summaryMethod = summaryMethod,
+        summaryParam = summaryParam)
 assayData(slData)$L_z[1:10, ]
 combData <- combineData(slData, slData)
 combData

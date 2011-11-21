@@ -2,8 +2,8 @@
 \alias{plotDensity}
 \title{Function to create a density plot}
 \usage{
-  plotDensity(x, xlim = c(0, 16), ylim, col, lty, lwd, add
-  = FALSE, xlab, ylab, log = TRUE, ...)
+  plotDensity(x, xlim = c(0, 16), ylim, col, lty, lwd,
+    add = FALSE, xlab, ylab, log = TRUE, ...)
 }
 \arguments{
   \item{x}{Matrix with numeric values.}
@@ -42,7 +42,7 @@
   package (www.aroma-project.org)
 }
 \examples{
-load(system.file("exampleData/slData.RData", package="cn.farms"))
+load(system.file("exampleData/slData.RData", package = "cn.farms"))
 plotDensity(assayData(slData)$intensity)
 }
 \author{

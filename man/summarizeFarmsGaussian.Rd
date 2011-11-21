@@ -2,10 +2,10 @@
 \alias{summarizeFarmsGaussian}
 \title{Summarization Gaussian approach}
 \usage{
-  summarizeFarmsGaussian(probes, weight = 0.15, mu = 0, cyc
-  = 10, tol = 1e-04, weightType = "mean", init = 0.6,
-  correction = 0, minNoise = 0.35, centering = "median",
-  refIdx)
+  summarizeFarmsGaussian(probes, weight = 0.15, mu = 0,
+    cyc = 10, tol = 1e-04, weightType = "mean", init = 0.6,
+    correction = 0, minNoise = 0.35, centering = "median",
+    refIdx)
 }
 \arguments{
   \item{probes}{A matrix with numeric values.}

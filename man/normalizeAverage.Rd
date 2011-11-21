@@ -3,7 +3,7 @@
 \title{Scales the range of the non-polymorphic data to the range of a given array.}
 \usage{
   normalizeAverage(x, baselineArray, avg = median,
-  targetAvg = 2200, ...)
+    targetAvg = 2200, ...)
 }
 \arguments{
   \item{x}{Data matrix}

@@ -3,9 +3,10 @@
 \title{Method for computation of the single-locus summarization}
 \usage{
   slSummarization(object, summaryMethod = "Exact",
-  summaryParam, callParam = list(runtype = "ff", cores =
-  1), summaryWindow = c("std", "fragment"), returnValues,
-  saveFile = "slData")
+    summaryParam,
+    callParam = list(runtype = "ff", cores = 1),
+    summaryWindow = c("std", "fragment"), returnValues,
+    saveFile = "slData")
 }
 \arguments{
   \item{object}{An instance of
@@ -42,32 +43,32 @@
   summarized to a probeset.
 }
 \examples{
-load(system.file("exampleData/normData.RData", package="cn.farms"))
-experimentData(normData)@other$annotDir <-
-system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
-package="cn.farms")
+load(system.file("exampleData/normData.RData", package = "cn.farms"))
+notes(experimentData(normData))$annotDir <-
+        system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
+                package = "cn.farms")
 summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(10)
 slData <- slSummarization(normData,
-summaryMethod = summaryMethod,
-summaryParam = summaryParam)
+        summaryMethod = summaryMethod,
+        summaryParam = summaryParam)
 assayData(slData)$L_z[1:10, ]
 
 summaryMethod <- "Gaussian"
 summaryParam <- list()
 summaryParam$cyc <- c(10)
 slData <- slSummarization(normData,
-summaryMethod = summaryMethod,
-summaryParam = summaryParam)
+        summaryMethod = summaryMethod,
+        summaryParam = summaryParam)
 assayData(slData)$L_z[1:10, ]
 
 summaryMethod <- "Exact"
 summaryParam <- list()
 summaryParam$cyc <- c(10, 20)
 slData <- slSummarization(normData,
-summaryMethod = summaryMethod,
-summaryParam = summaryParam)
+        summaryMethod = summaryMethod,
+        summaryParam = summaryParam)
 assayData(slData)$L_z[1:10, 1:10]
 }
 \author{

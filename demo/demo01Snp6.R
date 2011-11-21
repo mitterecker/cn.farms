@@ -68,7 +68,7 @@ experimentData(normData)@title <- "HapMap data"
 if (testing) {
 	## select one chromosome for further analysis
 	if (!exists("normDataBak")) normDataBak <- normData
-	load(file.path(experimentData(normData)@other$annotDir, "featureSet.RData"))
+	load(file.path(notes(experimentData(normData))$annotDir, "featureSet.RData"))
 	tmp <- featureSet$chrom[match(featureData(normData)@data$fsetid, 
 					featureSet$fsetid)]
 	normData <- normData[which(tmp == myChr), ]
@@ -89,10 +89,6 @@ slData <- slSummarization(normData,
 		summaryWindow = "std")
 assayData(slData)$L_z[1:10, ]
 
-## fragment length correction
-#slData <- fragLengCorr(slData, cores=cores)
-#experimentData(slData)@other
-
 
 ###############################################################################
 ## process non polymorphic data
@@ -107,17 +103,13 @@ if (exists("annotDir")) {
 if (testing) {
 	## select one chromosome for further analysis
 	npDataBak <- npData
-	load(file.path(experimentData(npData)@other$annotDir, 
+	load(file.path(notes(experimentData(normData))$annotDir, 
 					"featureSetCNV.RData"))
 	tmp <- featureSetCNV$chrom[match(
 					featureData(npData)@data$fsetid, featureSetCNV$fsetid)]
 	npData <- npData[which(tmp == myChr), ]
 }
 
-### fragment length correction
-#npData <- fragLengCorr(npData, cores=cores)
-#experimentData(npData)@other
-#assayData(npData)$intensity
 
 ###############################################################################
 ## combine SNP and CN data

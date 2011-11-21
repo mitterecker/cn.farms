@@ -3,7 +3,7 @@
 \title{Creation of annotation files}
 \usage{
   createAnnotation(filenames = NULL, annotation = NULL,
-  annotDir = NULL, checks = TRUE)
+    annotDir = NULL, checks = TRUE)
 }
 \arguments{
   \item{filenames}{An absolute path of the CEL files to
@@ -30,9 +30,9 @@
 \examples{
 \dontrun{
 library("hapmapsnp6")
-celDir <- system.file("celFiles", package="hapmapsnp6")
-filenames <- dir(path=celDir, full.names=TRUE)
-createAnnotation(filenames=filenames)
+celDir <- system.file("celFiles", package = "hapmapsnp6")
+filenames <- dir(path = celDir, full.names = TRUE)
+createAnnotation(filenames = filenames)
 }
 }
 \author{

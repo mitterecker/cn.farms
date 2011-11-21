@@ -1,5 +1,3 @@
-## FIXME: delete tol?
-
 #' Summarization variational Laplacian approach
 #' 
 #' This function runs the FARMS algorithm.
@@ -73,9 +71,9 @@ summarizeFarmsVariational <- function(
         
         x <- t(probes)
         
-        if (centering=="median") { y_v <- apply(x, 2, median) }
+        if (centering == "median") { y_v <- apply(x, 2, median) }
         
-        if (centering=="mean") { y_v <- colMeans(x) }
+        if (centering == "mean") { y_v <- colMeans(x) }
         
         xmean <- matrix(y_v, n_array, n_probes, byrow = TRUE)
         
@@ -235,7 +233,7 @@ summarizeFarmsVariational <- function(
     
     if(weightType == "square") {
         
-        PsiLL <- ((1 / Ph) * L^2 )^2
+        PsiLL <- ((1 / Ph) * L^2)^2
         
         sumPsiLL <- sum(PsiLL)
         
@@ -255,7 +253,7 @@ summarizeFarmsVariational <- function(
         
     } else if (weightType == "linear") {
         
-        PsiLL <- (1 / Ph) * L
+        PsiLL <- (1 / Ph) * L^2
         
         sumPsiLL <- sum(PsiLL)
         

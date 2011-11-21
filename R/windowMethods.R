@@ -14,6 +14,6 @@ summarizeWindowMethods <- function() {
     funcSel <- func[grep(pattern, func)]
     funcSel <- funcSel[-which(funcSel == "summarizeWindowMethods")]
     funcCall <- gsub(pattern, "", funcSel)
-    funcSel <- paste(funcSel, "()", sep="")
+    funcSel <- paste(funcSel, "()", sep = "")
     return(data.frame("call"=funcCall, "assignedFunction"=funcSel))
 }

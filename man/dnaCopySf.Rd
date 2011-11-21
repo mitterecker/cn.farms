@@ -30,16 +30,16 @@
   This function even works very well with ff matrices,
 }
 \examples{
-load(system.file("exampleData/mlData.RData", package="cn.farms"))
+load(system.file("exampleData/mlData.RData", package = "cn.farms"))
 mlData <- mlData[, 1:3]
 colnames(assayData(mlData)$L_z) <- sampleNames(mlData)
 segments <- dnaCopySf(
-x         = assayData(mlData)$L_z,
-chrom     = featureData(mlData)@data$chrom,
-maploc    = featureData(mlData)@data$start,
-cores     = 1,
-smoothing = FALSE)
-featureData(segments)@data
+        x         = assayData(mlData)$L_z,
+        chrom     = fData(mlData)$chrom,
+        maploc    = fData(mlData)$start,
+        cores     = 1,
+        smoothing = FALSE)
+fData(segments)$data
 }
 \author{
   Djork-Arne Clevert \email{okko@clevert.de} and Andreas

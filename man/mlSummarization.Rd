@@ -3,8 +3,9 @@
 \title{Does summarization}
 \usage{
   mlSummarization(object, windowMethod, windowParam,
-  summaryMethod, summaryParam, callParam = list(runtype =
-  "ff"), returnValues, saveFile = "mlData")
+    summaryMethod, summaryParam,
+    callParam = list(runtype = "ff"), returnValues,
+    saveFile = "mlData")
 }
 \arguments{
   \item{object}{an instance of
@@ -35,7 +36,7 @@
   Does summarization
 }
 \examples{
-load(system.file("exampleData/slData.RData", package="cn.farms"))
+load(system.file("exampleData/slData.RData", package = "cn.farms"))
 windowMethod <- "std"
 windowParam <- list()
 windowParam$windowSize <- 5
@@ -44,7 +45,7 @@ summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(20)
 mlData <- mlSummarization(slData, windowMethod, windowParam,
-summaryMethod, summaryParam)
+        summaryMethod, summaryParam)
 assayData(mlData)
 }
 \author{

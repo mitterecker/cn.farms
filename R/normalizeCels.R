@@ -49,7 +49,7 @@ normalizeCels <- function (
     
     if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
         saveFile <- paste(gsub("\\.RData", "", saveFile), 
-                normAdd, ".RData", sep="")
+                normAdd, ".RData", sep = "")
     } 
     
     method <- match.arg(method)
@@ -74,7 +74,7 @@ normalizeCels <- function (
     
     if (runtype == "bm") {
         cat(paste(Sys.time(), "|   Saving normalized data \n"))
-        save(normData, file=saveFile)
+        save(normData, file = saveFile)
     }
     return(normData)
 }

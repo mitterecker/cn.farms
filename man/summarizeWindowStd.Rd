@@ -22,10 +22,10 @@
 ## create toy physical data
 sizeTmp <- 30
 phInf <- data.frame(
-chrom=rep("15", sizeTmp),
-start=seq(from=1, by=300, length.out=sizeTmp),
-end=seq(from=3600, by=300, length.out=sizeTmp),
-man_fsetid=paste("SNP_A-", seq(sizeTmp)+1000, sep=""))
+        chrom = rep("15", sizeTmp),
+        start = seq(from = 1, by = 300, length.out = sizeTmp),
+        end = seq(from = 3600, by = 300, length.out = sizeTmp),
+        man_fsetid = paste("SNP_A-", seq(sizeTmp)+1000, sep = ""))
 summarizeWindowStd(phInf)
 }
 \author{

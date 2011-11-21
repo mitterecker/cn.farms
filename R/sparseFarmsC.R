@@ -9,7 +9,7 @@
 #' @examples 
 #' x <- matrix(rnorm(100, 11), 20, 5)
 #' sparseFarmsC(x, 50)
-sparseFarmsC <- function(probes, cyc=5){
+sparseFarmsC <- function(probes, cyc = 5){
     
     ## probes - data matrix
     ## cyc - maximum number of cycles of EM (default 100)
@@ -26,18 +26,18 @@ sparseFarmsC <- function(probes, cyc=5){
     XX <- crossprod(x) / n
     
     pointer <- .Call("sparseFarmsC", x, as.integer(cyc) , XX, nn, 
-            PACKAGE="cn.farms")
+            PACKAGE = "cn.farms")
     
-    L <- matrix(.Call("getL", pointer, PACKAGE="cn.farms"), 2, 3)
+    L <- matrix(.Call("getL", pointer, PACKAGE = "cn.farms"), 2, 3)
     
-    E_SX_n <- matrix(.Call("getEss", pointer, PACKAGE="cn.farms"), nn, 3)
+    E_SX_n <- matrix(.Call("getEss", pointer, PACKAGE = "cn.farms"), nn, 3)
     
-    lapla <- matrix(.Call("getLap", pointer, PACKAGE="cn.farms"), nn, 3)
+    lapla <- matrix(.Call("getLap", pointer, PACKAGE = "cn.farms"), nn, 3)
     
-    .Call("deinit", pointer, PACKAGE="cn.farms")
+    .Call("deinit", pointer, PACKAGE = "cn.farms")
     
     Lz <- L%*%t(E_SX_n)
     
-    return(list(Lz=Lz))
+    return(list(Lz = Lz))
 }
 

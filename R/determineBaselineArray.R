@@ -11,26 +11,26 @@
 #' @noRd
 determineBaselineArray <- function(
         filenames, 
-        nbrOfProbes=10000, 
-        runtype="ff", 
+        nbrOfProbes = 10000, 
+        runtype = "ff", 
         pmfeatureFid, 
-        cores=1, 
-        saveFile="tmp") {
+        cores = 1, 
+        saveFile = "tmp") {
 
     nbrOfSamples <- length(filenames)
     intensityTmp <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
-            type="double", bmName=gsub("\\.RData", "", saveFile))
+            type = "double", bmName = gsub("\\.RData", "", saveFile))
 
     sampleFidIdx <- sample(pmfeatureFid, nbrOfProbes)
 
     if (cores == 1) {
-        sfInit(parallel=FALSE)
+        sfInit(parallel = FALSE)
     } else {
-        sfInit(parallel=TRUE, cpus=cores, type="SOCK")        
+        sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
     
-    sfLibrary("ff", character.only=TRUE, verbose=FALSE)
-    suppressWarnings(sfExport("readCelIntensities", namespace="affxparser"))
+    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    suppressWarnings(sfExport("readCelIntensities", namespace = "affxparser"))
     suppressWarnings(sfExport("sampleFidIdx"))
     suppressWarnings(sfExport("intensityTmp"))
     suppressWarnings(sfExport("filenames"))
@@ -55,10 +55,6 @@ determineBaselineArrayH01 <- function (i) {
     sampleFidIdx <- sampleFidIdx
     
     tmpExprs <- affxparser::readCelIntensities(filenames[i], 
-            indices=sampleFidIdx)
+            indices = sampleFidIdx)
     intensityTmp[, i] <- log(tmpExprs)
 }
-
-    
-    
-    

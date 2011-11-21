@@ -2,10 +2,11 @@
 \alias{plotEvalIc}
 \title{Creates a plot with known regions and a numeric vector}
 \usage{
-  plotEvalIc(object, segments, chrom, variable, ylim, ylab
-  = "CN indicator", stripCol = "lightgray", regionCol =
-  rgb(130, 0, 139, max = 255), pointSize = 0.75, pointType
-  = 4, bandwidth = c(0.01, 1000), nbin = 100)
+  plotEvalIc(object, segments, chrom, variable, ylim,
+    ylab = "CN indicator", stripCol = "lightgray",
+    regionCol = rgb(130, 0, 139, max = 255),
+    pointSize = 0.75, pointType = 4,
+    bandwidth = c(0.01, 1000), nbin = 100)
 }
 \arguments{
   \item{object}{an instance of
@@ -41,10 +42,10 @@
   Creates a plot with known regions and a numeric vector
 }
 \examples{
-load(system.file("exampleData/slData.RData", package="cn.farms"))
-load(system.file("exampleData/testSegments.RData", package="cn.farms"))
-plotEvalIc(slData, featureData(testSegments)@data,
-variable=assayData(slData)$L_z[, 1], 23)
+load(system.file("exampleData/slData.RData", package = "cn.farms"))
+load(system.file("exampleData/testSegments.RData", package = "cn.farms"))
+plotEvalIc(slData, fData(testSegments),
+     variable = assayData(slData)$L_z[, 1], 23)
 }
 \author{
   Andreas Mitterecker

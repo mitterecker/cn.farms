@@ -24,7 +24,7 @@ normalizeQuantiles <- function (
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep="")
+    saveFile <- paste(saveFile, ".RData", sep = "")
     
     if(is.null(batch)) {
         batch <- rep(1, length(filenames))
@@ -88,10 +88,10 @@ normalizeQuantiles <- function (
         
         gc()
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")   
-        sfLibrary("cn.farms", character.only = TRUE, verbose = FALSE)
-        sfLibrary("affxparser", character.only = TRUE, verbose = FALSE)
-        sfLibrary("oligo", character.only = TRUE, verbose = FALSE)
-        sfLibrary("preprocessCore", character.only = TRUE, verbose = FALSE)
+        sfLibrary("cn.farms", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+        sfLibrary("affxparser", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+        sfLibrary("oligo", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+        sfLibrary("preprocessCore", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
         exportList <- c("fidTmp", "target", "idxOfAlleleA", 
                 "idxOfAlleleB", "intensity")
         suppressWarnings(sfExport(list = exportList))
@@ -112,7 +112,7 @@ normalizeQuantiles <- function (
     
     ## pheno data
     phenoData(eSet) <- new("AnnotatedDataFrame", data = data.frame(filenames,
-                    batch=batch))
+                    batch = batch))
     
     ## feature data
     featureData(eSet) <- new("AnnotatedDataFrame", 
@@ -120,7 +120,7 @@ normalizeQuantiles <- function (
     
     ## experiment data
     experimentData(eSet) <- new("MIAME", 
-            other=list(
+            other = list(
                     annotDir = annotDir, 
                     normalization = "quantiles", 
                     type = "normData"))    
@@ -152,9 +152,9 @@ normalizeQuantilesH01 <- function (ii, filenames) {
     
     tmpExprs <- affxparser::readCelIntensities(filenames[ii], indices = fidTmp)
     tmpExprs <- (tmpExprs[idxOfAlleleA] + tmpExprs[idxOfAlleleB]) / 2
-#    intensity[, ii] <- log2(preprocessCore::normalize.quantiles.use.target(
-#                    as.matrix(tmpExprs), target))
-    intensity[, ii] <- log(target[rank(tmpExprs)])
+    intensity[, ii] <- log2(preprocessCore::normalize.quantiles.use.target(
+                    as.matrix(tmpExprs), target))
+    #intensity[, ii] <- log2(target[rank(tmpExprs)])
 }
 
 

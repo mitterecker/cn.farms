@@ -17,17 +17,17 @@
 #' @importFrom DNAcopy segment
 #' @export
 #' @examples
-#' load(system.file("exampleData/mlData.RData", package="cn.farms"))
+#' load(system.file("exampleData/mlData.RData", package = "cn.farms"))
 #' mlData <- mlData[, 1:3]
 #' colnames(assayData(mlData)$L_z) <- sampleNames(mlData)
 #' segments <- dnaCopySf(
 #'         x         = assayData(mlData)$L_z, 
-#'         chrom     = featureData(mlData)@@data$chrom, 
-#'         maploc    = featureData(mlData)@@data$start, 
+#'         chrom     = fData(mlData)$chrom, 
+#'         maploc    = fData(mlData)$start, 
 #'         cores     = 1, 
 #'         smoothing = FALSE)
-#' featureData(segments)@@data
-dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
+#' fData(segments)$data
+dnaCopySf <- function (x, chrom, maploc, cores = 1, smoothing, ...) {
     t00 <- Sys.time()
        
     if (is.null(colnames(x))) {
@@ -41,11 +41,11 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
     if (cores == 1) {
         sfInit(parallel = FALSE)
     } else {
-        sfInit(parallel = TRUE, cpus = cores, type="SOCK")        
+        sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
 
-    sfLibrary("ff", character.only = TRUE, verbose = FALSE)
-    sfLibrary("DNAcopy", character.only = TRUE, verbose = FALSE)
+    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    sfLibrary("DNAcopy", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
     suppressWarnings(sfExport("x"))
     suppressWarnings(sfExport("chrom"))
     suppressWarnings(sfExport("maploc"))
@@ -72,8 +72,8 @@ dnaCopySf <- function (x, chrom, maploc, cores=1, smoothing, ...) {
     assayData(eSet) <- list(cnv = matrix(rep(2, nbrOfSamples * nbrOfCnvrs), 
                     ncol = nbrOfSamples)) 
     experimentData(eSet)@other$cnvLabels <- list(
-            color=c("red", "black", "green"), 
-            desc=c("deletion", "normal", "duplication"))
+            color = c("red", "black", "green"), 
+            desc  = c("deletion", "normal", "duplication"))
     print(difftime(Sys.time(), t00))
     return(eSet)
 }
@@ -103,13 +103,13 @@ dnaCopySfH01 <- function (i, ...) {
             x[, i], 
             chrom, 
             maploc,
-            data.type="logratio")
+            data.type = "logratio")
 
     if(smoothing == TRUE) {
         cnaObj <- DNAcopy::smooth.CNA(cnaObj)
     } 
     
-    segs <- DNAcopy::segment(cnaObj, min.width=min.width, 
-            undo.splits=undo.splits, undo.SD=undo.SD, ...)     
+    segs <- DNAcopy::segment(cnaObj, min.width = min.width, 
+            undo.splits = undo.splits, undo.SD = undo.SD, ...)     
     return(segs$output)
 }

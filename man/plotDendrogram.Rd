@@ -17,7 +17,7 @@
   Plots a dendrogram
 }
 \examples{
-load(system.file("exampleData/normData.RData", package="cn.farms"))
+load(system.file("exampleData/normData.RData", package = "cn.farms"))
 x <- assayData(normData)$intensity[, 1:3]
 y <- distributionDistance(x)
 attr(y, "Labels") <- substr(sampleNames(normData), 1, 7)

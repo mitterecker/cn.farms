@@ -2,8 +2,8 @@
 \alias{createMatrix}
 \title{Creates the needed matrix}
 \usage{
-  createMatrix(runtype, nrow, ncol, type = "double", bmName
-  = "NA")
+  createMatrix(runtype, nrow, ncol, type = "double",
+    bmName = "NA")
 }
 \arguments{
   \item{runtype}{Mode how the results are saved. Possible

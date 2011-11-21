@@ -3,9 +3,9 @@
 \title{Summarization variational Laplacian approach}
 \usage{
   summarizeFarmsVariational(probes, weight = 0.15, mu = 0,
-  cyc = 10, weightType = "median", init = 0.6, correction =
-  0, minNoise = 0.35, spuriousCorrelation = 0.3, centering
-  = "median")
+    cyc = 10, weightType = "median", init = 0.6,
+    correction = 0, minNoise = 0.35,
+    spuriousCorrelation = 0.3, centering = "median")
 }
 \arguments{
   \item{probes}{A matrix with numeric values.}

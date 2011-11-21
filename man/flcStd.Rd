@@ -2,8 +2,9 @@
 \alias{flcStd}
 \title{Does a fragment length correction on intensities}
 \usage{
-  flcStd(y, fragmentLengths, targetFcn = NULL, subsetToFit
-  = NULL, runtype = "ff", cores = 1, saveFile = "flc", ...)
+  flcStd(y, fragmentLengths, targetFcn = NULL,
+    subsetToFit = NULL, runtype = "ff", cores = 1,
+    saveFile = "flc", ...)
 }
 \arguments{
   \item{y}{y}

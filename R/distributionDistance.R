@@ -17,7 +17,7 @@
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @export
 #' @examples
-#' load(system.file("exampleData/normData.RData", package="cn.farms"))
+#' load(system.file("exampleData/normData.RData", package = "cn.farms"))
 #' x <- assayData(normData)$intensity[, 1:3]
 #' y <- distributionDistance(x)
 #' attr(y, "Labels") <- substr(sampleNames(normData), 1, 7)
@@ -57,7 +57,7 @@ distributionDistance <- function(
 	
 	
 	## Scale data to remove offset and scale issues
-	intensityData <- scale(intensityData, center=T, scale=T)
+	intensityData <- scale(intensityData, center = TRUE, scale = TRUE)
 	
   	## use a fix reference distribution 
 	if(useQuantileReference){
@@ -67,13 +67,13 @@ distributionDistance <- function(
        	for(i in 1:nbrOfCols){
    			### compute distance against the reference
 			res[i] <- calcDistance(
-                    x=intensityData[, i], 
-                    y=referenceDistribution, 
-                    method=method)
+                    x = intensityData[, i], 
+                    y = referenceDistribution, 
+                    method = method)
 		}
 		
 		attributes(res) <- list(Size = nbrOfCols, Labels = colnames(intensityData), 
-		        methods=method, class = "vector")
+		        methods = method, class = "vector")
 	} else {
        	res <- rep(NA, nbrOfCols * (nbrOfCols - 1) / 2)
    		count <- 1
@@ -81,18 +81,18 @@ distributionDistance <- function(
 		for(i in 1:(nbrOfCols - 1)){
    			for(j in (i + 1):nbrOfCols){
       			res[count] <- calcDistance(
-                        x=intensityData[, i], 
-                        y=intensityData[, j], 
-                        method=method)
+                        x = intensityData[, i], 
+                        y = intensityData[, j], 
+                        method = method)
         		count <- count + 1
            	}
         }
 	    
 		attributes(res) <- list(
-                Size=nbrOfCols, 
-                Labels=colnames(intensityData), 
-		        methods=method, 
-                class="dist")
+                Size = nbrOfCols, 
+                Labels = colnames(intensityData), 
+		        methods = method, 
+                class = "dist")
         
     }
     
@@ -101,14 +101,14 @@ distributionDistance <- function(
 }
 
 
-calcDistance <- function(x, y, method=c("JSDiv", "KLDiv", "KLInf")){ 
+calcDistance <- function(x, y, method = c("JSDiv", "KLDiv", "KLInf")){ 
     
 	## eps is added to avoid numerical issues
     eps <- .Machine$double.eps 
     
     ## compute kernel density estimates for both distributions
-	P <- density(x, n=10000, from=min(c(x, y)), to=max(c(x, y)))$y + eps  
-	Q <- density(y, n=10000, from=min(c(x, y)), to=max(c(x, y)))$y + eps
+	P <- density(x, n = 10000, from = min(c(x, y)), to = max(c(x, y)))$y + eps  
+	Q <- density(y, n = 10000, from = min(c(x, y)), to = max(c(x, y)))$y + eps
     
     ### calc distance measure
 	distance <- switch(method, 

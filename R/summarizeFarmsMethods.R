@@ -14,6 +14,6 @@ summarizeFarmsMethods <- function() {
     funcSel <- func[grep(pattern, func)]
     funcSel <- funcSel[-which(funcSel == "summarizeFarmsMethods")]
     funcCall <- gsub(pattern, "", funcSel)
-    funcSel <- paste(funcSel, "()", sep="")
+    funcSel <- paste(funcSel, "()", sep = "")
     return(data.frame("call"=funcCall, "assignedFunction"=funcSel))
 }

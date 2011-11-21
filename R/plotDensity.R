@@ -19,11 +19,11 @@
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @examples 
-#' load(system.file("exampleData/slData.RData", package="cn.farms"))
+#' load(system.file("exampleData/slData.RData", package = "cn.farms"))
 #' plotDensity(assayData(slData)$intensity)
 #' @export
-plotDensity <- function(x, xlim=c(0, 16), ylim, col, lty, 
-        lwd, add=FALSE, xlab, ylab, log=TRUE, ...) {
+plotDensity <- function(x, xlim = c(0, 16), ylim, col, lty, 
+        lwd, add = FALSE, xlab, ylab, log = TRUE, ...) {
     
     if (missing(ylab)) {
         ylab <- "density (integrates to one)"
@@ -39,21 +39,21 @@ plotDensity <- function(x, xlim=c(0, 16), ylim, col, lty,
     }
     
     if (missing(col)) {
-        col <- seq(length=nbrOfSamples)
+        col <- seq(length = nbrOfSamples)
     } else {
-        col <- rep(col, length.out=nbrOfSamples)
+        col <- rep(col, length.out = nbrOfSamples)
     }
 
     if (missing(lty)) {
         lty <- NULL
     } else {
-        lty <- rep(lty, length.out=nbrOfSamples)
+        lty <- rep(lty, length.out = nbrOfSamples)
     }
     
     if (missing(lwd)) {
         lwd <- NULL
     } else {
-        lwd <- rep(lwd, length.out=nbrOfSamples)
+        lwd <- rep(lwd, length.out = nbrOfSamples)
     }
     
     ds <- list()
@@ -66,8 +66,8 @@ plotDensity <- function(x, xlim=c(0, 16), ylim, col, lty,
                     d <- density(xx, ...)
                 })
         ds[[kk]] <- d
-        xlimDef <- range(c(xlimDef, range(d$x, na.rm=TRUE)), na.rm=TRUE)
-        ylimDef <- range(c(ylimDef, range(d$y, na.rm=TRUE)), na.rm=TRUE)
+        xlimDef <- range(c(xlimDef, range(d$x, na.rm = TRUE)), na.rm = TRUE)
+        ylimDef <- range(c(ylimDef, range(d$y, na.rm = TRUE)), na.rm = TRUE)
     }
     if (missing(xlim))
         xlim <- xlimDef
@@ -75,12 +75,14 @@ plotDensity <- function(x, xlim=c(0, 16), ylim, col, lty,
         ylim <- ylimDef
     if (add == FALSE) {
         suppressWarnings({
-                    plot(NA, xlim=xlim, ylim=ylim, xlab=xlab, ylab=ylab, ...)
+                    plot(NA, xlim = xlim, ylim = ylim, xlab = xlab, 
+                            ylab = ylab, ...)
                 })
     }
     for(kk in 1:nbrOfSamples) {
         suppressWarnings({
-                    lines(ds[[kk]], col=col[kk], lty=lty[kk], lwd=lwd[kk], ...)
+                    lines(ds[[kk]], col = col[kk], lty = lty[kk], 
+                            lwd = lwd[kk], ...)
                 })
     }
 }

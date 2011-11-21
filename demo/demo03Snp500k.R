@@ -67,12 +67,12 @@ if(exists("annotDir")) {
 
 if (testing) {
 	## select one chromosome for further analysis
-	load(file.path(experimentData(normData01)@other$annotDir, "featureSet.RData"))
+	load(file.path(notes(experimentData(normData))$annotDir, "featureSet.RData"))
 	tmp <- featureSet$chrom[match(featureData(normData01)@data$fsetid, 
 					featureSet$fsetid)]
 	normData01 <- normData01[which(tmp == myChr), ]
 	
-	load(file.path(experimentData(normData02)@other$annotDir, "featureSet.RData"))
+	load(file.path(notes(experimentData(normData))$annotDir, "featureSet.RData"))
 	tmp <- featureSet$chrom[match(featureData(normData02)@data$fsetid, 
 					featureSet$fsetid)]
 	normData02 <- normData02[which(tmp == myChr), ]
@@ -100,10 +100,6 @@ slData02 <- slSummarization(normData02,
         callParam = callParam, 
         summaryWindow = "std")
 assayData(slData02)$L_z[1:10, ]
-
-## fragment length correction
-#slData <- fragLengCorr(slData, cores=cores)
-#experimentData(slData)@other
 
 
 ###############################################################################

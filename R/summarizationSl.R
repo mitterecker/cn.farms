@@ -26,17 +26,17 @@
 #' @return Single-locus summarized data of an instance of 
 #' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
 #' @examples 
-#' load(system.file("exampleData/normData.RData", package="cn.farms"))
-#' experimentData(normData)@@other$annotDir <- 
+#' load(system.file("exampleData/normData.RData", package = "cn.farms"))
+#' notes(experimentData(normData))$annotDir <- 
 #'         system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
-#'                 package="cn.farms")
+#'                 package = "cn.farms")
 #' summaryMethod <- "Variational"
 #' summaryParam <- list()
 #' summaryParam$cyc <- c(10)
 #' slData <- slSummarization(normData, 
 #'         summaryMethod = summaryMethod, 
 #'         summaryParam = summaryParam)
-#' assayData(slData)$L_z[1:10, ]
+#' assayData(slData)$L_z[1:10, 1:10]
 #' 
 #' summaryMethod <- "Gaussian"
 #' summaryParam <- list()
@@ -44,7 +44,7 @@
 #' slData <- slSummarization(normData, 
 #'         summaryMethod = summaryMethod, 
 #'         summaryParam = summaryParam)
-#' assayData(slData)$L_z[1:10, ]
+#' assayData(slData)$L_z[1:10, 1:10]
 #' 
 #' summaryMethod <- "Exact"
 #' summaryParam <- list()
@@ -65,15 +65,15 @@ slSummarization <- function(
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep="")
+    saveFile <- paste(saveFile, ".RData", sep = "")
     
     normAdd <- normAdd(object@annotation)
     if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
         saveFile <- paste(gsub("\\.RData", "", saveFile), 
-                normAdd, ".RData", sep="")
+                normAdd, ".RData", sep = "")
     }
     
-    if (callParam$runtype=="bm" & file.exists(saveFile)) {
+    if (callParam$runtype == "bm" & file.exists(saveFile)) {
         message("Single-locus summarization has already been done.")
         message("Trying to load data ...")
         load(saveFile)
@@ -83,7 +83,7 @@ slSummarization <- function(
     summaryWindow <- match.arg(summaryWindow)
     if (summaryWindow == "fragment") {
         featureSet <- data.frame()
-        load(file.path(experimentData(object)@other$annotDir, 
+        load(file.path(notes(experimentData(object))$annotDir, 
                         "featureSet.RData"))
         tmp <- match(featureData(object)$fsetid, featureSet$fsetid)
         runIdx <- getFragmentSet(featureSet$fragment_length[tmp])
@@ -96,7 +96,7 @@ slSummarization <- function(
     summaryMethodName <- paste("summarizeFarms", paste(
                     toupper(substring(summaryMethod, 1,1)), 
                     substring(summaryMethod, 2),
-                    sep="", collapse=" "), sep="")
+                    sep = "", collapse = " "), sep = "")
     
     if (!exists(summaryMethodName)) {
         stop(paste("Unknown method (can't find function", summaryMethodName, 
@@ -122,7 +122,7 @@ slSummarization <- function(
     phenoData(eSet) <- phenoData(object)
     
     ## feature data
-    load(file.path(experimentData(object)@other$annotDir, "featureSet.RData"))
+    load(file.path(notes(experimentData(object))$annotDir, "featureSet.RData"))
     if (object@annotation == "pd.mapping250k.nsp" | 
             object@annotation == "pd.mapping250k.sty" |
             object@annotation == "pd.mapping50k.hind240" |
@@ -149,10 +149,10 @@ slSummarization <- function(
     t01 <- Sys.time()
     print(difftime(t01, t00))
     
-    if (callParam$runtype=="bm") {
+    if (callParam$runtype == "bm") {
         cat(paste(Sys.time(), "|   Saving data \n"))
         slData <- eSet
-        save(slData, file=saveFile)
+        save(slData, file = saveFile)
     }
     return(eSet)
 }

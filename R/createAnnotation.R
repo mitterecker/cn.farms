@@ -23,12 +23,12 @@
 #' @examples
 #' \dontrun{
 #' library("hapmapsnp6") 
-#' celDir <- system.file("celFiles", package="hapmapsnp6")
-#' filenames <- dir(path=celDir, full.names=TRUE)
-#' createAnnotation(filenames=filenames)
+#' celDir <- system.file("celFiles", package = "hapmapsnp6")
+#' filenames <- dir(path = celDir, full.names = TRUE)
+#' createAnnotation(filenames = filenames)
 #' }
-createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL, 
-        checks=TRUE) {
+createAnnotation <- function(filenames = NULL, annotation = NULL, 
+        annotDir = NULL, checks = TRUE) {
     
     if (checks) {
             ## check for correct CEL-files
@@ -36,8 +36,8 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
             if (length(celfiles) != length(filenames)) {
             message("It looks like that not all filenames are CEL-files!")
             message("Especially: ")
-            message(paste("   ", setdiff(filenames, celfiles), sep=" ", 
-                            collapse="\n"))
+            message(paste("   ", setdiff(filenames, celfiles), sep = " ", 
+                            collapse = "\n"))
             stop("Check CEL-files!")
             }
             
@@ -68,18 +68,18 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
                         "from bioconductor.org not installed but needed!"))
     }
     
-    require(pkgname, character.only=TRUE, quietly=TRUE)
+    require(pkgname, character.only = TRUE, quietly = TRUE)
     version <- installed.packages()[pkgname, "Version"]
 
     ## check annotation directory
     if (is.null(annotDir)) {
         annotDir <- file.path(getwd(), "annotation", pkgname, version)
-        dir.create(annotDir, showWarnings=FALSE, recursive=TRUE)
+        dir.create(annotDir, showWarnings = FALSE, recursive = TRUE)
     }
     if (length(dir(annotDir)) != 0) {
         cat(paste(Sys.time(), "|   Directory", annotDir, "not empty \n",
                         "                   |  ",
-                        "Annotation probably already done \n"), sep="")
+                        "Annotation probably already done \n"), sep = "")
         return(invisible())
     }
     
@@ -113,20 +113,20 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
         }
         
         featureSetFull <- tmp[order(tmp$chrom, tmp$physical_pos, tmp$fsetid), ]
-        save(featureSetFull, file=file.path(annotDir, "featureSetFull.RData"))
+        save(featureSetFull, file = file.path(annotDir, "featureSetFull.RData"))
         
         if (pkgname %in% c("pd.genomewidesnp.5", "pd.genomewidesnp.6")) {
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
                             "dbsnp_rs_id", "chrom", "physical_pos", "allele_a",
-                            "allele_b", "fragment_length", "fragment_length2")]
+                            "allele_b")]
         } else if (pkgname == "pd.cytogenetics.array") { 
             featureSet <- featureSetFull
         } else {
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
                             "dbsnp_rs_id", "chrom", "physical_pos", "allele_a",
-                            "allele_b", "fragment_length")]
+                            "allele_b")]
         }
-        save(featureSet, file=file.path(annotDir, "featureSet.RData"))
+        save(featureSet, file = file.path(annotDir, "featureSet.RData"))
         gc()
         rm(featureSetFull)
         
@@ -136,7 +136,7 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
         idxTmp <- match(pmfeatureTmp$fsetid, featureSet$fsetid)
         idx <- order(idxTmp)
         pmfeature <- pmfeatureTmp[idx, ]
-        save(pmfeature, file=file.path(annotDir, "pmfeature.RData"))
+        save(pmfeature, file = file.path(annotDir, "pmfeature.RData"))
         rm(idxTmp, idx, pmfeatureTmp)
         gc()
         
@@ -144,7 +144,7 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
         if (pkgname != "pd.cytogenetics.array") {
             sql <- "SELECT * FROM sequence"    
             sequence <- DBI::dbGetQuery(db(get(pkgname)), sql)
-            save(sequence, file=file.path(annotDir, "sequence.RData"))
+            save(sequence, file = file.path(annotDir, "sequence.RData"))
             rm(sequence)
             gc()
         }
@@ -175,13 +175,12 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
                 featureSetCNV <- featureSetCNVFull
             } else {
                 featureSetCNV <- featureSetCNVFull[, c("fsetid", "man_fsetid", 
-                                "chrom", "chrom_start", "chrom_stop", 
-                                "fragment_length", "fragment_length2")]
+                                "chrom", "chrom_start", "chrom_stop")]
             }
             
-            save(featureSetCNV, file=file.path(annotDir, "featureSetCNV.RData"))
+            save(featureSetCNV, file = file.path(annotDir, "featureSetCNV.RData"))
             save(featureSetCNVFull, 
-                    file=file.path(annotDir, "featureSetCNVFull.RData"))
+                    file = file.path(annotDir, "featureSetCNVFull.RData"))
             gc()
             
             sql <- "SELECT * FROM pmfeatureCNV"
@@ -189,14 +188,14 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
             idxTmp <- match(pmfeatureCNVTmp$fsetid, featureSetCNV$fsetid)
             idx <- order(idxTmp)
             pmfeatureCNV <- pmfeatureCNVTmp[idx, ]
-            save(pmfeatureCNV, file=file.path(annotDir, "pmfeatureCNV.RData"))
+            save(pmfeatureCNV, file = file.path(annotDir, "pmfeatureCNV.RData"))
             rm(idxTmp, idx, pmfeatureCNVTmp)
             gc()
             
             if (pkgname != "pd.cytogenetics.array") {
                 sql <- "SELECT * FROM sequenceCNV"    
                 sequenceCNV <- DBI::dbGetQuery(db(get(pkgname)), sql)
-                save(sequenceCNV, file=file.path(annotDir, "sequenceCNV.RData"))
+                save(sequenceCNV, file = file.path(annotDir, "sequenceCNV.RData"))
                 gc()
             }
         }
@@ -216,12 +215,12 @@ createAnnotation <- function(filenames=NULL, annotation=NULL, annotDir=NULL,
         idxOfStrandA <- which(pmfeature[, "strand"] == 0)
         idxOfStrandB <- which(pmfeature[, "strand"] == 1)
         
-        pairs <- paste(alleleA, alleleB, sep="")
+        pairs <- paste(alleleA, alleleB, sep = "")
         uniquePairs <- unique(pairs)
         
         save(pmfeature, uniquePairs, idxOfAlleleA, idxOfAlleleB, 
                 idxOfStrandA, idxOfStrandB, pairs, 
-                file=file.path(annotDir, "annotNormalization.RData"))
+                file = file.path(annotDir, "annotNormalization.RData"))
     }
     gc()
     cat(paste(Sys.time(), "|   Annotation processed \n"))

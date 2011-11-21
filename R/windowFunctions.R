@@ -3,7 +3,7 @@
 #' @return a Indices whhich are used for probeset summarization 
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
-getSingleProbeSetSize <- function(fsetid){
+getSingleProbeSetSize <- function(fsetid) {
     uniqueProbeSets <- unique(fsetid)
     endIndex <- length(uniqueProbeSets)
     orderedProbesets <-  order(uniqueProbeSets)
@@ -31,9 +31,9 @@ getFragmentSet <- function(fragLength) {
         fragLength[tmpIdx] <- 1200
     }
     
-    y <- diff(fragLength, lag=1)
+    y <- diff(fragLength, lag = 1)
     y[y != 0] <- 1
-    z <- diff(y, lag=1)
+    z <- diff(y, lag = 1)
     
     x03 <- cbind(fragLength, c(1, y), c(-1, z, 1))
     
@@ -59,12 +59,12 @@ getFragmentSet <- function(fragLength) {
 #' ## create toy physical data
 #' sizeTmp <- 30
 #' phInf <- data.frame(
-#'         chrom=rep("15", sizeTmp),
-#'         start=seq(from=1, by=300, length.out=sizeTmp), 
-#'         end=seq(from=3600, by=300, length.out=sizeTmp),
-#'         man_fsetid=paste("SNP_A-", seq(sizeTmp)+1000, sep=""))
+#'         chrom = rep("15", sizeTmp),
+#'         start = seq(from = 1, by = 300, length.out = sizeTmp), 
+#'         end = seq(from = 3600, by = 300, length.out = sizeTmp),
+#'         man_fsetid = paste("SNP_A-", seq(sizeTmp)+1000, sep = ""))
 #' summarizeWindowStd(phInf)
-summarizeWindowStd <- function(phInf, windowSize=3, overlap=TRUE) {
+summarizeWindowStd <- function(phInf, windowSize = 3, overlap = TRUE) {
     endIndex <- length(unique(phInf$"man_fsetid"))
     
     if (windowSize == 1) {
@@ -82,8 +82,8 @@ summarizeWindowStd <- function(phInf, windowSize=3, overlap=TRUE) {
         startTmp <- as.numeric(start[1:max.index])
         endTmp <- as.numeric(end[1:max.index])
         PS.info <- data.frame(
-                start=startTmp, 
-                end=endTmp)
+                start = startTmp, 
+                end = endTmp)
     }
     return(PS.info)
 }
@@ -100,12 +100,12 @@ summarizeWindowStd <- function(phInf, windowSize=3, overlap=TRUE) {
 #' ## create toy physical data
 #' sizeTmp <- 30
 #' phInf <- data.frame(
-#'         chrom=rep("15", sizeTmp),
-#'         start=seq(from=1, by=300, length.out=sizeTmp), 
-#'         end=seq(from=3600, by=300, length.out=sizeTmp),
-#'         man_fsetid=paste("SNP_A-", seq(sizeTmp)+1000, sep=""))
+#'         chrom = rep("15", sizeTmp),
+#'         start = seq(from = 1, by = 300, length.out = sizeTmp), 
+#'         end = seq(from = 3600, by = 300, length.out = sizeTmp),
+#'         man_fsetid = paste("SNP_A-", seq(sizeTmp)+1000, sep = ""))
 #' summarizeWindowBps(phInf)
-summarizeWindowBps <- function(phInf, fixedBps=10000, upperLimit=6) {
+summarizeWindowBps <- function(phInf, fixedBps = 10000, upperLimit = 6) {
     startIdx <- c()
     endIdx <- c()
     probesInChrom <- as.numeric(table(phInf$chrom))  # occurancies per chromosome 
@@ -126,7 +126,7 @@ summarizeWindowBps <- function(phInf, fixedBps=10000, upperLimit=6) {
                 phInf[startIndexOfChr:numberOfProbesInChrom[iCnt], ]    
 
         phPos <- as.numeric(as.character(phInfoSelectedChromosome[, 2]))
-        diffPhPositions <- c(diff(phPos, lag=1))
+        diffPhPositions <- c(diff(phPos, lag = 1))
         
         startIdx <- 1:length(phPos)
         endIdx <- vector(length = length(phPos))

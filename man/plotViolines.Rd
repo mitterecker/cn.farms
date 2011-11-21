@@ -24,10 +24,10 @@
   This function creates a violine plot on intensity values
 }
 \examples{
-load(system.file("exampleData/normData.RData", package="cn.farms"))
+load(system.file("exampleData/normData.RData", package = "cn.farms"))
 normData <- normData[, 1:10]
 groups <- seq(sampleNames(normData))
-plotViolines(normData, variable="intensity", groups, xlab="Intensity values")
+plotViolines(normData, variable = "intensity", groups, xlab = "Intensity values")
 }
 \author{
   Djork-Arne Clevert \email{okko@clevert.de} and Andreas

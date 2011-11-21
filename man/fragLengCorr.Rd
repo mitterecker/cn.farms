@@ -2,8 +2,8 @@
 \alias{fragLengCorr}
 \title{Does a fragment length correction}
 \usage{
-  fragLengCorr(object, runtype = "ff", saveFile =
-  "slDataFlc", ...)
+  fragLengCorr(object, runtype = "ff",
+    saveFile = "slDataFlc", ...)
 }
 \arguments{
   \item{object}{An instance of
@@ -25,7 +25,7 @@
   Does a fragment length correction
 }
 \examples{
-load(system.file("exampleData/slData.RData", package="cn.farms"))
+load(system.file("exampleData/slData.RData", package = "cn.farms"))
 slDataFlc <- fragLengCorr(slData)
 }
 \author{

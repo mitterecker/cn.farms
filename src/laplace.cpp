@@ -417,7 +417,6 @@ extern "C" SEXP momentsGauss(SEXP it, SEXP eps1S, SEXP eps2S, SEXP aS, SEXP bS,
 	logIntegrationFactor=log(integrationFactor);
 
 	int elements=LENGTH(aS);
-	int method=0;
 
 	SEXP RET;
 	SEXP normConstRET, moment1RET, moment2RET, maxRET, entropyRET,

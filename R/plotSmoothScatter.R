@@ -11,8 +11,8 @@
 #' @author Andreas Mitterecker
 #' @export 
 #' @examples
-#' load(system.file("exampleData/slData.RData", package="cn.farms"))
-#' plotSmoothScatter(slData[, 1:3], chrom="23")
+#' load(system.file("exampleData/slData.RData", package = "cn.farms"))
+#' plotSmoothScatter(slData[, 1:3], chrom = "23")
 plotSmoothScatter <- function(
         object, 
         variable,
@@ -66,7 +66,7 @@ plotSmoothScatter <- function(
         ySl <- assayData(x)[[variable]][, i]
         smoothScatter(x = xSl, y = ySl, ylim = ylim, ylab = "L_z", xlab = "bp", 
                 nrpoints = 1000, ...) 
-        abline(h=0)
+        abline(h = 0)
         loess.out <- loess(ySl ~ xSl)
         points(loess.out$x, loess.out$fitted, col = "red", pch = ".")      
     }

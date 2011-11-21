@@ -28,7 +28,7 @@ normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep="")
+    saveFile <- paste(saveFile, ".RData", sep = "")
     
     if(is.null(pkgname)) {
         mapping <- affxparser::readCelHeader(filenames[1])$chiptype
@@ -70,9 +70,9 @@ normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE
                 type = "double", bmName = gsub("\\.rda", "", saveFile))        
     }
 
-    sfLibrary("cn.farms", character.only = TRUE)
-    sfLibrary("affxparser", character.only = TRUE)
-    sfLibrary("oligo", character.only = TRUE)
+    sfLibrary("cn.farms", character.only = TRUE, keep.source = FALSE)
+    sfLibrary("affxparser", character.only = TRUE, keep.source = FALSE)
+    sfLibrary("oligo", character.only = TRUE, keep.source = FALSE)
     
     suppressWarnings(
             sfExport(list = c(
@@ -103,7 +103,7 @@ normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE
                 intensityA = intensityA, 
                 intensityB = intensityB)
     } else {
-        assayData(eSet) <- list(intensity=intensity)
+        assayData(eSet) <- list(intensity = intensity)
     }
     
     ## pheno data
@@ -181,7 +181,9 @@ normalizeSorH01 <- function (ii, filenames, cyc) {
                 intensityB[, ii] <- tmp2[idxOfAlleleB]
             }
             tmp01 <- (tmp2[idxOfAlleleA] + tmp2[idxOfAlleleB]) / 2
-            corr <- mean(tmp01, na.rm = TRUE) / 2200
+            
+            ## eventually run medianpolish here (on all arrays!)
+            corr <- median(tmp01, na.rm = TRUE) / 2200
             tmp02 <- tmp01 / corr
             
             intensity[, ii] <- log2(tmp02)

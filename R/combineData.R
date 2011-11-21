@@ -19,10 +19,10 @@
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @examples 
-#' load(system.file("exampleData/normData.RData", package="cn.farms"))
-#' experimentData(normData)@@other$annotDir <- 
+#' load(system.file("exampleData/normData.RData", package = "cn.farms"))
+#' notes(experimentData(normData))$annotDir <- 
 #'         system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
-#'                 package="cn.farms")
+#'                 package = "cn.farms")
 #' summaryMethod <- "Variational"
 #' summaryParam <- list()
 #' summaryParam$cyc <- c(10)
@@ -45,9 +45,9 @@ combineData <- function (
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
-    saveFile <- paste(saveFile, ".RData", sep="")
+    saveFile <- paste(saveFile, ".RData", sep = "")
     
-    if (runtype=="bm" & file.exists(saveFile)) {
+    if (runtype == "bm" & file.exists(saveFile)) {
         message("Combining the data has already been done")
         message("Trying to load combined data ...")
         load(saveFile)

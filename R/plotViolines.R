@@ -15,22 +15,22 @@
 #' @importFrom lattice panel.violin
 #' @importFrom lattice panel.bwplot
 #' @examples
-#' load(system.file("exampleData/normData.RData", package="cn.farms"))
+#' load(system.file("exampleData/normData.RData", package = "cn.farms"))
 #' normData <- normData[, 1:10]
 #' groups <- seq(sampleNames(normData))
-#' plotViolines(normData, variable="intensity", groups, xlab="Intensity values")
+#' plotViolines(normData, variable = "intensity", groups, xlab = "Intensity values")
 #' @export 
-plotViolines <- function(object, variable="intensity", groups, ...) {
+plotViolines <- function(object, variable = "intensity", groups, ...) {
     x <- assayData(object)[[variable]]
     if (missing(groups)) {
         groups <- rep(1, length(sampleNames(object)))  
     } 
     myData <- data.frame(
-            x=as.vector(x), 
-            y=rep(sampleNames(object), each = nrow(x)))
+            x = as.vector(x), 
+            y = rep(sampleNames(object), each = nrow(x)))
     
     lattice::bwplot(y~x, myData, ...,
-            names=sampleNames(object),
+            names = sampleNames(object),
             panel = function(..., box.ratio) {
                 lattice::panel.violin(
                         ..., 

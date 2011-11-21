@@ -11,13 +11,13 @@
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @importFrom oligoClasses initializeBigMatrix
 #' @export 
-createMatrix <- function(runtype, nrow, ncol, type="double", bmName="NA") {
-    bmName <- paste(bmName, "_", sep="")
+createMatrix <- function(runtype, nrow, ncol, type = "double", bmName = "NA") {
+    bmName <- paste(bmName, "_", sep = "")
     if (runtype == "ff") {
-        x <- ff(vmode=type, dim=c(nrow, ncol))    
+        x <- ff(vmode = type, dim = c(nrow, ncol))    
     } else if (runtype == "bm") {
         x <- oligoClasses::initializeBigMatrix(name = bmName, 
-                nrow, ncol, vmode=type)
+                nrow, ncol, vmode = type)
     } else {
         x <- matrix(NA, nrow, ncol)
     }

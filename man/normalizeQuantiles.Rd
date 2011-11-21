@@ -3,8 +3,8 @@
 \title{Normalization Quantiles}
 \usage{
   normalizeQuantiles(filenames, cores = 1, batch = NULL,
-  annotDir = NULL, runtype = "ff", pkgname = NULL, saveFile
-  = "normDataQuant")
+    annotDir = NULL, runtype = "ff", pkgname = NULL,
+    saveFile = "normDataQuant")
 }
 \arguments{
   \item{filenames}{filenames}

@@ -1,6 +1,9 @@
 \name{summarizeWindowMethods}
 \alias{summarizeWindowMethods}
 \title{Lists methods for possible window methods}
+\usage{
+  summarizeWindowMethods()
+}
 \value{
   Returns a data frame with all possible methods.
 }

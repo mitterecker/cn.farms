@@ -2,9 +2,9 @@
 \alias{distributionDistance}
 \title{Computes the distribution distance}
 \usage{
-  distributionDistance(intensityData, method = c("JSDiv",
-  "KLDiv", "KLInf"), useSubset = T, subsetFraction = 0.25,
-  useQuantileReference = FALSE)
+  distributionDistance(intensityData,
+    method = c("JSDiv", "KLDiv", "KLInf"), useSubset = T,
+    subsetFraction = 0.25, useQuantileReference = FALSE)
 }
 \arguments{
   \item{intensityData}{A matrix or an AffyBatch object.}
@@ -26,7 +26,7 @@
   Be aware that this function is implemented quite slow.
 }
 \examples{
-load(system.file("exampleData/normData.RData", package="cn.farms"))
+load(system.file("exampleData/normData.RData", package = "cn.farms"))
 x <- assayData(normData)$intensity[, 1:3]
 y <- distributionDistance(x)
 attr(y, "Labels") <- substr(sampleNames(normData), 1, 7)

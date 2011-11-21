@@ -67,7 +67,7 @@ experimentData(normData)@title <- "HapMap data"
 if (testing) {
 	## select one chromosome for further analysis
 	if (!exists("normDataBak")) normDataBak <- normData
-	load(file.path(experimentData(normData)@other$annotDir, "featureSet.RData"))
+	load(file.path(notes(experimentData(normData))$annotDir, "featureSet.RData"))
 	tmp <- featureSet$chrom[match(featureData(normData)@data$fsetid, 
 					featureSet$fsetid)]
 	normData <- normData[which(tmp == myChr), ]
@@ -87,10 +87,6 @@ slData <- slSummarization(normData,
 		callParam = callParam, 
 		summaryWindow = "std")
 assayData(slData)$L_z[1:10, ]
-
-## fragment length correction
-#slData <- fragLengCorr(slData, cores=cores)
-#experimentData(slData)@other
 
 
 ###############################################################################

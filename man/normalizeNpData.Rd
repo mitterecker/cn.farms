@@ -3,8 +3,8 @@
 \title{Processes the non-polymorphic data}
 \usage{
   normalizeNpData(filenames, cores = 1, annotDir = NULL,
-  runtype = "ff", saveFile = "npData", method =
-  c("baseline", "quantiles"))
+    runtype = "ff", saveFile = "npData",
+    method = c("baseline", "quantiles"))
 }
 \arguments{
   \item{filenames}{the absolute path of the CEL files as a
@@ -36,9 +36,9 @@
 \examples{
 \dontrun{
 library("hapmapsnp6")
-celDir <- system.file("celFiles", package="hapmapsnp6")
-filenames <- dir(path=celDir, full.names=TRUE)
-createAnnotation(filenames=filenames)
+celDir <- system.file("celFiles", package = "hapmapsnp6")
+filenames <- dir(path = celDir, full.names = TRUE)
+createAnnotation(filenames = filenames)
 npData <- normalizeNpData(filenames)
 }
 }
