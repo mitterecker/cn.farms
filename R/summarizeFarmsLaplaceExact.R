@@ -5,6 +5,7 @@
 #' @param probes A matrix with numeric values.
 #' @param mu Hyperparameter value which allows to quantify different aspects of potential prior knowledge. Values near zero assumes that most positions do not contain a signal, and introduces a bias for loading matrix elements near zero. Default value is 0 and it's recommended not to change it.
 #' @param weight Hyperparameter value which determines the influence of the Gaussian prior of the loadings
+#' @param weightSignal Hyperparameter value on the signal.
 #' @param weightZ Hyperparameter value which determines how strong the Laplace prior of the factor should be at 0. Users should be aware, that a change of weightZ in comparison to the default parameter might also entail a need to change other parameters. Unexperienced users should not change weightZ.
 #' @param weightProbes Parameter (TRUE/FALSE), that determines, if the number of probes should additionally be considered in weight. If TRUE, weight will be modified.
 #' @param cyc Number of cycles. If the length is two, it is assumed, that a minimum and a maximum number of cycles is given. If the length is one, the value is interpreted as the exact number of cycles to be executed (minimum == maximum).
@@ -55,8 +56,9 @@
 
 summarizeFarmsExact <- function(
 		probes, 
-		mu = 0, 
-		weight = 0.5, 
+		mu = 1.0, 
+		weight = 0.001, 
+		weightSignal = 1.0,
 		weightZ = 1.0, 
 		weightProbes = TRUE,
 		cyc = c(10, 10), 
@@ -166,12 +168,14 @@ summarizeFarmsExact <- function(
 	DataCov[DataCov <= 0] <- 10^-3
 	DataCov <- (DataCov + t(DataCov)) / 2
 	
-	myLambda <- rep(0, dimension)
-	PsiLambda <- rep(mean(diag(DataCov)) / weight, dimension)
+	myLambda <- rep(mu, dimension)
+	PsiLambda <- rep(1.0 / weight, dimension)
 	if(weightProbes) {
-        PsiLambda <- rep(mean(diag(DataCov)) / (weight*dimension), dimension)
+        PsiLambda <- rep(1.0 / (weight*dimension), dimension)
     }
+	sigmaS <- 1/sqrt(weightSignal)
 	
+	s <- 1.0
 	Psi <- initPsi * diag(DataCov)
 	lambda <- sqrt(diag(DataCov) - Psi)
 	lapla <- rep(1, n)
@@ -250,12 +254,21 @@ summarizeFarmsExact <- function(
 			avg_Ez2 <- sum(PsiM1_Lambda * avg_xEz) * sigmaZ2 + sigmaZ2
 		}
 		
+		lambda <- lambda_old
+		
 		## M-Step
 		Psi_PsiLambdaM1 <- Psi / PsiLambda
-		lambda <- (avg_xEz + Psi_PsiLambdaM1 * myLambda) / (avg_Ez2 * rep(1, dimension) + Psi_PsiLambdaM1)
+		
+		s <- sum(lambda*avg_xEz/Psi)/(1/sigmaS^2+sum(lambda^2/Psi)*avg_Ez2)
+		lambda <- (avg_xEz * s + Psi_PsiLambdaM1 * myLambda) / (avg_Ez2 * s^2 * rep(1, dimension) + Psi_PsiLambdaM1)
+		#lambda <- (avg_xEz + Psi_PsiLambdaM1 * myLambda) / (avg_Ez2 * rep(1, dimension) + Psi_PsiLambdaM1)
 		lambda <- ifelse(lambda < 0.0, rep(0, length(lambda)), lambda)
-		Psi <- diag(DataCov) - avg_xEz * lambda + Psi_PsiLambdaM1 * (myLambda - lambda) * lambda
+		Psi <- diag(DataCov) - avg_xEz * s * lambda + Psi_PsiLambdaM1 * (myLambda - lambda) * lambda
+		#Psi <- diag(DataCov) - avg_xEz * lambda + Psi_PsiLambdaM1 * (myLambda - lambda) * lambda
 		Psi[Psi < 10^-3] <- 10^-3
+		
+		lambda_old <- lambda
+		lambda <- lambda*s
 		
 		if(i > cyc[1] && max(abs(Psi - PsiOld)) / max(abs(PsiOld)) < tol) {
 			nrCyc <- i + 1

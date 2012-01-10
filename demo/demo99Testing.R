@@ -1,9 +1,7 @@
 ## The examples from the man pages
 library(cn.farms)
 dontrun <- T
-
-
-
+ 
 ## combineData
 load(system.file("exampleData/normData.RData", package="cn.farms"))
 notes(experimentData(normData))$annotDir <- 

@@ -16,8 +16,7 @@ createMatrix <- function(runtype, nrow, ncol, type = "double", bmName = "NA") {
     if (runtype == "ff") {
         x <- ff(vmode = type, dim = c(nrow, ncol))    
     } else if (runtype == "bm") {
-        x <- oligoClasses::initializeBigMatrix(name = bmName, 
-                nrow, ncol, vmode = type)
+        x <- initializeBigMatrix(name = bmName, nrow, ncol, vmode = type)
     } else {
         x <- matrix(NA, nrow, ncol)
     }

@@ -2,9 +2,10 @@
 \alias{normalizeCels}
 \title{Wrapper for the normalization functions}
 \usage{
-  normalizeCels(filenames, method = c("SOR", "quantiles"),
-    cores = 1, alleles = FALSE, runtype = "bm",
-    annotDir = NULL, saveFile = "normData", ...)
+  normalizeCels(filenames,
+    method = c("SOR", "quantiles", "none"), cores = 1,
+    alleles = FALSE, runtype = "bm", annotDir = NULL,
+    saveFile = "normData", ...)
 }
 \arguments{
   \item{filenames}{The absolute path of the CEL files as a

@@ -1,13 +1,13 @@
-\name{summarizeFarmsExact}
-\alias{summarizeFarmsExact}
+\name{summarizeFarmsExact3}
+\alias{summarizeFarmsExact3}
 \title{Summarization Laplacian approach with exact computation}
 \usage{
-  summarizeFarmsExact(probes, mu = 1, weight = 0.001,
-    weightSignal = 1, weightZ = 1, weightProbes = TRUE,
-    cyc = c(10, 10), tol = 1e-05, weightType = "mean",
-    centering = "median", rescale = FALSE,
-    backscaleComputation = FALSE, maxIntensity = TRUE,
-    refIdx, ...)
+  summarizeFarmsExact3(probes, mu = 1, weight = 100,
+    weightSignal = 1, weightZ = 30, weightProbes = TRUE,
+    updateSignal = FALSE, cyc = c(10, 10), tol = 1e-05,
+    weightType = "mean", centering = "median",
+    rescale = FALSE, backscaleComputation = FALSE,
+    maxIntensity = TRUE, refIdx, ...)
 }
 \arguments{
   \item{probes}{A matrix with numeric values.}
@@ -35,6 +35,8 @@
   determines, if the number of probes should additionally
   be considered in weight. If TRUE, weight will be
   modified.}
+
+  \item{updateSignal}{updateSignal.}
 
   \item{cyc}{Number of cycles. If the length is two, it is
   assumed, that a minimum and a maximum number of cycles is

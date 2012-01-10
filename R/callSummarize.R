@@ -110,8 +110,7 @@ callSummarize <- function(
             c("slot67", "allMedian",               1,            nbrOfProbes),
             c("slot68", "twoMedian",               1,            nbrOfProbes),
             c("slot69", "allMean",                 1,            nbrOfProbes),
-            c("slot70", "twoMean",                 1,            nbrOfProbes),
-            c("slot71", "Psi",                     nbrOfSamples, nbrOfProbes))
+            c("slot70", "twoMean",                 1,            nbrOfProbes))
     
     varNames <- data.frame(varNames, stringsAsFactors = FALSE)
     varNames[, 3] <- as.numeric(varNames[, 3])

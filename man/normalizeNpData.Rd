@@ -4,7 +4,7 @@
 \usage{
   normalizeNpData(filenames, cores = 1, annotDir = NULL,
     runtype = "ff", saveFile = "npData",
-    method = c("baseline", "quantiles"))
+    method = c("baseline", "quantiles", "none"))
 }
 \arguments{
   \item{filenames}{the absolute path of the CEL files as a

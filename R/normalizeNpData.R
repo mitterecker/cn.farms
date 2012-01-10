@@ -29,10 +29,10 @@ normalizeNpData <- function(
         annotDir = NULL, 
         runtype = "ff", 
         saveFile = "npData", 
-        method = c("baseline", "quantiles")) {
+        method = c("baseline", "quantiles", "none")) {
     
     method <- match.arg(method)
-    normMethods <- c("baseline", "quantiles")
+    normMethods <- c("baseline", "quantiles", "none")
     
     if (!method %in% normMethods) {
         stop("Normalization method not found!")
@@ -90,8 +90,8 @@ normalizeNpData <- function(
         baseline <- determineBaselineArray(
                 filenames, nbrOfProbes = 10000, runtype = "ff", 
                 pmfeatureCNV$fid, cores = cores)
-        baselineArray <- affxparser::readCelIntensities(filenames[baseline], 
-                indices = pmfeatureCNV$fid)
+        baselineArray <- as.vector(affxparser::readCelIntensities(filenames[baseline], 
+                indices = pmfeatureCNV$fid))
         
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
         suppressWarnings(sfExport("normalizeAverage", namespace = "cn.farms"))
@@ -103,8 +103,12 @@ normalizeNpData <- function(
         
         cat(paste(Sys.time(), "|   Starting processing \n"))
         if (method == "quantiles") {
+            suppressWarnings(sfLibrary("preprocessCore", character.only = TRUE))
             res <- suppressWarnings(
                     sfLapply(1:nbrOfSamples, normalizeQuantilesNpH01))
+        } else if (method == "none") {
+            res <- suppressWarnings(
+                    sfLapply(1:nbrOfSamples, normalizeNoneDataH01))     
         } else {
             res <- suppressWarnings(
                     sfLapply(1:nbrOfSamples, normalizeNpDataH01))                
@@ -168,6 +172,27 @@ normalizeNpDataH01 <- function(i) {
     
     LZExprs <- affxparser::readCelIntensities(filenames[i], 
             indices = pmfeatureCNV$fid)
+    LZExprs <- normalizeAverage(LZExprs, baselineArray)
+    LZExprs <- log2(LZExprs)
+    intensity[, i] <- LZExprs
+}
+
+#' Helper function 
+#' @param i i
+#' @return data
+#' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
+#' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
+#' @importFrom affxparser readCelIntensities
+#' @noRd
+normalizeNoneDataH01 <- function(i) {
+    
+    ## non-visible bindings
+    filenames <- filenames
+    pmfeatureCNV <- pmfeatureCNV
+    baselineArray <- baselineArray
+    
+    LZExprs <- affxparser::readCelIntensities(filenames[i], 
+            indices = pmfeatureCNV$fid)
     #LZExprs <- normalizeAverage(LZExprs, baselineArray)
     LZExprs <- log2(LZExprs)
     intensity[, i] <- LZExprs
@@ -190,7 +215,7 @@ normalizeQuantilesNpH01 <- function(i) {
     
     tmpExprs <- affxparser::readCelIntensities(filenames[i], 
             indices = pmfeatureCNV$fid)
-#    intensity[, i] <- log2(preprocessCore::normalize.quantiles.use.target(
-#                    as.matrix(tmpExprs), baselineArray))
-    intensity[, i] <- log2(baselineArray[rank(tmpExprs)])
+    intensity[, i] <- log2(preprocessCore::normalize.quantiles.use.target(
+                    as.matrix(tmpExprs), baselineArray))
+#    intensity[, i] <- log2(baselineArray[rank(tmpExprs)])
 }

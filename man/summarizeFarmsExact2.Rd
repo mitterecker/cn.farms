@@ -1,8 +1,8 @@
-\name{summarizeFarmsExact}
-\alias{summarizeFarmsExact}
+\name{summarizeFarmsExact2}
+\alias{summarizeFarmsExact2}
 \title{Summarization Laplacian approach with exact computation}
 \usage{
-  summarizeFarmsExact(probes, mu = 1, weight = 0.001,
+  summarizeFarmsExact2(probes, mu = 1, weight = 0.5,
     weightSignal = 1, weightZ = 1, weightProbes = TRUE,
     cyc = c(10, 10), tol = 1e-05, weightType = "mean",
     centering = "median", rescale = FALSE,

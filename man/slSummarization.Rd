@@ -3,7 +3,7 @@
 \title{Method for computation of the single-locus summarization}
 \usage{
   slSummarization(object, summaryMethod = "Exact",
-    summaryParam,
+    summaryParam = list(),
     callParam = list(runtype = "ff", cores = 1),
     summaryWindow = c("std", "fragment"), returnValues,
     saveFile = "slData")
@@ -53,7 +53,7 @@ summaryParam$cyc <- c(10)
 slData <- slSummarization(normData,
         summaryMethod = summaryMethod,
         summaryParam = summaryParam)
-assayData(slData)$L_z[1:10, ]
+assayData(slData)$L_z[1:10, 1:10]
 
 summaryMethod <- "Gaussian"
 summaryParam <- list()
@@ -61,7 +61,7 @@ summaryParam$cyc <- c(10)
 slData <- slSummarization(normData,
         summaryMethod = summaryMethod,
         summaryParam = summaryParam)
-assayData(slData)$L_z[1:10, ]
+assayData(slData)$L_z[1:10, 1:10]
 
 summaryMethod <- "Exact"
 summaryParam <- list()
