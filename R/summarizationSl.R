@@ -62,6 +62,13 @@ slSummarization <- function(
         returnValues, 
         saveFile = "slData") {
     
+    if ("cores" %in% names(callParam) == FALSE) {
+        callParam$cores <- 1
+    } 
+    if ("runtype" %in% names(callParam) == FALSE) {
+        callParam$runtype <- "ff"
+    } 
+    
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
