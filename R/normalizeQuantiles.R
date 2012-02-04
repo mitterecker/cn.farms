@@ -69,7 +69,7 @@ normalizeQuantiles <- function (
         tmpExprs <- affxparser::readCelIntensities(filenames, 
                 indices = pmfeature$fid)
         tmpExprs <- (tmpExprs[idxOfAlleleA, ] + tmpExprs[idxOfAlleleB, ]) / 2
-        tmpExprs <- log(tmpExprs)
+        tmpExprs <- log2(tmpExprs)
         x <- preprocessCore::normalize.quantiles(tmpExprs)
         intensity[] <- x[]
         rm(x, tmpExprs)

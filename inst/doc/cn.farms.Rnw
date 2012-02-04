@@ -34,7 +34,7 @@ Linz\\Altenberger Str. 69, 4040 Linz, Austria\\
 \begin{document}
 
 << echo=FALSE,results=hide>>=
-options(width = 80)
+options(width=80)
 set.seed(0)
 library(cn.farms)
 farmsVers <- packageDescription("cn.farms")$Version
@@ -223,22 +223,22 @@ library(cn.farms)
 
 \begin{Sinput}
 > library("hapmapsnp6") 
-> celDir <- system.file("celFiles", package = "hapmapsnp6")
-> filenames <- dir(path = celDir, full.names = TRUE)
+> celDir <- system.file("celFiles", package="hapmapsnp6")
+> filenames <- dir(path=celDir, full.names=TRUE)
 \end{Sinput}
 
 \noindent  Next, the user specifies a working directory on the harddisk whereto save the results.
 
 \begin{Sinput}
 > workDir <- tempdir()
-> dir.create(workDir, showWarnings = FALSE, recursive = TRUE)
+> dir.create(workDir, showWarnings=FALSE, recursive=TRUE)
 > setwd(workDir)
 \end{Sinput}
 
 \noindent For reasons of computational time and memory consumption \Rpackage{cn.farms} supports high-performance computation. 
 The parameter  \verb+cores+ specifies number of CPUs requested for the cluster and  the parameter  \verb+runtype+
-indicates how the data matrix should be stored.   \verb+runtype = "ff"+ creates a transient flat-file which will not be saved automatically.
-Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be saved permanently.
+indicates how the data matrix should be stored.   \verb+runtype="ff"+ creates a transient flat-file which will not be saved automatically.
+Whereas  \verb+runtype="bm"+ creates a persistent flat-file which can be saved permanently.
 
 \begin{Sinput}
 > cores <- 2
@@ -248,25 +248,25 @@ Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be saved
 \noindent  Next, the user specifies a subdirectory whereto save the flat-files.
 
 \begin{Sinput}
-> dir.create("ffObjects/ff", showWarnings = FALSE, recursive = TRUE)
-> oligoClasses::ldPath(file.path(getwd(), "ffObjects"))
-> options(fftempdir = file.path(oligoClasses::ldPath(), "ff"))
+> dir.create("ffObjects/ff", showWarnings=FALSE, recursive=TRUE)
+> ldPath(file.path(getwd(), "ffObjects"))
+> options(fftempdir=file.path(ldPath(), "ff"))
 \end{Sinput}
 
-\noindent  The directory (\verb+celDir = "where/are/my/cel-files"+) which contain the cel-files has to be specified. 
+\noindent  The directory (\verb+celDir="where/are/my/cel-files"+) which contain the cel-files has to be specified. 
 
 \begin{Sinput}
-> celDir <- system.file("celFiles", package = "hapmapsnp6")
-> filenames <- dir(path = celDir, full.names = TRUE)
+> celDir <- system.file("celFiles", package="hapmapsnp6")
+> filenames <- dir(path=celDir, full.names=TRUE)
 \end{Sinput}
 
 \noindent The following step will create the annotation file.
 
 \begin{Sinput}
 > if(exists("annotDir")) {
->	createAnnotation(filenames = filenames, annotDir = annotDir)	
+>	createAnnotation(filenames=filenames, annotDir=annotDir)	
 > } else {
-> 	createAnnotation(filenames = filenames)
+> 	createAnnotation(filenames=filenames)
 > }
 \end{Sinput}
 
@@ -277,11 +277,11 @@ Whereas  \verb+runtype = "bm"+ creates a persistent flat-file which can be saved
 
 > ## normalization of SNP data
 > if(exists("annotDir")) {
-> 	normData <- normalizeCels(filenames, method = normMethod, cores, 
->			alleles = TRUE, annotDir = annotDir, runtype = runtype)
+> 	normData <- normalizeCels(filenames, method=normMethod, cores, 
+>			alleles=TRUE, annotDir=annotDir, runtype=runtype)
 > } else {
-> 	normData <- normalizeCels(filenames, method = normMethod, cores, 
->           alleles = TRUE, runtype = runtype)
+> 	normData <- normalizeCels(filenames, method=normMethod, cores, 
+>           alleles=TRUE, runtype=runtype)
 > }
 \end{Sinput}
 
@@ -294,13 +294,13 @@ or if the DNA probe loci are summarized separately (\verb+summaryWindow="std"+ i
 summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(10)
-callParam <- list(cores = cores, runtype = runtype)
+callParam <- list(cores=cores, runtype=runtype)
 
 slData <- slSummarization(normData, 
-		summaryMethod = summaryMethod, 
-		summaryParam = summaryParam,
-		callParam = callParam,
-		summaryWindow = "std")
+		summaryMethod=summaryMethod, 
+		summaryParam=summaryParam,
+		callParam=callParam,
+		summaryWindow="std")
 
 show(slData)
 assayData(slData)$intensity[1:10, 1:5] ## intensity values
@@ -312,16 +312,16 @@ assayData(slData)$L_z[1:10, 1:5] ## relative values
 
 \begin{Sinput}
 > if (exists("annotDir")) {
-	npData <- normalizeNpData(filenames, cores, annotDir = annotDir)	
+	npData <- normalizeNpData(filenames, cores, annotDir=annotDir)	
  } else {
-	npData <- normalizeNpData(filenames, cores, runtype = runtype)
+	npData <- normalizeNpData(filenames, cores, runtype=runtype)
  }
 \end{Sinput}
 
 \noindent This step combines non-polymorphic probes and single-locus summarized SNP-probes.
 
 << echo=TRUE>>=
-combData <- combineData(slData, npData, runtype = runtype)
+combData <- combineData(slData, npData, runtype=runtype)
 show(combData) 
 @
 
@@ -351,13 +351,13 @@ windowParam$overlap <- TRUE
 summaryMethod <- "Variational"
 summaryParam <- list()
 summaryParam$cyc <- c(20)
-callParam <- list(cores = cores, runtype = runtype)
+callParam <- list(cores=cores, runtype=runtype)
 mlData <- mlSummarization(slData, 
-		windowMethod  = windowMethod, 
-		windowParam   = windowParam, 
-		summaryMethod = summaryMethod, 
-		summaryParam  = summaryParam, 
-		callParam     = callParam)
+		windowMethod =windowMethod, 
+		windowParam  =windowParam, 
+		summaryMethod=summaryMethod, 
+		summaryParam =summaryParam, 
+		callParam    =callParam)
 names(assayData(mlData))
 assayData(mlData)$intensity[1:10, 1:5]
 assayData(mlData)$L_z[1:10, 1:5]
@@ -370,18 +370,18 @@ assayData(mlData)$L_z[1:10, 1:5]
 << echo=TRUE>>=
 colnames(assayData(mlData)$L_z) <- sampleNames(mlData)
 segments <- dnaCopySf(
-		x         = assayData(mlData)$L_z[, 1:10], 
-		chrom     = featureData(mlData)@data$chrom, 
-		maploc    = featureData(mlData)@data$start, 
-		cores     = cores, 
-		smoothing = FALSE)
-head(featureData(segments)@data)
+		x        =assayData(mlData)$L_z[, 1:10], 
+		chrom    =fData(mlData)$chrom, 
+		maploc   =fData(mlData)$start, 
+		cores    =cores, 
+		smoothing=FALSE)
+head(fData(segments))
 @
 
 \noindent To get further information, e.g. how to process Affymetrix 500K arrays, please check the followings demos.  
 
 \begin{Sinput}
-> demo(package = "cn.farms")
+> demo(package="cn.farms")
 
 Demos in package 'cn.farms':
 

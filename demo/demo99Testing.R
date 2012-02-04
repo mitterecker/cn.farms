@@ -1,6 +1,6 @@
 ## The examples from the man pages
 library(cn.farms)
-dontrun <- T
+dontrun <- TRUE
  
 ## combineData
 load(system.file("exampleData/normData.RData", package="cn.farms"))

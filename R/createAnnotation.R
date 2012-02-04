@@ -117,14 +117,14 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
         
         if (pkgname %in% c("pd.genomewidesnp.5", "pd.genomewidesnp.6")) {
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
-                            "dbsnp_rs_id", "chrom", "physical_pos", "allele_a",
-                            "allele_b")]
+                            "chrom", "physical_pos", "allele_a",
+                            "allele_b")] ## "dbsnp_rs_id" missing
         } else if (pkgname == "pd.cytogenetics.array") { 
             featureSet <- featureSetFull
         } else {
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
-                            "dbsnp_rs_id", "chrom", "physical_pos", "allele_a",
-                            "allele_b")]
+                            "chrom", "physical_pos", "allele_a",
+                            "allele_b")] ## "dbsnp_rs_id"
         }
         save(featureSet, file = file.path(annotDir, "featureSet.RData"))
         gc()
