@@ -1,7 +1,7 @@
 Package: cn.farms
 Title: cn.farms - Factor Analysis for copy number
     estimation
-Version: 1.7.0
+Version: 1.7.1
 Author: Andreas Mitterecker, Djork-Arne Clevert
 Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>
 Suggests:

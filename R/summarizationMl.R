@@ -1,16 +1,23 @@
-#' Does summarization
+#' Method for computation of the multi-loci summarization
 #' @param object an instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
 #' @param windowMethod Method for combination of neighbouring SNPs. 
 #' Possible values are Std and Bps.
 #' @param windowParam further parameters as the window size
 #' @param summaryMethod allowed versions for the summarization step are: 
 #' Gaussian, Variational, Exact. Default is Variational.
-#' @param summaryParam summaryParam
-#' @param callParam callParam
-#' @param returnValues List with return values. 
+#' @param summaryParam The parameters for the summaryMethod. Further information
+#' can be obtained via the according functions: 
+#' \code{\link[cn.farms:summarizeFarmsGaussian]{cn.farms}},
+#' \code{\link[cn.farms:summarizeFarmsVariational]{cn.farms}} or 
+#' \code{\link[cn.farms:summarizeFarmsExact]{cn.farms}}
+#' @param callParam Additional parameters for runtype (ff or bm) as well as 
+#' cores for parallelization.
+#' @param returnValues  List with return values. 
+#' For possible values see \code{\link[cn.farms:summaryMethod]{cn.farms}}.
 #' @param saveFile Name of the file to save.
 #' For possible values see summaryMethod.
-#' @return Some data
+#' @return Multi-loci summarized data of an instance of 
+#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @export

@@ -61,19 +61,19 @@ combineData <- function (
     colNamesNp <-  c("chrom", "start", "end", "man_fsetid")
     
     if (dataSnpType == "slData" & dataNpType == "npData") {
-        a <- featureData(object01)@data[, colNamesSnp]
-        b <- featureData(object02)@data[, colNamesNp]
+        a <- fData(object01)[, colNamesSnp]
+        b <- fData(object02)[, colNamesNp]
         colnames(b) <- colNamesSnp
     } else if (dataSnpType == "npData" & dataNpType == "slData") {
-        a <- featureData(object01)@data[, colNamesNp]
-        b <- featureData(object02)@data[, colNamesSnp]
+        a <- fData(object01)[, colNamesNp]
+        b <- fData(object02)[, colNamesSnp]
         colnames(a) <- colNamesSnp
     } else if (dataSnpType == "slData" & dataNpType == "slData") {
-        a <- featureData(object01)@data[, colNamesSnp]
-        b <- featureData(object02)@data[, colNamesSnp]
+        a <- fData(object01)[, colNamesSnp]
+        b <- fData(object02)[, colNamesSnp]
     }  else if (dataSnpType == "npData" & dataNpType == "npData") {
-        a <- featureData(object01)@data[, colNamesNp]
-        b <- featureData(object02)@data[, colNamesNp]
+        a <- fData(object01)[, colNamesNp]
+        b <- fData(object02)[, colNamesNp]
     } else {
         stop("Wrong input objects")
     }
@@ -90,8 +90,8 @@ combineData <- function (
     intensity <- createMatrix(runtype, nbrOfProbes, nbrOfSamples, 
             type = "double", bmName = gsub("\\.RData", "", saveFile))
     
-    intensity[which(idx <= cutoff), ] <- assayData(object01)[[obj01Var]][]
-    intensity[which(idx > cutoff), ] <- assayData(object02)[[obj02Var]][]
+    intensity[which(idx <= cutoff), ] <- as.matrix(assayData(object01)[[obj01Var]][])
+    intensity[which(idx > cutoff), ] <- as.matrix(assayData(object02)[[obj02Var]][])
     
     combData <- new("ExpressionSet")
     
@@ -113,7 +113,7 @@ combineData <- function (
     experimentData(combData)@other$type <- "combData"
     
     ## annotation
-    annotation(combData) <- annotation(object01)
+    ##annotation(combData) <- annotation(object01)
     
     if (runtype == "bm") {
         cat(paste(Sys.time(), "|   Saving normalized data \n"))

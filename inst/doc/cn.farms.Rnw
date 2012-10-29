@@ -33,7 +33,7 @@ Linz\\Altenberger Str. 69, 4040 Linz, Austria\\
 
 \begin{document}
 
-<< echo=FALSE,results=hide>>=
+<<echo=FALSE,results=hide>>=
 options(width=80)
 set.seed(0)
 library(cn.farms)
