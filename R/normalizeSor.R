@@ -18,7 +18,6 @@
 #' @importFrom oligo cleanPlatformName
 #' @importFrom snowfall sfInit
 #' @importFrom snowfall sfExport
-#' @importFrom snowfall sfLibrary
 #' @importFrom snowfall sfLapply
 #' @importFrom snowfall sfClusterEval
 #' @importFrom snowfall sfStop
@@ -70,9 +69,9 @@ normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE
                 type = "double", bmName = gsub("\\.rda", "", saveFile))        
     }
 
-    sfLibrary("cn.farms", character.only = TRUE, keep.source = FALSE)
-    sfLibrary("affxparser", character.only = TRUE, keep.source = FALSE)
-    sfLibrary("oligo", character.only = TRUE, keep.source = FALSE)
+    cnLibrary("cn.farms", character.only = TRUE)
+    cnLibrary("affxparser", character.only = TRUE)
+    cnLibrary("oligo", character.only = TRUE)
     
     suppressWarnings(
             sfExport(list = c(

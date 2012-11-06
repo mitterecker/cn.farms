@@ -88,10 +88,10 @@ normalizeQuantiles <- function (
         
         gc()
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")   
-        sfLibrary("cn.farms", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
-        sfLibrary("affxparser", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
-        sfLibrary("oligo", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
-        sfLibrary("preprocessCore", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+        cnLibrary("cn.farms", character.only = TRUE, verbose = FALSE)
+        cnLibrary("affxparser", character.only = TRUE, verbose = FALSE)
+        cnLibrary("oligo", character.only = TRUE, verbose = FALSE)
+        cnLibrary("preprocessCore", character.only = TRUE, verbose = FALSE)
         exportList <- c("fidTmp", "target", "idxOfAlleleA", 
                 "idxOfAlleleB", "intensity")
         suppressWarnings(sfExport(list = exportList))

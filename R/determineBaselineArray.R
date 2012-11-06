@@ -29,7 +29,7 @@ determineBaselineArray <- function(
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
     
-    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    cnLibrary("ff", character.only = TRUE, verbose = FALSE)
     suppressWarnings(sfExport("readCelIntensities", namespace = "affxparser"))
     suppressWarnings(sfExport("sampleFidIdx"))
     suppressWarnings(sfExport("intensityTmp"))

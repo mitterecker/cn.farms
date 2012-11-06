@@ -13,7 +13,6 @@
 #' @param callParam Additional parameters for runtype (ff or bm) as well as 
 #' cores for parallelization.
 #' @param returnValues  List with return values. 
-#' For possible values see \code{\link[cn.farms:summaryMethod]{cn.farms}}.
 #' @param saveFile Name of the file to save.
 #' For possible values see summaryMethod.
 #' @return Multi-loci summarized data of an instance of 

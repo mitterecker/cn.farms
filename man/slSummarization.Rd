@@ -29,8 +29,7 @@
   \item{summaryWindow}{Method for combination of the SNPs.
   Possible values are sl and fragment.}
 
-  \item{returnValues}{List with return values. For possible
-  values see summaryMethod.}
+  \item{returnValues}{List with return values.}
 
   \item{saveFile}{Name of the file to save.}
 }

@@ -103,7 +103,7 @@ normalizeNpData <- function(
         
         cat(paste(Sys.time(), "|   Starting processing \n"))
         if (method == "quantiles") {
-            suppressWarnings(sfLibrary("preprocessCore", character.only = TRUE))
+            suppressWarnings(cnLibrary("preprocessCore", character.only = TRUE))
             res <- suppressWarnings(
                     sfLapply(1:nbrOfSamples, normalizeQuantilesNpH01))
         } else if (method == "none") {

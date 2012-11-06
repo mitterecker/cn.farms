@@ -165,7 +165,7 @@ callSummarize <- function(
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")
     }
     
-    sfLibrary("cn.farms", character.only = TRUE, keep.source = FALSE)
+    cnLibrary("cn.farms", character.only = TRUE)
     suppressWarnings(sfExport("summarizeFarmsGaussian", namespace = "cn.farms"))
     suppressWarnings(sfExport("summarizeFarmsVariational", namespace = "cn.farms"))
     suppressWarnings(sfExport("summarizeFarmsExact", namespace = "cn.farms"))
@@ -186,17 +186,16 @@ callSummarize <- function(
         cat(paste(Sys.time(), " |   Summarizing batch ",
                         batches[i], " ... \n", sep = ""))
         sampleIndices <- which(batchList == batches[i])
-        res <- sfLapply(seq(nbrOfProbes), callSummarizeH01, sampleIndices, 
-                summaryMethod)
+        res <- suppressWarnings(sfLapply(seq(nbrOfProbes), callSummarizeH01, sampleIndices, 
+                summaryMethod))
     }
-    
-    sfStop()
-    
+
+    suppressWarnings(sfStop())
     result <- list()
     tmp <- paste("result <- list(",
             paste(paste(varNames[idxNames, 2], varNames[idxNames, 1], sep = "="), 
                     collapse = ", "), ")")
-    eval(parse(text = tmp))
+    suppressWarnings(eval(parse(text = tmp)))
     cat(paste(Sys.time(), " |   Summarization done \n", sep = ""))
     return(result)
 }

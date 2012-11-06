@@ -17,7 +17,6 @@
 #' @param summaryWindow Method for combination of the SNPs. Possible values are 
 #' sl and fragment.
 #' @param returnValues List with return values. 
-#' For possible values see \code{\link[cn.farms:summaryMethod]{cn.farms}}.
 #' @param saveFile Name of the file to save.
 #' @seealso \code{\link{summarizeFarmsExact}}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
@@ -114,8 +113,8 @@ slSummarization <- function(
             rm(x)
         } else {
             sfInit(parallel = TRUE, cpus = callParam$cores, type = "SOCK")
-            suppressWarnings(sfLibrary("Biobase", character.only = TRUE))
-            suppressWarnings(sfLibrary("ff", character.only = TRUE))
+            suppressWarnings(cnLibrary("Biobase", character.only = TRUE))
+            suppressWarnings(cnLibrary("ff", character.only = TRUE))
             suppressWarnings(sfExport("slRes"))
             sfClusterEval(open(slRes))
             suppressWarnings(sfExport("runIdx"))

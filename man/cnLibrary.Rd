@@ -1,0 +1,46 @@
+\name{cnLibrary}
+\alias{cnLibrary}
+\title{This function was taken from snowfall and edited due to some deprecated function calls.}
+\usage{
+  cnLibrary(package, pos = 2, lib.loc = NULL,
+    character.only = FALSE, warn.conflicts = TRUE,
+    keep.source = getOption("keep.source.pkgs"),
+    verbose = getOption("verbose"), version,
+    stopOnError = TRUE)
+}
+\arguments{
+  \item{package}{name of the package. Check 'library' for
+  details.}
+
+  \item{pos}{position in search path to load library.}
+
+  \item{lib.loc}{a character vector describing the location
+  of the R library trees to search through, or 'NULL'.
+  Check 'library' for details.}
+
+  \item{character.only}{a logical indicating package can be
+  assumed to be a character string. Check 'library' for
+  details.}
+
+  \item{warn.conflicts}{warn on conflicts (see "library").}
+
+  \item{keep.source}{DEPRECATED (see "library").}
+
+  \item{verbose}{enable verbose messages.}
+
+  \item{version}{version of library to load (see
+  "library").}
+
+  \item{stopOnError}{logical.}
+}
+\value{
+  for more information see "library".
+}
+\description{
+  This function was taken from snowfall and edited due to
+  some deprecated function calls.
+}
+\author{
+  snowfall
+}
+

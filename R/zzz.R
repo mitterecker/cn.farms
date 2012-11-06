@@ -33,11 +33,10 @@
 			"Homepage: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html","\n\n",
 			"cn.farms Package Version ", 
             utils::packageDescription("cn.farms")$Version, "\n")
-	#suppressMessages()
     
     pi <- utils::packageDescription(pkgname);
       packageStartupMessage(pkgname, " v", pi$Version, " (", 
-                pi$Date, ") successfully loaded. See ?", pkgname, " for help."); 
+                pi$Date, ") successfully loaded."); 
     
 }
 

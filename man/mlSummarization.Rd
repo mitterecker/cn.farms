@@ -1,6 +1,6 @@
 \name{mlSummarization}
 \alias{mlSummarization}
-\title{Does summarization}
+\title{Method for computation of the multi-loci summarization}
 \usage{
   mlSummarization(object, windowMethod, windowParam,
     summaryMethod, summaryParam,
@@ -20,9 +20,15 @@
   summarization step are: Gaussian, Variational, Exact.
   Default is Variational.}
 
-  \item{summaryParam}{summaryParam}
+  \item{summaryParam}{The parameters for the summaryMethod.
+  Further information can be obtained via the according
+  functions:
+  \code{\link[cn.farms:summarizeFarmsGaussian]{cn.farms}},
+  \code{\link[cn.farms:summarizeFarmsVariational]{cn.farms}}
+  or \code{\link[cn.farms:summarizeFarmsExact]{cn.farms}}}
 
-  \item{callParam}{callParam}
+  \item{callParam}{Additional parameters for runtype (ff or
+  bm) as well as cores for parallelization.}
 
   \item{returnValues}{List with return values.}
 
@@ -30,10 +36,11 @@
   values see summaryMethod.}
 }
 \value{
-  Some data
+  Multi-loci summarized data of an instance of
+  \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
 }
 \description{
-  Does summarization
+  Method for computation of the multi-loci summarization
 }
 \examples{
 load(system.file("exampleData/slData.RData", package = "cn.farms"))

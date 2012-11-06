@@ -4,7 +4,7 @@
 \usage{
   plotEvalIc(object, segments, chrom, variable, ylim,
     ylab = "CN indicator", stripCol = "lightgray",
-    regionCol = rgb(130, 0, 139, max = 255),
+    regionCol = rgb(130, 0, 139, maxColorValue = 255),
     pointSize = 0.75, pointType = 4,
     bandwidth = c(0.01, 1000), nbin = 100)
 }

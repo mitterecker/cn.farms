@@ -18,8 +18,9 @@ Description: This package implements the cn.FARMS algorithm
     snow and ff.
 biocViews: Microarray, Bioinformatics, CopyNumberVariants
 URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-Date: 2012-01-10
+Date: 2012-11-06
 Imports:
+    BiocGenerics,
     DBI,
     affxparser,
     oligo,
@@ -67,9 +68,9 @@ Collate:
     'windowFunctions.R'
     'windowMethods.R'
     'normalizeProbeSequence.R'
+    'snowfallExt.R'
     'summarizeFarmsLaplaceExact2.R'
     'summarizeFarmsLaplaceExact3.R'
     'normalizeNone.R'
     'utils-lds.R'
-    'vanillaIce.R'
     'zzz.R'

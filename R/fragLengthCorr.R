@@ -23,7 +23,7 @@ fragLengCorr <- function (
     saveFile <- gsub("\\.rda", "", saveFile)
     saveFile <- paste(saveFile, ".RData", sep = "")
     
-    normAdd <- normAdd(object@annotation)
+    normAdd <- normAdd(annotation(object))
     if (normAdd %in% c("Nsp", "Sty", "Hind240", "Xba240")) {
         saveFile <- paste(gsub("\\.RData", "", saveFile), 
                 normAdd, ".RData", sep = "")
@@ -129,8 +129,8 @@ flcStd <- function(y, fragmentLengths, targetFcn = NULL, subsetToFit = NULL,
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
     
-    sfLibrary("stats", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
-    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    cnLibrary("stats", character.only = TRUE, verbose = FALSE)
+    cnLibrary("ff", character.only = TRUE, verbose = FALSE)
     
     suppressWarnings(sfExport(list = c(
                             "nbrOfSamples", "nbrOfProbes", 
@@ -237,8 +237,8 @@ flcSnp6Std <- function(y, fragmentLengths, targetFcn = NULL,
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
     
-    sfLibrary("stats", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
-    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    cnLibrary("stats", character.only = TRUE, verbose = FALSE)
+    cnLibrary("ff", character.only = TRUE, verbose = FALSE)
     
     suppressWarnings(sfExport(list = c(
                             "nbrOfSamples", "nbrOfProbes", 

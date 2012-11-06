@@ -26,7 +26,7 @@
 #'         maploc    = fData(mlData)$start, 
 #'         cores     = 1, 
 #'         smoothing = FALSE)
-#' fData(segments)$data
+#' fData(segments)
 dnaCopySf <- function (x, chrom, maploc, cores = 1, smoothing, ...) {
     t00 <- Sys.time()
        
@@ -44,8 +44,8 @@ dnaCopySf <- function (x, chrom, maploc, cores = 1, smoothing, ...) {
         sfInit(parallel = TRUE, cpus = cores, type = "SOCK")        
     }
 
-    sfLibrary("ff", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
-    sfLibrary("DNAcopy", character.only = TRUE, verbose = FALSE, keep.source = FALSE)
+    cnLibrary("ff", character.only = TRUE, verbose = FALSE)
+    cnLibrary("DNAcopy", character.only = TRUE, verbose = FALSE)
     suppressWarnings(sfExport("x"))
     suppressWarnings(sfExport("chrom"))
     suppressWarnings(sfExport("maploc"))

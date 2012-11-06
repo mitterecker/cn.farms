@@ -39,7 +39,7 @@ segments <- dnaCopySf(
         maploc    = fData(mlData)$start,
         cores     = 1,
         smoothing = FALSE)
-fData(segments)$data
+fData(segments)
 }
 \author{
   Djork-Arne Clevert \email{okko@clevert.de} and Andreas
