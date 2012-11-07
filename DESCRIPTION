@@ -73,4 +73,5 @@ Collate:
     'summarizeFarmsLaplaceExact3.R'
     'normalizeNone.R'
     'utils-lds.R'
+    'vanillaIce.R'
     'zzz.R'
