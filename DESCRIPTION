@@ -1,7 +1,7 @@
 Package: cn.farms
-Title: cn.farms - Factor Analysis for copy number
+Title: cn.farms - factor analysis for copy number
     estimation
-Version: 1.7.1
+Version: 1.7.2
 Author: Andreas Mitterecker, Djork-Arne Clevert
 Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>
 Suggests:
@@ -33,7 +33,7 @@ Depends:
     methods,
     ff,
     oligoClasses,
-    snowfall
+    snow
 Collate:
     'callSummarize.R'
     'combineData.R'
@@ -73,5 +73,10 @@ Collate:
     'summarizeFarmsLaplaceExact3.R'
     'normalizeNone.R'
     'utils-lds.R'
-    'vanillaIce.R'
     'zzz.R'
+    'sFclusterFunctions.R'
+    'sFinit.R'
+    'sFsnowfall-internal.R'
+    'sFsnowWrappers.R'
+    'sFsocketRequest.R'
+    'vanillaIce.R'

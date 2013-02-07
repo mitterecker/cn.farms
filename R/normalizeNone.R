@@ -16,11 +16,6 @@
 #' @importMethodsFrom DBI dbGetQuery
 #' @importFrom affxparser readCelHeader
 #' @importFrom oligo cleanPlatformName
-#' @importFrom snowfall sfInit
-#' @importFrom snowfall sfExport
-#' @importFrom snowfall sfLapply
-#' @importFrom snowfall sfClusterEval
-#' @importFrom snowfall sfStop
 normalizeNone <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE, 
         runtype = "ff", cyc = 5, pkgname = NULL, saveFile = "Sor") {
     

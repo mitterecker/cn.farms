@@ -38,11 +38,9 @@
 #' @param verbose enable verbose messages.
 #' @param version version of library to load (see "library").
 #' @param stopOnError logical. 
-#' @author snowfall
+#' @author xxx
 #' @return for more information see "library".
 #' @export
-#' @importFrom snowfall sfCat
-#' @importFrom snowfall sfExport
 cnLibrary <- function( package,
     pos = 2,
     lib.loc = NULL,
@@ -52,7 +50,7 @@ cnLibrary <- function( package,
     verbose = getOption("verbose"),
     version,
     stopOnError = TRUE ) {
-  snowfall:::sfCheck();
+sfCheck();
   
   ## Generate (global) names list with all parameters.
 #  setVar( ".sfPars", list() )
@@ -110,12 +108,12 @@ cnLibrary <- function( package,
       sfPars$lib.loc <- absFilePath( sfPars$lib.loc )
         
     ## Export to namespace.
-    snowfall:::setVar( ".sfPars", sfPars )
+setVar( ".sfPars", sfPars )
     .sfPars <- sfPars
     
     ## Weird enough ".sfPars" need to be exported (else it would not be found
     ## on slave, although it is a parameter)
-    sfExport( ".sfPars", local=FALSE, namespace="snowfall" )
+    sfExport( ".sfPars", local=FALSE, namespace="cn.farms" )
     
     ## Load libs using require as Exception on nodes doesn't help us here.
     ## @todo Check on correct execution via logical.return
@@ -125,7 +123,7 @@ cnLibrary <- function( package,
     
     if( inherits( result, "try-error" ) ||
         ( length( result ) != sfCpus() ) ||
-        !all( snowfall:::checkTryErrorAny( result ) ) ||
+        !all( checkTryErrorAny( result ) ) ||
         !all( unlist( result ) ) ) {
       if( stopOnError )
         stop( paste( "Stop: error loading library on slave(s):",

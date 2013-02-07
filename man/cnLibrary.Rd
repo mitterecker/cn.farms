@@ -41,6 +41,6 @@
   some deprecated function calls.
 }
 \author{
-  snowfall
+  xxx
 }
 

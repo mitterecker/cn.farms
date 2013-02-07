@@ -3,7 +3,6 @@
 #    suppressMessages(library(ff, quietly = TRUE))
 #    suppressMessages(library(oligo, quietly = TRUE))
 #    suppressMessages(library(oligoClasses, quietly = TRUE))
-#    suppressMessages(library(snowfall, quietly = TRUE))
 #    suppressMessages(library(snow, quietly = TRUE))
 #    suppressMessages(library(DBI, quietly = TRUE))
 #    suppressMessages(library(affxparser, quietly = TRUE))

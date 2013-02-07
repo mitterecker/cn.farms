@@ -442,97 +442,6 @@ Alternatively you can use the function "dnaCopySf" from the cn.farms package.
 \section{Use case: SNP6 data}
 \begin{Sinput}
 > library(cn.farms)
-Loading required package: Biobase
-Loading required package: BiocGenerics
-
-Attaching package: ‘BiocGenerics’
-
-The following object(s) are masked from ‘package:stats’:
-
-    xtabs
-
-The following object(s) are masked from ‘package:base’:
-
-    anyDuplicated, cbind, colnames, duplicated, eval, Filter, Find,
-    get, intersect, lapply, Map, mapply, mget, order, paste, pmax,
-    pmax.int, pmin, pmin.int, Position, rbind, Reduce, rep.int,
-    rownames, sapply, setdiff, table, tapply, union, unique
-
-Welcome to Bioconductor
-
-    Vignettes contain introductory material; view with
-    'browseVignettes()'. To cite Bioconductor, see
-    'citation("Biobase")', and for packages 'citation("pkgname")'.
-
-Loading required package: ff
-Loading required package: tools
-Loading required package: bit
-Loading package bit 1.1-9
-package:bit (c) 2008-2012 Jens Oehlschlaegel (GPL-2)
-creators: bit bitwhich
-coercion: as.logical as.integer as.bit as.bitwhich which
-operator: ! & | xor != ==
-querying: print length any all min max range sum summary
-bit access: length<- [ [<- [[ [[<-
-for more help type ?bit
-
-Attaching package: ‘bit’
-
-The following object(s) are masked from ‘package:base’:
-
-    xor
-
-Loading package ff2.2-9
-- getOption("fftempdir")=="/tmp/RtmpdDq8c4"
-
-- getOption("ffextension")=="ff"
-
-- getOption("ffdrop")==TRUE
-
-- getOption("fffinonexit")==TRUE
-
-- getOption("ffpagesize")==65536
-
-- getOption("ffcaching")=="mmnoflush"  -- consider "ffeachflush" if your system stalls on large writes
-
-- getOption("ffbatchbytes")==16777216 -- consider a different value for tuning your system
-
-- getOption("ffmaxbytes")==536870912 -- consider a different value for tuning your system
-
-Attaching package ff
-
-Attaching package: ‘ff’
-
-The following object(s) are masked from ‘package:utils’:
-
-    write.csv, write.csv2
-
-The following object(s) are masked from ‘package:base’:
-
-    is.factor, is.ordered
-
-Loading required package: oligoClasses
-Welcome to oligoClasses version 1.20.0
-Loading required package: snowfall
-Loading required package: snow
-               _                                
-              | |                               
- __   _  _    | |  __,   ,_    _  _  _    ,     
-/    / |/ |   |/  /  |  /  |  / |/ |/ |  / \_  
-\___/  |  |_/o|__/\_/|_/   |_/  |  |  |_/ \/ 
-              |\                               
-              |/                                
-
-Citation: D.-A. Clevert et al.,
-cn.FARMS: a latent variable model to detect copy number variations in microarray data with a low false discovery rate
-Nucleic Acids Research, 2011.
-BibTex: enter 'toBibtex(citation("cn.farms"))'
-
-Homepage: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-
-cn.farms Package Version 1.7.0
-
-cn.farms v1.7.0 (2012-10-29) successfully loaded. See ?cn.farms for help.
 > 
 > ## load test data
 > library("hapmap500knsp")
@@ -605,17 +514,6 @@ Welcome to oligo version 1.22.0
 2012-11-06 09:59:51 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
 R Version:  R version 2.15.2 (2012-10-26) 
 
-snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
-
-Library cn.farms loaded.
-Library cn.farms loaded in cluster.
-
-Library affxparser loaded.
-Library affxparser loaded in cluster.
-
-Library oligo loaded.
-Library oligo loaded in cluster.
-
 2012-11-06 10:00:04 |   Starting normalization 
 2012-11-06 10:00:17 |   Normalization done 
 
@@ -625,17 +523,6 @@ Stopping cluster
 > normDataSty <- normalizeCels(filenames=celFiles$STY, 
 +         method=normMethod, cores=cores, runtype=runtype)
 2012-11-06 10:00:19 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
-snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
-
-Library cn.farms loaded.
-Library cn.farms loaded in cluster.
-
-Library affxparser loaded.
-Library affxparser loaded in cluster.
-
-Library oligo loaded.
-Library oligo loaded in cluster.
-
 2012-11-06 10:00:31 |   Starting normalization 
 2012-11-06 10:00:44 |   Normalization done 
 
@@ -657,7 +544,6 @@ Stopping cluster
 +         summaryWindow="std")
 2012-11-06 10:00:47 |   Starting summarization 
 2012-11-06 10:00:47 |   Computations will take some time, please be patient 
-snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
@@ -676,7 +562,6 @@ Time difference of 12.97855 mins
 +         summaryWindow="std")
 2012-11-06 10:13:47 |   Starting summarization 
 2012-11-06 10:13:47 |   Computations will take some time, please be patient 
-snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
@@ -725,7 +610,6 @@ Time difference of 11.87153 mins
 Slot intensity of assayData is used
 2012-11-06 10:25:42 |   Starting summarization 
 2012-11-06 10:25:42 |   Computations will take some time, please be patient 
-snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
@@ -751,97 +635,6 @@ Stopping cluster
 
 \begin{Sinput}
 > library(cn.farms)
-Loading required package: Biobase
-Loading required package: BiocGenerics
-
-Attaching package: ‘BiocGenerics’
-
-The following object(s) are masked from ‘package:stats’:
-
-    xtabs
-
-The following object(s) are masked from ‘package:base’:
-
-    anyDuplicated, cbind, colnames, duplicated, eval, Filter, Find,
-    get, intersect, lapply, Map, mapply, mget, order, paste, pmax,
-    pmax.int, pmin, pmin.int, Position, rbind, Reduce, rep.int,
-    rownames, sapply, setdiff, table, tapply, union, unique
-
-Welcome to Bioconductor
-
-    Vignettes contain introductory material; view with
-    'browseVignettes()'. To cite Bioconductor, see
-    'citation("Biobase")', and for packages 'citation("pkgname")'.
-
-Loading required package: ff
-Loading required package: tools
-Loading required package: bit
-Loading package bit 1.1-9
-package:bit (c) 2008-2012 Jens Oehlschlaegel (GPL-2)
-creators: bit bitwhich
-coercion: as.logical as.integer as.bit as.bitwhich which
-operator: ! & | xor != ==
-querying: print length any all min max range sum summary
-bit access: length<- [ [<- [[ [[<-
-for more help type ?bit
-
-Attaching package: ‘bit’
-
-The following object(s) are masked from ‘package:base’:
-
-    xor
-
-Loading package ff2.2-9
-- getOption("fftempdir")=="/tmp/RtmpdDq8c4"
-
-- getOption("ffextension")=="ff"
-
-- getOption("ffdrop")==TRUE
-
-- getOption("fffinonexit")==TRUE
-
-- getOption("ffpagesize")==65536
-
-- getOption("ffcaching")=="mmnoflush"  -- consider "ffeachflush" if your system stalls on large writes
-
-- getOption("ffbatchbytes")==16777216 -- consider a different value for tuning your system
-
-- getOption("ffmaxbytes")==536870912 -- consider a different value for tuning your system
-
-Attaching package ff
-
-Attaching package: ‘ff’
-
-The following object(s) are masked from ‘package:utils’:
-
-    write.csv, write.csv2
-
-The following object(s) are masked from ‘package:base’:
-
-    is.factor, is.ordered
-
-Loading required package: oligoClasses
-Welcome to oligoClasses version 1.20.0
-Loading required package: snowfall
-Loading required package: snow
-               _                                
-              | |                               
- __   _  _    | |  __,   ,_    _  _  _    ,     
-/    / |/ |   |/  /  |  /  |  / |/ |/ |  / \_  
-\___/  |  |_/o|__/\_/|_/   |_/  |  |  |_/ \/ 
-              |\                               
-              |/                                
-
-Citation: D.-A. Clevert et al.,
-cn.FARMS: a latent variable model to detect copy number variations in microarray data with a low false discovery rate
-Nucleic Acids Research, 2011.
-BibTex: enter 'toBibtex(citation("cn.farms"))'
-
-Homepage: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-
-cn.farms Package Version 1.7.0
-
-cn.farms v1.7.0 (2012-10-29) successfully loaded. See ?cn.farms for help.
 > 
 > ## load test data
 > library("hapmap500knsp")

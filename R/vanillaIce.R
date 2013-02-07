@@ -7,7 +7,7 @@
 ## @importFrom VanillaICE hmm.setup
 ## @importFrom VanillaICE cnEmission
 ## @export
-
+NULL
 
 #' Postprocessing of summarized data with VanillaICE
 #' @param mlData data from cn.farms
