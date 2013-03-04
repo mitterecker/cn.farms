@@ -923,7 +923,7 @@ sfTest <- function() {
 
     ## Find path of the installed cn.farms Package.
     res <- NULL
-    res <- try( .find.package( "cn.farms" ) )
+    res <- try( find.package( "cn.farms" ) )
 
     if( inherits( res, "try-error" ) )
       return( c( FALSE, paste( "Exception: cannot locate package cn.farms.",
