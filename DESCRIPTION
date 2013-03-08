@@ -1,7 +1,7 @@
 Package: cn.farms
 Title: cn.farms - factor analysis for copy number
     estimation
-Version: 1.7.3
+Version: 1.7.4
 Author: Andreas Mitterecker, Djork-Arne Clevert
 Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>
 Suggests:
@@ -18,7 +18,7 @@ Description: This package implements the cn.FARMS algorithm
     snow and ff.
 biocViews: Microarray, Bioinformatics, CopyNumberVariants
 URL: http://www.bioinf.jku.at/software/cnfarms/cnfarms.html
-Date: 2012-11-06
+Date: 2013-03-08
 Imports:
     BiocGenerics,
     DBI,
