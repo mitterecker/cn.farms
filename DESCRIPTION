@@ -1,6 +1,6 @@
 Package: cn.farms
 Title: cn.farms - factor analysis for copy number estimation
-Version: 1.11.1
+Version: 1.12.0
 Author: Andreas Mitterecker, Djork-Arne Clevert
 Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>
 Suggests: pd.mapping250k.sty, pd.mapping250k.nsp, pd.genomewidesnp.5,
