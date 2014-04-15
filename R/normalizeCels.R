@@ -63,7 +63,7 @@ normalizeCels <- function (
         load(saveFile)
         return(normData)
     }
-    
+
     normData <- switch(method, 
             SOR = normalizeSor(filenames = filenames, cores = cores, 
                     alleles = alleles, runtype = runtype, annotDir = annotDir, 

@@ -33,11 +33,12 @@ Linz\\Altenberger Str. 69, 4040 Linz, Austria\\
 \SweaveOpts{eps=FALSE}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 
 <<echo=FALSE,results=hide>>=
 options(width=80)
 set.seed(0)
-library(cn.farms)
+require(cn.farms)
 farmsVers <- packageDescription("cn.farms")$Version
 
 ##  toy-data which is used for testing the vignette
@@ -214,7 +215,7 @@ The following example was created by a very small subset of the HapMap data set.
 
 As usual, it is necessary to load the \Rpackage{cn.farms} package:
 \begin{Sinput}
-library(cn.farms)
+require(cn.farms)
 \end{Sinput}
 
 \subsection{Quick start : Process SNP 6.0 array}
@@ -222,12 +223,12 @@ library(cn.farms)
 \noindent The \Rpackage{hapmapsnp6} package is loaded for testing purpose.
 
 \begin{Sinput}
-> library("hapmapsnp6") 
+> require("hapmapsnp6") 
 > celDir <- system.file("celFiles", package="hapmapsnp6")
 > filenames <- dir(path=celDir, full.names=TRUE)
 \end{Sinput}
 
-\noindent  Next, the user specifies a working directory on the harddisk whereto save the results.
+\noindent  Next, the user specifies a working directory on the harddisk where to save the results.
 
 \begin{Sinput}
 > workDir <- tempdir()
@@ -237,7 +238,7 @@ library(cn.farms)
 
 \noindent For reasons of computational time and memory consumption \Rpackage{cn.farms} supports high-performance computation. 
 The parameter  \verb+cores+ specifies number of CPUs requested for the cluster and  the parameter  \verb+runtype+
-indicates how the data matrix should be stored.   \verb+runtype="ff"+ creates a transient flat-file which will not be saved automatically.
+indicates how the data matrix should be stored. \verb+runtype="ff"+ creates a transient flat-file which will not be saved automatically.
 Whereas  \verb+runtype="bm"+ creates a persistent flat-file which can be saved permanently.
 
 \begin{Sinput}
@@ -303,8 +304,8 @@ slData <- slSummarization(normData,
 		summaryWindow="std")
 
 show(slData)
-assayData(slData)$intensity[1:10, 1:5] ## intensity values
-assayData(slData)$L_z[1:10, 1:5] ## relative values
+assayData(slData)$intensity[1:6, 1:5] ## intensity values
+assayData(slData)$L_z[1:6, 1:5] ## relative values
 @
 
 
@@ -359,15 +360,15 @@ mlData <- mlSummarization(slData,
 		summaryParam =summaryParam, 
 		callParam    =callParam)
 names(assayData(mlData))
-assayData(mlData)$intensity[1:10, 1:5]
-assayData(mlData)$L_z[1:10, 1:5]
+assayData(mlData)$intensity[1:6, 1:5]
+assayData(mlData)$L_z[1:6, 1:5]
 @
 
 \noindent Next, the summarized data will be segmented in order to identify break points. Therefore we provide a parallelized version of
 \Rpackage{DNAcopy}. 
 
 
-<< echo=TRUE>>=
+<<echo=TRUE>>=
 colnames(assayData(mlData)$L_z) <- sampleNames(mlData)
 segments <- dnaCopySf(
 		x        =assayData(mlData)$L_z[, 1:10], 
@@ -400,9 +401,9 @@ demo05Testing         Run the examples
 This shows the segmentation with fastseg:
 
 \begin{Sinput}
-library(cn.farms)
-library(parallel)
-library(fastseg)
+require(cn.farms)
+require(parallel)
+require(fastseg)
 
 ## set cores
 myCores <- 8
@@ -417,7 +418,7 @@ for (chrom in 22:1) {
   z2 <- assayData(combDataTmp)$intensity
   
   cl <- makeCluster(getOption("cl.cores", myCores))
-  clusterEvalQ(cl, { library(fastseg) })
+  clusterEvalQ(cl, { require(fastseg) })
   system.time(segRes <- parCapply(cl, as.matrix(z2), fastseg, type=1, alpha=50, minSeg=3))
   stopCluster(cl)
   
@@ -439,12 +440,17 @@ for (chrom in 22:1) {
 
 Alternatively you can use the function "dnaCopySf" from the cn.farms package.
 
+\section{Annotation and supported platforms}
+The \Rpackage{cn.farms} package works with per default works with 250K/500K and SNP6 arrays from Affymetrix. Anyway the package also works with the most recent CytoscanHD array, where you can find the annotation file on our homepage \texttt{\href{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}}.
+
+
+
 \section{Use case: SNP6 data}
 \begin{Sinput}
-> library(cn.farms)
+> require(cn.farms)
 > 
 > ## load test data
-> library("hapmap500knsp")
+> require("hapmap500knsp")
 /-------------------------------------------\
 |         SAMPLE HAPMAP 500K NSP            |
 |-------------------------------------------|
@@ -457,7 +463,7 @@ Alternatively you can use the function "dnaCopySf" from the cn.farms package.
 | in good faith and the maintainer does not |
 | warrant their accuracy.                   |
 \-------------------------------------------/
-> library("hapmap500ksty")
+> require("hapmap500ksty")
 /-------------------------------------------\
 |         SAMPLE HAPMAP 500K STY            |
 |-------------------------------------------|
@@ -634,10 +640,10 @@ Stopping cluster
 \section{Use case: 250K/500K arrays}
 
 \begin{Sinput}
-> library(cn.farms)
+> require(cn.farms)
 > 
 > ## load test data
-> library("hapmap500knsp")
+> require("hapmap500knsp")
 /-------------------------------------------\
 |         SAMPLE HAPMAP 500K NSP            |
 |-------------------------------------------|
@@ -650,7 +656,7 @@ Stopping cluster
 | in good faith and the maintainer does not |
 | warrant their accuracy.                   |
 \-------------------------------------------/
-> library("hapmap500ksty")
+> require("hapmap500ksty")
 /-------------------------------------------\
 |         SAMPLE HAPMAP 500K STY            |
 |-------------------------------------------|

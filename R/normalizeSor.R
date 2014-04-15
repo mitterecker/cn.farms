@@ -18,7 +18,7 @@
 #' @importFrom oligo cleanPlatformName
 normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE, 
         runtype = "ff", cyc = 5, pkgname = NULL, saveFile = "Sor") {
-    
+
     ## assure correct file extension
     saveFile <- gsub("\\.RData", "", saveFile)
     saveFile <- gsub("\\.rda", "", saveFile)
@@ -34,8 +34,7 @@ normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE
         annotDir <- normalizePath(file.path("annotation", pkgname, vers))
     }
     
-    cat(paste(Sys.time(), "|   Annotation directory: ", 
-                    annotDir, " \n"))
+    cat(paste(Sys.time(), "|   Annotation directory: ", annotDir, " \n"))
     
     normFile <- file.path(annotDir, "annotNormalization.RData")
     if(file.exists(normFile)) {
@@ -44,7 +43,7 @@ normalizeSor <- function (filenames, cores = 1, annotDir = NULL, alleles = FALSE
     } else {
         stop("Something went wrong with the annotation")
     }    
-    
+    browser()
     if (cores == 1) {
         sfInit(parallel = FALSE)
     } else {

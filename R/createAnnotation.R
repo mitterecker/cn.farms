@@ -90,7 +90,8 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
             "pd.genomewidesnp.6", 
             "pd.mapping250k.nsp", 
             "pd.mapping250k.sty", 
-            "pd.cytogenetics.array")
+            "pd.cytogenetics.array", 
+            "pd.cytoscanhd.array")
     
     if (!(pkgname %in% knownPackages)) {
         stop("Unknown annotation")
@@ -99,7 +100,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
                         pkgname, version, " \n"))
         cat(paste(Sys.time(), "|   Annotation will be saved in", 
                         annotDir, " \n"))
-        
+
         ## featureSet
         sql <- "SELECT * FROM featureSet"
         tmp <- DBI::dbGetQuery(oligoClasses::db(get(pkgname)), sql)
@@ -107,7 +108,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
         idx <- !is.na(tmp$chrom)
         tmp <- tmp[idx, ]
         
-        if (pkgname == "pd.cytogenetics.array") {
+        if (pkgname == "pd.cytogenetics.array" || pkgname == "pd.cytoscanhd.array") {
             tmp$physical_pos <- tmp$position
             tmp$position <- NULL
         }
@@ -119,7 +120,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
                             "chrom", "physical_pos", "allele_a",
                             "allele_b")] ## "dbsnp_rs_id" missing
-        } else if (pkgname == "pd.cytogenetics.array") { 
+        } else if (pkgname == "pd.cytogenetics.array" || pkgname == "pd.cytoscanhd.array") { 
             featureSet <- featureSetFull
         } else {
             featureSet <- featureSetFull[, c("fsetid", "man_fsetid",  
@@ -141,7 +142,8 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
         gc()
         
         ## sequence
-        if (pkgname != "pd.cytogenetics.array") {
+        
+        if (!(pkgname %in% c("pd.cytogenetics.array", "pd.cytoscanhd.array"))) {
             sql <- "SELECT * FROM sequence"    
             sequence <- DBI::dbGetQuery(db(get(pkgname)), sql)
             save(sequence, file = file.path(annotDir, "sequence.RData"))
@@ -153,7 +155,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
         
         ## available only for newer Affymetrix arrays
         if (pkgname %in% c("pd.genomewidesnp.5", "pd.genomewidesnp.6", 
-                "pd.cytogenetics.array")) {
+                "pd.cytogenetics.array", "pd.cytoscanhd.array")) {
             
             ## featureSetCNV
             sql <- "SELECT * FROM featureSetCNV"
@@ -162,7 +164,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
             idx <- !is.na(tmp$chrom)
             tmp <- tmp[idx, ]
             
-            if (pkgname == "pd.cytogenetics.array") {
+            if (pkgname %in% c("pd.cytogenetics.array", "pd.cytoscanhd.array")) {
                 tmp$chrom_start <- tmp$position
                 tmp$chrom_stop <- tmp$position
                 tmp$position <- NULL
@@ -171,7 +173,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
             featureSetCNVFull <- tmp[order(tmp$chrom, 
                             tmp$chrom_start, tmp$fsetid), ]
             
-            if (pkgname == "pd.cytogenetics.array") { 
+            if (pkgname %in% c("pd.cytogenetics.array", "pd.cytoscanhd.array")) { 
                 featureSetCNV <- featureSetCNVFull
             } else {
                 featureSetCNV <- featureSetCNVFull[, c("fsetid", "man_fsetid", 
@@ -192,7 +194,7 @@ createAnnotation <- function(filenames = NULL, annotation = NULL,
             rm(idxTmp, idx, pmfeatureCNVTmp)
             gc()
             
-            if (pkgname != "pd.cytogenetics.array") {
+            if (!(pkgname %in% c("pd.cytogenetics.array", "pd.cytoscanhd.array"))) {
                 sql <- "SELECT * FROM sequenceCNV"    
                 sequenceCNV <- DBI::dbGetQuery(db(get(pkgname)), sql)
                 save(sequenceCNV, file = file.path(annotDir, "sequenceCNV.RData"))
