@@ -36,17 +36,17 @@ Linz\\Altenberger Str. 69, 4040 Linz, Austria\\
 \SweaveOpts{concordance=TRUE}
 
 <<echo=FALSE,results=hide>>=
-options(width=80)
+options(width = 80)
 set.seed(0)
 require(cn.farms)
 farmsVers <- packageDescription("cn.farms")$Version
 
 ##  toy-data which is used for testing the vignette
-load(system.file("exampleData/normData.RData", package="cn.farms"))
-load(system.file("exampleData/slData.RData", package="cn.farms"))
+load(system.file("exampleData/normData.RData", package = "cn.farms"))
+load(system.file("exampleData/slData.RData", package = "cn.farms"))
 notes(experimentData(normData))$annotDir <- 
 		system.file("exampleData/annotation/pd.genomewidesnp.6/1.1.0",
-				package="cn.farms")
+				package = "cn.farms")
 cores <- 1
 runtype <- "ff"
 npData <- slData
@@ -64,145 +64,53 @@ npData <- slData
 \setlength{\parskip}{\auxparskip}
 \section{Introduction}
 
-The \Rpackage{cn.farms} package provides 
-a novel copy number variation (CNV) detection method, called ``cn.FARMS'', 
-which is based on our FARMS (``factor analysis for robust microarray
-summarization'' \citep{Hochreiter:06}) algorithm. 
-FARMS is since 2006 the leading summarization 
-method of the international ``affycomp'' competition if sensitivity 
-and specificity are considered simultaneously. 
-We extended FARMS to cn.FARMS \citep{Clevert:11}
-for detecting CNVs by moving from mRNA copy numbers to
-DNA copy numbers.\\
-In the following section we will briefly describe the algorithm and provide
-a quick start guide.
-For further information regarding the algorithm and its assessment 
-see the \Rpackage{cn.farms} homepage at
-\href{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}.
+The \Rpackage{cn.farms} package provides a novel copy number variation (CNV) detection method, called ``cn.FARMS'', which is based on our FARMS (``factor analysis for robust microarray summarization'' \citep{Hochreiter:06}) algorithm. 
+FARMS is since 2006 the leading summarization method of the international ``affycomp'' competition if sensitivity and specificity are considered simultaneously. 
+We extended FARMS to cn.FARMS \citep{Clevert:11} for detecting CNVs by moving from mRNA copy numbers to DNA copy numbers.\\
+In the following section we will briefly describe the algorithm and provide a quick start guide. For further information regarding the algorithm and its assessment 
+see the \Rpackage{cn.farms} homepage at \texttt{\href{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}{http://www.bioinf.jku.at/software/cnfarms/cnfarms.html}}.
 
 \section{cn.FARMS: FARMS for CNV Detection}
 \label{sec:farmspipeline}
-cn.FARMS is described ``in a nutshell''  by the preprocessing pipeline depicted
-in Figure \ref{fig:preprocess_chain_fig}:\linebreak
-{\bf (1) Normalization} is performed at two levels.
-It has as {\em input} the raw probe intensity values and
-as {\em output} intensity values at chromosome locations
-which are leveled between arrays and are allele independent.
-At the {\em first level} normalization methods 
-remove technical variations between arrays arising from 
-differences in sample preparation or labeling, 
-array production (e.g.\ batch effects), or scanning differences.
-The goal of the first level is to correct for array-wide effects.
-At the {\em second level} alleles are combined to one intensity
-value at a chromosome location and a correction for
-cross-hybridization between allele A and allele B probes is
-performed.
-Cross-hybridization arise due to close 
-sequence similarity between the probes of different alleles, therefore a
-probe of one allele picks up a signal of the other allele.
-The optional corrections for differences in
-PCR yield can be performed at this step or after ``single-locus
-modeling''.
+cn.FARMS is described ``in a nutshell'' by the preprocessing pipeline depicted in Figure \ref{fig:preprocess_chain_fig}:\linebreak {\bf (1) Normalization} is performed at two levels. It has as {\em input} the raw probe intensity values and
+as {\em output} intensity values at chromosome locations which are leveled between arrays and are allele independent. At the {\em first level} normalization methods 
+remove technical variations between arrays arising from differences in sample preparation or labeling, array production (e.g.\ batch effects), or scanning differences.
+The goal of the first level is to correct for array-wide effects. At the {\em second level} alleles are combined to one intensity value at a chromosome location and a correction for cross-hybridization between allele A and allele B probes is
+performed. Cross-hybridization arise due to close sequence similarity between the probes of different alleles, therefore a probe of one allele picks up a signal of the other allele. The optional corrections for differences in PCR yield can be performed at this step or after ``single-locus modeling''.
 \begin{figure}[!b]
 \begin{center}
 \includegraphics[angle=0,width=0.99\textwidth]{figures/figure2}
 \caption{Copy number analysis for (Affymetrix) DNA genotyping arrays
-as a three-step pipeline: (1) Normalization, (2) Modeling, and (3) Segmentation.
-Modeling is divided into ``single-locus modeling'' and ``multi-loci
-modeling'' with ``fragment length
-correction'' as an optional intermediate step. 
-The cn.FARMS pipeline is: normalization by sparse
-overcomplete representation, single-locus modeling by FARMS, fragment length
-correction, and multi-loci modeling by FARMS. 
+as a three-step pipeline: (1) Normalization, (2) Modeling, and (3) Segmentation. Modeling is divided into ``single-locus modeling'' and ``multi-loci modeling'' with ``fragment length correction'' as an optional intermediate step. The cn.FARMS pipeline is: normalization by sparse overcomplete representation, single-locus modeling by FARMS, fragment length correction, and multi-loci modeling by FARMS. 
 \label{fig:preprocess_chain_fig}}
 \end{center}
 \end{figure} 
-We propose sparse overcomplete representation in the two-dimensional 
-space of allele A and B intensity to correct for cross-hybridization between 
-allele A and allele B probes. Therefore we do not only estimate the AA and the BB
-cross-hybridization like CRMA \citep{Bengtsson:08} but also the AB cross-hybridization. The
-latter takes into account that hybridization and cross-hybridization
-may be different for the AB genotype, where for both allele probes 
-target fragments are available and compete for hybridization. 
-After allele correction, we follow CRMA and normalize by scaling the probes
-to a pre-specified mean intensity value. CNV probes which have only one
-allele are scaled in the same way. \linebreak 
-{\bf(2) Modeling} is also performed at two levels.
-The {\em input} is the probe intensity values which 
-independently measure the copy number of a specific target fragment or
-DNA probe locus.
-The {\em output} is an estimate for the region copy number.
-At the {\em first level}, ``single-locus modeling'' the probes which
-measure the same fragment are combined to a raw fragment copy number (``raw''
-means that the copy number is still a continuous values) --- 
-see Figure~\ref{fig:meta_probeset_fig}. These raw fragment
-  copy numbers are estimated by FARMS. 
-The original FARMS was designed to
-summarize probes which target the same mRNA. This can readily
-transfered to CNV analysis where FARMS now summarizes probes which
-target the same DNA fragment. Either both strands can be
-summarized together or separately where our default is the former.
-\cite{Nannya:05} suggested considering
-fragment characteristics  like sequence patterns and the length because
-they affect PCR amplification.
-For example, PCR is usually less efficient for  
-longer fragments, which lead to fewer copies to hybridize and
-result in weaker probe intensities.
-Following these suggestions cn.FARMS performs an optional intermediate 
-level to correct for the fragment length and sequence features to  
-make raw fragment copy numbers comparable along the
-chromosome.
-At the {\em second level}, ``multi-loci modeling'', the raw copy numbers
-of neighboring fragments or neighboring  DNA probe loci
-are combined to a ``meta-probe set'' which
+We propose sparse overcomplete representation in the two-dimensional space of allele A and B intensity to correct for cross-hybridization between allele A and allele B probes. Therefore we do not only estimate the AA and the BB cross-hybridization like CRMA \citep{Bengtsson:08} but also the AB cross-hybridization. The latter takes into account that hybridization and cross-hybridization may be different for the AB genotype, where for both allele probes target fragments are available and compete for hybridization. After allele correction, we follow CRMA and normalize by scaling the probes to a pre-specified mean intensity value. CNV probes which have only one allele are scaled in the same way. \linebreak 
+{\bf(2) Modeling} is also performed at two levels. The {\em input} is the probe intensity values which independently measure the copy number of a specific target fragment or DNA probe locus. The {\em output} is an estimate for the region copy number. At the {\em first level}, ``single-locus modeling'' the probes which measure the same fragment are combined to a raw fragment copy number (``raw'' means that the copy number is still a continuous values) ---see Figure~\ref{fig:meta_probeset_fig}. These raw fragment copy numbers are estimated by FARMS. The original FARMS was designed to
+summarize probes which target the same mRNA. This can readily transfered to CNV analysis where FARMS now summarizes probes which target the same DNA fragment. Either both strands can be summarized together or separately where our default is the former.\cite{Nannya:05} suggested considering fragment characteristics  like sequence patterns and the length because they affect PCR amplification. For example, PCR is usually less efficient for longer fragments, which lead to fewer copies to hybridize and result in weaker probe intensities.
+Following these suggestions cn.FARMS performs an optional intermediate level to correct for the fragment length and sequence features to make raw fragment copy numbers comparable along the chromosome.
+At the {\em second level}, ``multi-loci modeling'', the raw copy numbers of neighboring fragments or neighboring  DNA probe loci are combined to a ``meta-probe set'' which
 targets a DNA region. 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[angle=0,width= 0.75\columnwidth]{figures/figure1}
 \caption{The copy number hierarchy
-probes-fragment-region. Fragment copy numbers serve as  
-meta-probes used for ``multi-loci modeling'' which yields region copy numbers.
-Inner boxes: The probes which target a fragment (often at a SNP
-  position) are single-locus summarized to a raw copy number of this fragment.
-Note, that instead of fragments a DNA probe loci can be summarized. Outer box: The
-  raw fragment copy numbers are the meta-probes for a DNA
-  region and are multi-loci summarized to a raw region copy number.
+probes-fragment-region. Fragment copy numbers serve as meta-probes used for ``multi-loci modeling'' which yields region copy numbers. Inner boxes: The probes which target a fragment (often at a SNP position) are single-locus summarized to a raw copy number of this fragment. Note, that instead of fragments a DNA probe loci can be summarized. Outer box: The raw fragment copy numbers are the meta-probes for a DNA region and are multi-loci summarized to a raw region copy number.
 \label{fig:meta_probeset_fig}}
 \end{center}
 \end{figure} 
-The raw fragment copy numbers from single-locus modeling are now themselves
-probes for a DNA region as depicted in Figure~\ref{fig:meta_probeset_fig}.
-Again we use FARMS to summarize meta-probes and
-to estimate a raw copy number for the region. This modeling across 
-samples is novel as previous methods only model along the chromosome. 
-Multi-loci modeling considerably reduces
-the false discovery rates, because raw copy numbers of
-neighboring fragments or neighboring DNA probe loci must agree to each other 
-on the copy number, which reduces the likelihood of a discovery by chance.
-However, low FDR is traded against high resolution by 
-the window size for multi-loci modeling, i.e.~
-by how many raw copy numbers of neighboring fragments or neighboring
-DNA probe loci are combined. 
-The more loci are combined, the more the FDR is reduced, because more  
-meta-probes must mutually agree on the region's copy number.
-The window size for multi-loci modeling is 
-a hyperparameter which trades off low FDR against high resolution. 
-We recommend a window size of 5 as default, 3 for high
-resolution, and 10 for low FDR.
-Alternatively to a fixed number of CNV or
-SNP sites, the cn.FARMS software allows defining a window in terms of base pairs.
-In this case, multi-loci modeling may use a different number
-of meta-probes at different DNA locations, in particular for less than
-two meta-probes multi-loci modeling is skipped. 
-Note, however that controlling the FDR is more
-difficult because a minimal number of meta-probes cannot be assured
-for each window and modeling with few meta-probes is prone to false discoveries.
+The raw fragment copy numbers from single-locus modeling are now themselves probes for a DNA region as depicted in Figure~\ref{fig:meta_probeset_fig}. Again we use FARMS to summarize meta-probes and to estimate a raw copy number for the region. This modeling across samples is novel as previous methods only model along the chromosome. 
+Multi-loci modeling considerably reduces the false discovery rates, because raw copy numbers of neighboring fragments or neighboring DNA probe loci must agree to each other 
+on the copy number, which reduces the likelihood of a discovery by chance. However, low FDR is traded against high resolution by the window size for multi-loci modeling, i.e.~
+by how many raw copy numbers of neighboring fragments or neighboring DNA probe loci are combined. 
+The more loci are combined, the more the FDR is reduced, because more meta-probes must mutually agree on the region's copy number. The window size for multi-loci modeling is 
+a hyperparameter which trades off low FDR against high resolution. We recommend a window size of 5 as default, 3 for high resolution, and 10 for low FDR.
+Alternatively to a fixed number of CNV or SNP sites, the cn.FARMS software allows defining a window in terms of base pairs.
+In this case, multi-loci modeling may use a different number of meta-probes at different DNA locations, in particular for less than two meta-probes multi-loci modeling is skipped. 
+Note, however that controlling the FDR is more difficult because a minimal number of meta-probes cannot be assured for each window and modeling with few meta-probes is prone to false discoveries.
 FARMS supplies an informative/non-informative (I/NI) call \citep{Talloen:07,Talloen:10}
-which is used to detect CNVs. Additionally, the I/NI value  gives the
-signal-to-noise-ratio of the estimated raw copy number.\linebreak
-{\bf(3) Segmentation} can afterwards be performed by  \Rpackage{DNAcopy}.
-
-
+which is used to detect CNVs. Additionally, the I/NI value  gives the signal-to-noise-ratio of the estimated raw copy number.\linebreak
+{\bf(3) Segmentation} can afterwards be performed by  \Rpackage{fastseg} or \Rpackage{DNAcopy}.
 
 
 
@@ -210,15 +118,34 @@ signal-to-noise-ratio of the estimated raw copy number.\linebreak
 \section{Getting Started: cn.FARMS}
 \label{sec:started}
 
-The following example was created by a very small subset of the HapMap data set.
- 
+A very small subset of the HapMap data set on Affymetrix SNP 6.0 array - included in the R package \Rpackage{hapmapsnp6} - is used to show how the \Rpackage{cn.farms} is utilized. 
 
+\subsection{Quick start : Process SNP 6.0 array}
+
+After loading the \Rpackage{cn.farms} it is sufficient to state the CEL files you want to process and run the function \texttt{cn.farms} to gain first results. Be aware that \Rpackage{cn.farms} will create result files in your current working directory. 
+
+\begin{Sinput} 
+> require(cn.farms)
+> require("hapmapsnp6") 
+> celDir <- system.file("celFiles", package = "hapmapsnp6")
+> filenames <- dir(path = celDir, full.names = TRUE)
+> results <- cn.farms(filenames)
+\end{Sinput}
+
+In this function only the copy number probes (and no SNP probes) are used for copy number estimation. Segmentation of the the gained results is advised as an additional step. 
+
+
+
+
+For more sophisticated settings - like different normalization methods, multicore support, finer parameter adjustment - we refer to Subsection \ref{sub:SNP6Step}. 
+
+
+\subsection{Process SNP 6.0 array step by step}
+\label{sub:SNP6Step}
 As usual, it is necessary to load the \Rpackage{cn.farms} package:
 \begin{Sinput}
 require(cn.farms)
 \end{Sinput}
-
-\subsection{Quick start : Process SNP 6.0 array}
 
 \noindent The \Rpackage{hapmapsnp6} package is loaded for testing purpose.
 
@@ -500,41 +427,41 @@ Loading required package: DBI
 ================================================================================
 Welcome to oligo version 1.22.0
 ================================================================================
-2012-11-06 09:56:45 |   Reading annotation from package pd.mapping250k.nsp 1.8.0  
-2012-11-06 09:56:45 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
-2012-11-06 09:58:13 |   SNP information done 
-2012-11-06 09:58:13 |   Non polymorphic information done 
-2012-11-06 09:58:28 |   Annotation processed 
+09:56:45 |   Reading annotation from package pd.mapping250k.nsp 1.8.0  
+09:56:45 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
+09:58:13 |   SNP information done 
+09:58:13 |   Non polymorphic information done 
+09:58:28 |   Annotation processed 
 > createAnnotation(filenames=celFiles$STY)
-2012-11-06 09:58:29 |   Reading annotation from package pd.mapping250k.sty 1.8.0  
-2012-11-06 09:58:29 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
-2012-11-06 09:59:36 |   SNP information done 
-2012-11-06 09:59:36 |   Non polymorphic information done 
-2012-11-06 09:59:51 |   Annotation processed 
+09:58:29 |   Reading annotation from package pd.mapping250k.sty 1.8.0  
+09:58:29 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
+09:59:36 |   SNP information done 
+09:59:36 |   Non polymorphic information done 
+09:59:51 |   Annotation processed 
 > 
 > 
 > ## normalize the data
 > normMethod <- "SOR"
 > normDataNsp <- normalizeCels(filenames=celFiles$NSP, 
 +         method=normMethod, cores=cores, runtype=runtype)
-2012-11-06 09:59:51 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
+09:59:51 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
 R Version:  R version 2.15.2 (2012-10-26) 
 
-2012-11-06 10:00:04 |   Starting normalization 
-2012-11-06 10:00:17 |   Normalization done 
+10:00:04 |   Starting normalization 
+10:00:17 |   Normalization done 
 
 Stopping cluster
 
-2012-11-06 10:00:18 |   Saving normalized data 
+10:00:18 |   Saving normalized data 
 > normDataSty <- normalizeCels(filenames=celFiles$STY, 
 +         method=normMethod, cores=cores, runtype=runtype)
-2012-11-06 10:00:19 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
-2012-11-06 10:00:31 |   Starting normalization 
-2012-11-06 10:00:44 |   Normalization done 
+10:00:19 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
+10:00:31 |   Starting normalization 
+10:00:44 |   Normalization done 
 
 Stopping cluster
 
-2012-11-06 10:00:45 |   Saving normalized data 
+10:00:45 |   Saving normalized data 
 > 
 > 
 > ## run single-locus FARMS algorithm
@@ -548,42 +475,42 @@ Stopping cluster
 +         summaryParam=summaryParam,
 +         callParam=callParam,
 +         summaryWindow="std")
-2012-11-06 10:00:47 |   Starting summarization 
-2012-11-06 10:00:47 |   Computations will take some time, please be patient 
+10:00:47 |   Starting summarization 
+10:00:47 |   Computations will take some time, please be patient 
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
 
-2012-11-06 10:00:52 |   Summarizing batch 1 ... 
+10:00:52 |   Summarizing batch 1 ... 
 
 Stopping cluster
 
-2012-11-06 10:13:45 |   Summarization done 
+10:13:45 |   Summarization done 
 Time difference of 12.97855 mins
-2012-11-06 10:13:45 |   Saving data 
+10:13:45 |   Saving data 
 > slDataSty <- slSummarization(normDataSty,
 +         summaryMethod=summaryMethod,
 +         summaryParam=summaryParam,
 +         callParam=callParam,
 +         summaryWindow="std")
-2012-11-06 10:13:47 |   Starting summarization 
-2012-11-06 10:13:47 |   Computations will take some time, please be patient 
+10:13:47 |   Starting summarization 
+10:13:47 |   Computations will take some time, please be patient 
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
 
-2012-11-06 10:13:52 |   Summarizing batch 1 ... 
+10:13:52 |   Summarizing batch 1 ... 
 
 Stopping cluster
 
-2012-11-06 10:25:39 |   Summarization done 
+10:25:39 |   Summarization done 
 Time difference of 11.87153 mins
-2012-11-06 10:25:39 |   Saving data 
+10:25:39 |   Saving data 
 > 
 > 
 > ## combine NSP and STY arrays
 > combData <- combineData(slDataNsp, slDataSty, runtype=runtype)
-2012-11-06 10:25:41 |   Saving normalized data 
+10:25:41 |   Saving normalized data 
 > fData(combData)[1:10, ]
         chrom   start     end    man_fsetid
 962431      1  752566  752566 SNP_A-1909444
@@ -614,18 +541,18 @@ Time difference of 11.87153 mins
 +         summaryParam=summaryParam,
 +         callParam=callParam)
 Slot intensity of assayData is used
-2012-11-06 10:25:42 |   Starting summarization 
-2012-11-06 10:25:42 |   Computations will take some time, please be patient 
+10:25:42 |   Starting summarization 
+10:25:42 |   Computations will take some time, please be patient 
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
 
-2012-11-06 10:25:48 |   Summarizing batch 1 ... 
+10:25:48 |   Summarizing batch 1 ... 
 
 Stopping cluster
 
-2012-11-06 10:50:34 |   Summarization done 
-2012-11-06 10:50:34 |   Saving data 
+10:50:34 |   Summarization done 
+10:50:34 |   Saving data 
 > 
 > head(fData(mlData))
   chrom   start     end    man_fsetid
@@ -693,24 +620,24 @@ Loading required package: DBI
 ================================================================================
 Welcome to oligo version 1.22.0
 ================================================================================
-2012-11-06 09:56:45 |   Reading annotation from package pd.mapping250k.nsp 1.8.0  
-2012-11-06 09:56:45 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
-2012-11-06 09:58:13 |   SNP information done 
-2012-11-06 09:58:13 |   Non polymorphic information done 
-2012-11-06 09:58:28 |   Annotation processed 
+09:56:45 |   Reading annotation from package pd.mapping250k.nsp 1.8.0  
+09:56:45 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
+09:58:13 |   SNP information done 
+09:58:13 |   Non polymorphic information done 
+09:58:28 |   Annotation processed 
 > createAnnotation(filenames=celFiles$STY)
-2012-11-06 09:58:29 |   Reading annotation from package pd.mapping250k.sty 1.8.0  
-2012-11-06 09:58:29 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
-2012-11-06 09:59:36 |   SNP information done 
-2012-11-06 09:59:36 |   Non polymorphic information done 
-2012-11-06 09:59:51 |   Annotation processed 
+09:58:29 |   Reading annotation from package pd.mapping250k.sty 1.8.0  
+09:58:29 |   Annotation will be saved in /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
+09:59:36 |   SNP information done 
+09:59:36 |   Non polymorphic information done 
+09:59:51 |   Annotation processed 
 > 
 > 
 > ## normalize the data
 > normMethod <- "SOR"
 > normDataNsp <- normalizeCels(filenames=celFiles$NSP, 
 +         method=normMethod, cores=cores, runtype=runtype)
-2012-11-06 09:59:51 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
+09:59:51 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.nsp/1.8.0  
 R Version:  R version 2.15.2 (2012-10-26) 
 
 snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
@@ -724,15 +651,15 @@ Library affxparser loaded in cluster.
 Library oligo loaded.
 Library oligo loaded in cluster.
 
-2012-11-06 10:00:04 |   Starting normalization 
-2012-11-06 10:00:17 |   Normalization done 
+10:00:04 |   Starting normalization 
+10:00:17 |   Normalization done 
 
 Stopping cluster
 
-2012-11-06 10:00:18 |   Saving normalized data 
+10:00:18 |   Saving normalized data 
 > normDataSty <- normalizeCels(filenames=celFiles$STY, 
 +         method=normMethod, cores=cores, runtype=runtype)
-2012-11-06 10:00:19 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
+10:00:19 |   Annotation directory:  /tmp/RtmpdDq8c4/annotation/pd.mapping250k.sty/1.8.0  
 snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
 
 Library cn.farms loaded.
@@ -744,12 +671,12 @@ Library affxparser loaded in cluster.
 Library oligo loaded.
 Library oligo loaded in cluster.
 
-2012-11-06 10:00:31 |   Starting normalization 
-2012-11-06 10:00:44 |   Normalization done 
+10:00:31 |   Starting normalization 
+10:00:44 |   Normalization done 
 
 Stopping cluster
 
-2012-11-06 10:00:45 |   Saving normalized data 
+10:00:45 |   Saving normalized data 
 > 
 > 
 > ## run single-locus FARMS algorithm
@@ -763,44 +690,44 @@ Stopping cluster
 +         summaryParam=summaryParam,
 +         callParam=callParam,
 +         summaryWindow="std")
-2012-11-06 10:00:47 |   Starting summarization 
-2012-11-06 10:00:47 |   Computations will take some time, please be patient 
+10:00:47 |   Starting summarization 
+10:00:47 |   Computations will take some time, please be patient 
 snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
 
-2012-11-06 10:00:52 |   Summarizing batch 1 ... 
+10:00:52 |   Summarizing batch 1 ... 
 
 Stopping cluster
 
-2012-11-06 10:13:45 |   Summarization done 
+10:13:45 |   Summarization done 
 Time difference of 12.97855 mins
-2012-11-06 10:13:45 |   Saving data 
+10:13:45 |   Saving data 
 > slDataSty <- slSummarization(normDataSty,
 +         summaryMethod=summaryMethod,
 +         summaryParam=summaryParam,
 +         callParam=callParam,
 +         summaryWindow="std")
-2012-11-06 10:13:47 |   Starting summarization 
-2012-11-06 10:13:47 |   Computations will take some time, please be patient 
+10:13:47 |   Starting summarization 
+10:13:47 |   Computations will take some time, please be patient 
 snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
 
-2012-11-06 10:13:52 |   Summarizing batch 1 ... 
+10:13:52 |   Summarizing batch 1 ... 
 
 Stopping cluster
 
-2012-11-06 10:25:39 |   Summarization done 
+10:25:39 |   Summarization done 
 Time difference of 11.87153 mins
-2012-11-06 10:25:39 |   Saving data 
+10:25:39 |   Saving data 
 > 
 > 
 > ## combine NSP and STY arrays
 > combData <- combineData(slDataNsp, slDataSty, runtype=runtype)
-2012-11-06 10:25:41 |   Saving normalized data 
+10:25:41 |   Saving normalized data 
 > fData(combData)[1:10, ]
         chrom   start     end    man_fsetid
 962431      1  752566  752566 SNP_A-1909444
@@ -831,19 +758,19 @@ Time difference of 11.87153 mins
 +         summaryParam=summaryParam,
 +         callParam=callParam)
 Slot intensity of assayData is used
-2012-11-06 10:25:42 |   Starting summarization 
-2012-11-06 10:25:42 |   Computations will take some time, please be patient 
+10:25:42 |   Starting summarization 
+10:25:42 |   Computations will take some time, please be patient 
 snowfall 1.84 initialized (using snow 0.3-10): parallel execution on 2 CPUs.
 
 Library cn.farms loaded.
 Library cn.farms loaded in cluster.
 
-2012-11-06 10:25:48 |   Summarizing batch 1 ... 
+10:25:48 |   Summarizing ... 
 
 Stopping cluster
 
-2012-11-06 10:50:34 |   Summarization done 
-2012-11-06 10:50:34 |   Saving data 
+10:50:34 |   Summarization done 
+10:50:34 |   Saving data 
 > 
 > head(fData(mlData))
   chrom   start     end    man_fsetid

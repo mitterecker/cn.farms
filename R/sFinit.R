@@ -58,12 +58,13 @@ sfInit <- function( parallel=NULL,
     nostart=FALSE,
     useRscript=FALSE      ## snow: Default is TRUE.
 ) {
+  
   ## Flag for detection of reconnect (means: non-first calls to sfInit())
   reconnect <- FALSE
   
   ## Saves users from many own if-clauses probably.
   if( nostart ) return( TRUE );
-  
+
   ## Are options setted?
   if( length( .sfOption ) == 0 ) {
     debug( "Setup sfOption..." )
@@ -133,7 +134,7 @@ sfInit <- function( parallel=NULL,
       setOption( "RESTDIR", file.path( Sys.getenv( "HOME" ), ".sfCluster", "restore" ) )
     
     ## Remove config (as data() writes it as global variable).
-    rm( config, pos=globalenv() )
+    #rm( config, pos=globalenv() )
   }
   ## If .sfOption exists, sfInit() was called before: restart.
   ## (sfCluster should be able to handle this - although slaves are iterated and
@@ -160,9 +161,10 @@ sfInit <- function( parallel=NULL,
   
   if( getOption( 'verbose' ) && !reconnect )
     print( .sfOption )
-  
+
   ## If given restore-directory does not exist, create it.
   if( !file.exists( .sfOption$RESTDIR ) ) {
+#  if( is.null( .sfOption$RESTDIR ) ) {
     ## 1.62: removed
     ##    .sfOption$RESTDIR <<- path.expand( "~/.sfCluster/restore" )
     dirCreateStop( .sfOption$RESTDIR )
@@ -200,14 +202,14 @@ sfInit <- function( parallel=NULL,
         message( paste( "Library", libList[[.sfOption$type]], "loaded." ) )
     }
     
-    ## In any parallel mode, load snow if needed.
-    if( !require( snow ) ) {
-      message( paste( "Failed to load library 'snow' required for parallel mode.\n",
-              "Switching to sequential mode (1 cpu only)!." ) );
-      
-      ## Fallback to sequential mode.
-      return( sfInit( parallel=FALSE ) )
-    }
+#    ## In any parallel mode, load snow if needed.
+#    if( !require( parallel ) ) {
+#      message( paste( "Failed to load library 'snow' required for parallel mode.\n",
+#              "Switching to sequential mode (1 cpu only)!." ) );
+#      
+#      ## Fallback to sequential mode.
+#      return( sfInit( parallel=FALSE ) )
+#    }
     
     ## Chg. 1.62
     ## Temporary file for output.
@@ -235,8 +237,8 @@ sfInit <- function( parallel=NULL,
     ## korrekt startet und h�ngen bleibt (z.B. wenn zuviele CPUs f�r das
     ## Cluster angefordert werden - was PVM schluckt, macht MPI anscheinend
     ## Kopfzerbrechen).
-    setDefaultClusterOptions( type = .sfOption$type )
-    setDefaultClusterOptions( homogenous = FALSE )
+    suppressWarnings(setDefaultClusterOptions( type = .sfOption$type ))
+    suppressWarnings(setDefaultClusterOptions( homogenous = FALSE ))
     
     ## On socket connections the list of hosts needs to be given.
     ## If no is set, use localhost with default R.
@@ -267,11 +269,11 @@ sfInit <- function( parallel=NULL,
         setOption( "nodes", length( .sfOption$sockHosts ) )
       
       ## Patch Markus Schmidberger (Mail 11/25/2008).
-      setOption( "cluster", try( makeNWScluster(
+      setOption( "cluster", try( suppressWarnings(makeNWScluster(
                   .sfOption$sockHosts[1:.sfOption$nodes],
                   type = "NWS",
                   outfile = tmp
-              ) ) )
+              ) ) ) )
     }
     # MPI cluster (also default for irregular type).
     else {
@@ -279,17 +281,17 @@ sfInit <- function( parallel=NULL,
       ##       with snow > 0.3 (on older snow Versions this option
       ##       is ignored. Also homogenous is always on.
       ## 1.83: But for non-sfCluster usage at least it has to be modifyable.
-      setOption( "cluster", try( makeMPIcluster( .sfOption$nodes,
+      setOption( "cluster", try( suppressWarnings(makeMPIcluster( .sfOption$nodes,
                   outfile = tmp,
                   homogenous = TRUE,
                   useRscript = useRscript
-              ) ) )
+              ) ) ) )
     }
     
     ## Startup successfull? If not: stop.
     if( is.null( .sfOption$cluster ) ||
         inherits( .sfOption$cluster, "try-error" ) )
-      stop( paste( "Starting of snow cluster failed!",
+      stop( paste( "Starting of cluster failed!",
               geterrmessage(), .sfOption$cluster ) )
     
     ## Cluster setup finished. Set flag (used in error handlers and stop).

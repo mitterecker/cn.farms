@@ -183,8 +183,7 @@ callSummarize <- function(
     
     batches <- as.character(sort(unique(batchList)))
     for(i in 1:length(batches)){
-        cat(paste(Sys.time(), " |   Summarizing batch ",
-                        batches[i], " ... \n", sep = ""))
+        cat(paste(Sys.time(), " |   Summarizing ... \n", sep = ""))
         sampleIndices <- which(batchList == batches[i])
         res <- suppressWarnings(sfLapply(seq(nbrOfProbes), callSummarizeH01, sampleIndices, 
                 summaryMethod))
