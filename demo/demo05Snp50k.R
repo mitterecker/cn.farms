@@ -3,8 +3,9 @@ library(cn.farms)
 
 sampleData <- "hapmap100khind"
 if (!(sampleData %in% installed.packages()[, "Package"])) {
-    source("http://www.bioconductor.org/biocLite.R")
-    biocLite(sampleData)
+    if (!requireNamespace("BiocManager", quietly=TRUE))
+        install.packages("BiocManager")
+    BiocManager::install(sampleData)
 }
 
 library(hapmap100khind)
