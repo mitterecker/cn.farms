@@ -1,11 +1,11 @@
 Package: cn.farms
 Title: cn.FARMS - factor analysis for copy number estimation
-Version: 1.35.0
-Date: 2014-05-19
+Version: 1.35.1
+Date: 2020-02-17
 Type: Package
 License: LGPL (>= 2.0)
 Author: Andreas Mitterecker, Djork-Arne Clevert
-Maintainer: Andreas Mitterecker <mitterecker@bioinf.jku.at>
+Maintainer: Andreas Mitterecker <mitterecker@ml.jku.at>
 Description: This package implements the cn.FARMS algorithm for copy
         number variation (CNV) analysis. cn.FARMS allows to analyze the
         most common Affymetrix (250K-SNP6.0) array types, supports
