@@ -1,9 +1,8 @@
 citHeader("To cite package 'cn.farms' in publications use:")
 
-desc <- packageDescription("cn.farms")
-year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
-vers <- paste("R package version", desc$Version)
-url  <- desc$URL
+year <- sub("-.*", "", meta$Date)
+vers <- paste("R package version", meta$Version)
+url  <- meta$URL
 
 citEntry(entry="article",
          title="{cn.FARMS}: a latent variable model to detect copy
