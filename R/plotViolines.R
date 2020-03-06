@@ -3,7 +3,7 @@
 #' This function creates a violine plot on intensity values
 #' 
 #' @param object An instance of 
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+#' \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 #' @param variable states which variable of assayData should be plotted.
 #' @param groups Vector with the dimension of the samples for coloring.
 #' @param ... Further arguments passed to the lattice graph.

@@ -26,7 +26,7 @@ With bm the results will be saved permanently.}
 \item{saveFile}{Name of the file to save.}
 }
 \value{
-An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 }
 \description{
 Runs the SOR normalization on microarray data

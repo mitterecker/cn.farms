@@ -13,7 +13,7 @@ cn.farms(filenames, cores = 1, runtype = "bm")
 \item{runtype}{either ff or bm.}
 }
 \value{
-An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 containing the results of the analysis.
 }
 \description{

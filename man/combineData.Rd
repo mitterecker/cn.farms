@@ -7,10 +7,10 @@ combineData(object01, object02, obj01Var = "intensity",
   obj02Var = "intensity", runtype = "ff", saveFile = "combData")
 }
 \arguments{
-\item{object01}{An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+\item{object01}{An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 either with SNP or non-polymorphic data}
 
-\item{object02}{An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+\item{object02}{An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 either with SNP or non-polymorphic data}
 
 \item{obj01Var}{States the variable which should be combined from the
@@ -26,7 +26,7 @@ With bm the results will be saved permanently.}
 \item{saveFile}{Name of the file to save.}
 }
 \value{
-An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}.
+An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}.
 }
 \description{
 Suitable for SNP or non-polymorphic data which were already processed with

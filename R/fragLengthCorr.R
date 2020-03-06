@@ -1,11 +1,11 @@
 #' Does a fragment length correction
 #' @param object An instance of 
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+#' \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 #' @param runtype Mode how the results are saved. Possible values are ff or bm. 
 #' @param ... Further parameters passed to the correction method.
 #' @param saveFile Name of the file to save.
 #' @return An instance of 
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}.
+#' \code{\link[Biobase:ExpressionSet]{ExpressionSet}}.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @examples

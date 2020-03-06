@@ -4,7 +4,7 @@
 #' 
 #' @name slSummarization
 #' @param object An instance of 
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+#' \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 #' @param summaryMethod allowed versions for the summarization step are: 
 #' Gaussian,Variational, Exact. Default is Variational.
 #' @param summaryParam The parameters for the summaryMethod. Further information
@@ -23,7 +23,7 @@
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @export
 #' @return Single-locus summarized data of an instance of 
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+#' \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 #' @examples 
 #' load(system.file("exampleData/normData.RData", package = "cn.farms"))
 #' notes(experimentData(normData))$annotDir <- 

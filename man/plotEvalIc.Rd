@@ -9,7 +9,7 @@ plotEvalIc(object, segments, chrom, variable, ylim, ylab = "CN indicator",
   nbin = 100)
 }
 \arguments{
-\item{object}{an instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}}
+\item{object}{an instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}}
 
 \item{segments}{A data.frame with known regions.}
 

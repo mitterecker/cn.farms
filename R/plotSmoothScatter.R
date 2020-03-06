@@ -1,5 +1,5 @@
 #' Creates a smooth scatter plot
-#' @param object An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}.
+#' @param object An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}.
 #' @param variable States which variable of the assayData should be plotted.
 #' @param chrom The chromosome you want to plot.
 #' @param start The physical start position.

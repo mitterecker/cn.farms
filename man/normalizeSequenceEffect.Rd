@@ -8,7 +8,7 @@ normalizeSequenceEffect(object, annotDir = NULL, runtype = "ff",
 }
 \arguments{
 \item{object}{an instance of
-\code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}}
+\code{\link[Biobase:ExpressionSet]{ExpressionSet}}}
 
 \item{annotDir}{the directory where the anntotation can be found}
 

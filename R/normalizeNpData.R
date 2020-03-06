@@ -10,7 +10,7 @@
 #' With bm the results will be saved permanently. 
 #' @param saveFile Name of the file to save.
 #' @param method The method for the normalization.
-#' @return An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}} 
+#' @return An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}} 
 #' containing the non-polymorphic data of the microarray.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}

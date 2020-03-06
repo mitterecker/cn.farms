@@ -1,6 +1,6 @@
 #' Correction for probe sequence effects
 #' @param object an instance of 
-#' \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+#' \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 #' @param annotDir the directory where the anntotation can be found 
 #' @param runtype mode how the results are saved. Possible values are ff or bm. 
 #' If ff is chosen the data will not be saved automatically. 

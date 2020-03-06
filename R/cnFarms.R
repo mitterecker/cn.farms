@@ -5,7 +5,7 @@
 #' @param filenames the absolute filepaths of the CEL files. 
 #' @param cores number of parallel instances.
 #' @param runtype either ff (results will be lost after closing the R session) or bm (results will be saved after closing the R session). 
-#' @return An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+#' @return An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 #' containing the results of the analysis.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}

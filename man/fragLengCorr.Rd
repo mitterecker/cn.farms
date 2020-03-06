@@ -7,7 +7,7 @@ fragLengCorr(object, runtype = "ff", saveFile = "slDataFlc", ...)
 }
 \arguments{
 \item{object}{An instance of
-\code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}}
+\code{\link[Biobase:ExpressionSet]{ExpressionSet}}}
 
 \item{runtype}{Mode how the results are saved. Possible values are ff or bm.}
 
@@ -17,7 +17,7 @@ fragLengCorr(object, runtype = "ff", saveFile = "slDataFlc", ...)
 }
 \value{
 An instance of
-\code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}.
+\code{\link[Biobase:ExpressionSet]{ExpressionSet}}.
 }
 \description{
 Does a fragment length correction

@@ -7,7 +7,7 @@ plotViolines(object, variable = "intensity", groups, ...)
 }
 \arguments{
 \item{object}{An instance of
-\code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}}
+\code{\link[Biobase:ExpressionSet]{ExpressionSet}}}
 
 \item{variable}{states which variable of assayData should be plotted.}
 

@@ -6,7 +6,7 @@
 plotSmoothScatter(object, variable, chrom, start, end, ylim, pdfname, ...)
 }
 \arguments{
-\item{object}{An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}.}
+\item{object}{An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}.}
 
 \item{variable}{States which variable of the assayData should be plotted.}
 

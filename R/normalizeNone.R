@@ -9,7 +9,7 @@
 #' With bm the results will be saved permanently. 
 #' @param pkgname Optional parameter for the CEL mapping.
 #' @param saveFile Name of the file to save.
-#' @return An instance of \code{\link[Biobase:ExpressionSet-class]{ExpressionSet}}
+#' @return An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @importMethodsFrom oligoClasses db
