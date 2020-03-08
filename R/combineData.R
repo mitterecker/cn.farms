@@ -3,9 +3,9 @@
 #' Suitable for SNP or non-polymorphic data which were already processed with 
 #' single locus FARMS
 #' 
-#' @param object01 An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+#' @param object01 An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 #' either with SNP or non-polymorphic data
-#' @param object02 An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+#' @param object02 An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 #' either with SNP or non-polymorphic data
 #' @param obj01Var States the variable which should be combined from the 
 #' assayData slot. Default is intensity.
@@ -15,7 +15,7 @@
 #' If ff is chosen the data will not be saved automatically. 
 #' With bm the results will be saved permanently. 
 #' @param saveFile Name of the file to save.
-#' @return An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}.
+#' @return An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @examples 

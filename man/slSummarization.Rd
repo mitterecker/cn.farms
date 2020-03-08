@@ -9,7 +9,7 @@ slSummarization(object, summaryMethod = "Exact", summaryParam = list(),
 }
 \arguments{
 \item{object}{An instance of
-\code{\link[Biobase:ExpressionSet]{ExpressionSet}}}
+\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}}
 
 \item{summaryMethod}{allowed versions for the summarization step are:
 Gaussian,Variational, Exact. Default is Variational.}
@@ -32,7 +32,7 @@ sl and fragment.}
 }
 \value{
 Single-locus summarized data of an instance of
-\code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 }
 \description{
 The different probes of the SNPs of the array are summarized to a probeset.

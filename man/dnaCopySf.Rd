@@ -19,7 +19,7 @@ dnaCopySf(x, chrom, maploc, cores = 1, smoothing, ...)
 \item{...}{Further parameter for the function segment of DNAcopy}
 }
 \value{
-An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 containing the segments.
 }
 \description{

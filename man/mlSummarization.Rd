@@ -7,7 +7,7 @@ mlSummarization(object, windowMethod, windowParam, summaryMethod, summaryParam,
   callParam = list(runtype = "ff"), returnValues, saveFile = "mlData")
 }
 \arguments{
-\item{object}{an instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}}
+\item{object}{an instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}}
 
 \item{windowMethod}{Method for combination of neighbouring SNPs.
 Possible values are Std and Bps.}
@@ -33,7 +33,7 @@ For possible values see summaryMethod.}
 }
 \value{
 Multi-loci summarized data of an instance of
-\code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+\code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 }
 \description{
 Method for computation of the multi-loci summarization

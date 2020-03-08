@@ -8,7 +8,7 @@
 #' @param cores Number of cores to use
 #' @param smoothing States if smoothing of the data should be done 
 #' @param ... Further parameter for the function segment of DNAcopy
-#' @return An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+#' @return An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 #' containing the segments.
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}

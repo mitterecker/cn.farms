@@ -1,5 +1,5 @@
 #' Creates a plot with known regions and a numeric vector 
-#' @param object  an instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+#' @param object  an instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 #' @param segments A data.frame with known regions.
 #' @param chrom the chromosome.
 #' @param variable The numeric vector which should be plotted.

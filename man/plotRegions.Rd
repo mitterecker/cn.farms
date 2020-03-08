@@ -7,9 +7,9 @@ plotRegions(object, segments, addInd = NULL, ylim, variable,
   colorVersion = 0, plotLegend = TRUE, pdfname)
 }
 \arguments{
-\item{object}{An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}}
+\item{object}{An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}}
 
-\item{segments}{An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+\item{segments}{An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 with the segments to plot}
 
 \item{addInd}{States how many indices should be plotted besides the region}

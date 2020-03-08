@@ -22,7 +22,7 @@ With bm the results will be saved permanently.}
 \item{method}{The method for the normalization.}
 }
 \value{
-An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 containing the non-polymorphic data of the microarray.
 }
 \description{

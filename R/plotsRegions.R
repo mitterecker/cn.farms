@@ -2,8 +2,8 @@
 #' 
 #' A pdf in the working directory is produced.
 #' 
-#' @param object An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
-#' @param segments An instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+#' @param object An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
+#' @param segments An instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 #' with the segments to plot
 #' @param addInd States how many indices should be plotted besides the region
 #' @param ylim The limits for the y axis.

@@ -1,5 +1,5 @@
 #' Method for computation of the multi-loci summarization
-#' @param object an instance of \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+#' @param object an instance of \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 #' @param windowMethod Method for combination of neighbouring SNPs. 
 #' Possible values are Std and Bps.
 #' @param windowParam further parameters as the window size
@@ -16,7 +16,7 @@
 #' @param saveFile Name of the file to save.
 #' For possible values see summaryMethod.
 #' @return Multi-loci summarized data of an instance of 
-#' \code{\link[Biobase:ExpressionSet]{ExpressionSet}}
+#' \code{\link[Biobase:class.ExpressionSet]{ExpressionSet}}
 #' @author Djork-Arne Clevert \email{okko@@clevert.de} and 
 #' Andreas Mitterecker \email{mitterecker@@bioinf.jku.at}
 #' @export
