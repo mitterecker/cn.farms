@@ -1,7 +1,7 @@
 Package: cn.farms
 Title: cn.FARMS - factor analysis for copy number estimation
-Version: 1.35.3
-Date: 2020-03-06
+Version: 1.35.4
+Date: 2020-03-09
 Type: Package
 License: LGPL (>= 2.0)
 Author: Andreas Mitterecker, Djork-Arne Clevert
